@@ -7,52 +7,52 @@ namespace BasketBall_LiveScore.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamsController : ControllerBase
+    public class TimeoutsController : ControllerBase
     {
         private readonly BasketballContext _context;
 
-        public TeamsController(BasketballContext context)
+        public TimeoutsController(BasketballContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
+        public async Task<ActionResult<IEnumerable<TimeoutMatch>>> GetTimeouts()
         {
-            return await _context.Teams.ToListAsync();
+            return await _context.Timeouts.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(int id)
+        public async Task<ActionResult<TimeoutMatch>> GetTimeout(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
+            var timeout = await _context.Timeouts.FindAsync(id);
 
-            if (team == null)
+            if (timeout == null)
             {
                 return NotFound();
             }
 
-            return team;
+            return timeout;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Team>> PostTeam(Team team)
+        public async Task<ActionResult<TimeoutMatch>> PostTimeout(TimeoutMatch timeout)
         {
-            _context.Teams.Add(team);
+            _context.Timeouts.Add(timeout);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetTimeout", new { id = timeout.Id }, timeout);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam(int id, Team team)
+        public async Task<IActionResult> PutTimeout(int id, TimeoutMatch timeout)
         {
-            if (id != team.Id)
+            if (id != timeout.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(team).State = EntityState.Modified;
+            _context.Entry(timeout).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(id))
+                if (!TimeoutExists(id))
                 {
                     return NotFound();
                 }
@@ -74,23 +74,24 @@ namespace BasketBall_LiveScore.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam(int id)
+        public async Task<IActionResult> DeleteTimeout(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
+            var timeout = await _context.Timeouts.FindAsync(id);
+            if (timeout == null)
             {
                 return NotFound();
             }
 
-            _context.Teams.Remove(team);
+            _context.Timeouts.Remove(timeout);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TeamExists(int id)
+        private bool TimeoutExists(int id)
         {
-            return _context.Teams.Any(e => e.Id == id);
+            return _context.Timeouts.Any(e => e.Id == id);
         }
     }
+
 }

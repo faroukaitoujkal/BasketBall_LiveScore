@@ -7,52 +7,52 @@ namespace BasketBall_LiveScore.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamsController : ControllerBase
+    public class FoulsController : ControllerBase
     {
         private readonly BasketballContext _context;
 
-        public TeamsController(BasketballContext context)
+        public FoulsController(BasketballContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
+        public async Task<ActionResult<IEnumerable<Foul>>> GetFouls()
         {
-            return await _context.Teams.ToListAsync();
+            return await _context.Fouls.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(int id)
+        public async Task<ActionResult<Foul>> GetFoul(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
+            var foul = await _context.Fouls.FindAsync(id);
 
-            if (team == null)
+            if (foul == null)
             {
                 return NotFound();
             }
 
-            return team;
+            return foul;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Team>> PostTeam(Team team)
+        public async Task<ActionResult<Foul>> PostFoul(Foul foul)
         {
-            _context.Teams.Add(team);
+            _context.Fouls.Add(foul);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetFoul", new { id = foul.Id }, foul);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam(int id, Team team)
+        public async Task<IActionResult> PutFoul(int id, Foul foul)
         {
-            if (id != team.Id)
+            if (id != foul.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(team).State = EntityState.Modified;
+            _context.Entry(foul).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(id))
+                if (!FoulExists(id))
                 {
                     return NotFound();
                 }
@@ -74,23 +74,23 @@ namespace BasketBall_LiveScore.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam(int id)
+        public async Task<IActionResult> DeleteFoul(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
+            var foul = await _context.Fouls.FindAsync(id);
+            if (foul == null)
             {
                 return NotFound();
             }
 
-            _context.Teams.Remove(team);
+            _context.Fouls.Remove(foul);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TeamExists(int id)
+        private bool FoulExists(int id)
         {
-            return _context.Teams.Any(e => e.Id == id);
+            return _context.Fouls.Any(e => e.Id == id);
         }
     }
 }

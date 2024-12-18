@@ -7,52 +7,52 @@ namespace BasketBall_LiveScore.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamsController : ControllerBase
+    public class QuartersController : ControllerBase
     {
         private readonly BasketballContext _context;
 
-        public TeamsController(BasketballContext context)
+        public QuartersController(BasketballContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
+        public async Task<ActionResult<IEnumerable<Quarter>>> GetQuarters()
         {
-            return await _context.Teams.ToListAsync();
+            return await _context.Quarters.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(int id)
+        public async Task<ActionResult<Quarter>> GetQuarter(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
+            var quarter = await _context.Quarters.FindAsync(id);
 
-            if (team == null)
+            if (quarter == null)
             {
                 return NotFound();
             }
 
-            return team;
+            return quarter;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Team>> PostTeam(Team team)
+        public async Task<ActionResult<Quarter>> PostQuarter(Quarter quarter)
         {
-            _context.Teams.Add(team);
+            _context.Quarters.Add(quarter);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetQuarter", new { id = quarter.Id }, quarter);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam(int id, Team team)
+        public async Task<IActionResult> PutQuarter(int id, Quarter quarter)
         {
-            if (id != team.Id)
+            if (id != quarter.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(team).State = EntityState.Modified;
+            _context.Entry(quarter).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(id))
+                if (!QuarterExists(id))
                 {
                     return NotFound();
                 }
@@ -74,23 +74,23 @@ namespace BasketBall_LiveScore.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam(int id)
+        public async Task<IActionResult> DeleteQuarter(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
+            var quarter = await _context.Quarters.FindAsync(id);
+            if (quarter == null)
             {
                 return NotFound();
             }
 
-            _context.Teams.Remove(team);
+            _context.Quarters.Remove(quarter);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TeamExists(int id)
+        private bool QuarterExists(int id)
         {
-            return _context.Teams.Any(e => e.Id == id);
+            return _context.Quarters.Any(e => e.Id == id);
         }
     }
 }

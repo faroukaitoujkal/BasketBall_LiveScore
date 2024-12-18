@@ -7,52 +7,52 @@ namespace BasketBall_LiveScore.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamsController : ControllerBase
+    public class PlayersController : ControllerBase
     {
         private readonly BasketballContext _context;
 
-        public TeamsController(BasketballContext context)
+        public PlayersController(BasketballContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
         {
-            return await _context.Teams.ToListAsync();
+            return await _context.Players.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(int id)
+        public async Task<ActionResult<Player>> GetPlayer(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
+            var player = await _context.Players.FindAsync(id);
 
-            if (team == null)
+            if (player == null)
             {
                 return NotFound();
             }
 
-            return team;
+            return player;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Team>> PostTeam(Team team)
+        public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
-            _context.Teams.Add(team);
+            _context.Players.Add(player);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam(int id, Team team)
+        public async Task<IActionResult> PutPlayer(int id, Player player)
         {
-            if (id != team.Id)
+            if (id != player.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(team).State = EntityState.Modified;
+            _context.Entry(player).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(id))
+                if (!PlayerExists(id))
                 {
                     return NotFound();
                 }
@@ -74,23 +74,23 @@ namespace BasketBall_LiveScore.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam(int id)
+        public async Task<IActionResult> DeletePlayer(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
+            var player = await _context.Players.FindAsync(id);
+            if (player == null)
             {
                 return NotFound();
             }
 
-            _context.Teams.Remove(team);
+            _context.Players.Remove(player);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TeamExists(int id)
+        private bool PlayerExists(int id)
         {
-            return _context.Teams.Any(e => e.Id == id);
+            return _context.Players.Any(e => e.Id == id);
         }
     }
 }
