@@ -39,11 +39,19 @@ namespace BasketBall_LiveScore.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
+            var team = await _context.Teams.FindAsync(player.TeamId);
+            /*if (team == null)
+            {
+                return BadRequest("Invalid TeamId.");
+            }*/
+            player.Team = team; 
+
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayer(int id, Player player)

@@ -24,7 +24,7 @@ export class PlayerFormComponent implements OnInit {
     this.playerForm = this.fb.group({
       name: ['', Validators.required],
       number: ['', Validators.required],
-      teamId: ['', Validators.required]
+      teamId: [null, Validators.required]
     });
   }
 
@@ -45,17 +45,14 @@ export class PlayerFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.playerForm.valid) {
-      const player: Player = this.playerForm.value;
-      const selectedTeam = this.teams.find(t => t.id === player.teamId);
-      if (selectedTeam) {
-        player.team = selectedTeam;
-      }
-      console.log('Submitting player:', JSON.stringify(player, null, 2));
+      const player: Player = {
+        ...this.playerForm.value,
+        team: undefined 
+      };
 
       this.playerService.createPlayer(player).pipe(
         catchError(error => {
           console.error('HTTP Error:', error.message);
-          console.error('HTTP Response:', error);
           return of(null);
         })
       ).subscribe(response => {
@@ -63,8 +60,6 @@ export class PlayerFormComponent implements OnInit {
           console.log('Player created successfully', response);
           this.playerForm.reset();
           this.router.navigate(['/players']);
-        } else {
-          console.error('Failed to create player. No response received.');
         }
       });
     }

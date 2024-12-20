@@ -8,5 +8,5 @@ export interface Player {
   name: string;
   number: number;
   teamId: number;
-  team?: Team; // Le champ team est optionnel
+  team?: Team; 
 }
