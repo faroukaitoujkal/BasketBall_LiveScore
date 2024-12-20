@@ -7,17 +7,15 @@ import { Player } from './player.model';
   providedIn: 'root'
 })
 export class PlayerService {
-
-  private apiUrl = 'api/players'; // URL de l'API
+  private apiUrl = 'https://localhost:7088/api/players'; 
 
   constructor(private http: HttpClient) { }
 
-  // Méthode pour créer un joueur
   createPlayer(player: Player): Observable<Player> {
+    console.log('Creating player at URL:', this.apiUrl); 
     return this.http.post<Player>(this.apiUrl, player);
   }
 
-  // Méthode pour obtenir tous les joueurs (optionnel)
   getPlayers(): Observable<Player[]> {
     return this.http.get<Player[]>(this.apiUrl);
   }

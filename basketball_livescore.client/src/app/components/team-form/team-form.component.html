@@ -2,10 +2,9 @@
   <h2>Create Team</h2>
   <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Name</label>
+      <label for="name">Nom Equipe:</label>
       <input type="text" id="name" formControlName="name" class="form-control">
     </div>
     <button type="submit" class="btn btn-primary">Create Team</button>
   </form>
-  <button (click)="navigateToPlayer()">Aller vers joueur</button>
 </div>

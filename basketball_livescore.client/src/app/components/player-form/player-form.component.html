@@ -2,16 +2,18 @@
   <h2>Create Player</h2>
   <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Name</label>
+      <label for="name">Name:</label>
       <input type="text" id="name" formControlName="name" class="form-control">
     </div>
     <div class="form-group">
-      <label for="number">Number</label>
+      <label for="number">Number:</label>
       <input type="number" id="number" formControlName="number" class="form-control">
     </div>
     <div class="form-group">
-      <label for="teamId">Team ID</label>
-      <input type="number" id="teamId" formControlName="teamId" class="form-control">
+      <label for="teamId">Team:</label>
+      <select id="teamId" formControlName="teamId" class="form-control">
+        <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
+      </select>
     </div>
     <button type="submit" class="btn btn-primary">Create Player</button>
   </form>

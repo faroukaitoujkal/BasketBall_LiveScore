@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TeamService } from '../../services/team.service';
 import { Team } from '../../services/team.model';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-team-form',
@@ -24,20 +25,23 @@ export class TeamFormComponent implements OnInit {
   onSubmit(): void {
     if (this.teamForm.valid) {
       const team: Team = this.teamForm.value;
-      this.teamService.createTeam(team).subscribe(
-        response => {
+      console.log('Submitting team:', JSON.stringify(team, null, 2)); 
+
+      this.teamService.createTeam(team).pipe(
+        catchError(error => {
+          console.error('HTTP Error:', error.message);
+          console.error('HTTP Response:', error);
+          return of(null);
+        })
+      ).subscribe(response => {
+        if (response) {
           console.log('Team created successfully', response);
           this.teamForm.reset();
           this.router.navigate(['/teams']);
-        },
-        error => {
-          console.error('Error creating team', error);
+        } else {
+          console.error('Failed to create team. No response received.');
         }
-      );
+      });
     }
-  }
-
-  navigateToPlayer(): void {
-    this.router.navigateByUrl("/players/create");
   }
 }

@@ -2,6 +2,7 @@
 using BasketBall_LiveScore.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace BasketBall_LiveScore.Server.Controllers
 {
@@ -19,7 +20,7 @@ namespace BasketBall_LiveScore.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
         {
-            return await _context.Players.ToListAsync();
+            return await _context.Players.Include(p => p.Team).ToListAsync();
         }
 
         [HttpGet("{id}")]

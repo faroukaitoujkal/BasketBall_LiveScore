@@ -2,6 +2,8 @@
 using BasketBall_LiveScore.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace BasketBall_LiveScore.Server.Controllers
 {
@@ -38,6 +40,14 @@ namespace BasketBall_LiveScore.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Team>> PostTeam(Team team)
         {
+            if (team.Players != null)
+            {
+                foreach (var player in team.Players)
+                {
+                    player.TeamId = team.Id; // Associez chaque joueur à l'équipe
+                }
+            }
+
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
