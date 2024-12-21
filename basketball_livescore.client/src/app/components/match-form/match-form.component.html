@@ -1,0 +1,50 @@
+<div class="container">
+  <h2>Create Match</h2>
+  <form [formGroup]="matchForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="matchDate">Match Date:</label>
+      <input type="datetime-local" id="matchDate" formControlName="matchDate" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="location">Location:</label>
+      <input type="text" id="location" formControlName="location" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="homeTeamId">Home Team:</label>
+      <select id="homeTeamId" formControlName="homeTeamId" class="form-control">
+        <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="awayTeamId">Away Team:</label>
+      <select id="awayTeamId" formControlName="awayTeamId" class="form-control">
+        <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
+      </select>
+      <div *ngIf="matchForm.errors?.['uniqueTeams']" class="text-danger">
+        Home team and away team cannot be the same.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="numberOfQuarters">Number of Quarters:</label>
+      <input type="number" id="numberOfQuarters" formControlName="numberOfQuarters" class="form-control">
+      <div *ngIf="matchForm.get('numberOfQuarters')?.errors?.['range']" class="text-danger">
+        Number of quarters must be between 2 and 4.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="quarterDuration">Quarter Duration (minutes):</label>
+      <input type="number" id="quarterDuration" formControlName="quarterDuration" class="form-control">
+      <div *ngIf="matchForm.get('quarterDuration')?.errors?.['range']" class="text-danger">
+        Quarter duration must be between 10 and 12 minutes.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="timeoutDuration">Timeout Duration (minutes):</label>
+      <input type="number" id="timeoutDuration" formControlName="timeoutDuration" class="form-control">
+      <div *ngIf="matchForm.get('timeoutDuration')?.errors?.['range']" class="text-danger">
+        Timeout duration must be between 0.5 and 2 minutes.
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Match</button>
+  </form>
+</div>
