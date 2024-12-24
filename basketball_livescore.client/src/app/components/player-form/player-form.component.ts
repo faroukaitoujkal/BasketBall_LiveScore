@@ -47,7 +47,7 @@ export class PlayerFormComponent implements OnInit {
     if (this.playerForm.valid) {
       const player: Player = {
         ...this.playerForm.value,
-        team: undefined 
+        team: undefined
       };
 
       this.playerService.createPlayer(player).pipe(

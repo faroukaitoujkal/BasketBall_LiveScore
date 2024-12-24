@@ -1,16 +1,16 @@
-import { Team } from "./player.model";
+  import { Team } from "./team.model"; 
 
-export interface Match {
-  id?: number;
-  matchDate: Date;
-  location: string;
-  homeTeamId: number;
-  homeTeam?: Team;
-  awayTeamId: number;
-  awayTeam?: Team;
-  encodedBy?: string;
-  liveEncoders?: string[];
-  numberOfQuarters?: number;
-  quarterDuration?: number;
-  timeoutDuration?: number;
-}
+  export interface Match {
+    id?: number;
+    matchDate: Date;
+    location: string;
+    homeTeamId: number;
+    awayTeamId: number;
+    numberOfQuarters: number;
+    quarterDuration: number;
+    timeoutDuration: number;
+    encodedBy?: string;
+    liveEncoders?: string[];
+    homeTeam?: Team; 
+    awayTeam?: Team; 
+  }

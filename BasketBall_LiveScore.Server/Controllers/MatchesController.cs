@@ -2,6 +2,8 @@
 using BasketBall_LiveScore.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace BasketBall_LiveScore.Server.Controllers
 {
@@ -10,22 +12,30 @@ namespace BasketBall_LiveScore.Server.Controllers
     public class MatchesController : ControllerBase
     {
         private readonly BasketballContext _context;
+        private readonly ILogger<MatchesController> _logger;
 
-        public MatchesController(BasketballContext context)
+        public MatchesController(BasketballContext context, ILogger<MatchesController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Match>>> GetMatches()
         {
-            return await _context.Matches.ToListAsync();
+            return await _context.Matches
+                .Include(m => m.HomeTeam)
+                .Include(m => m.AwayTeam)
+                .ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Match>> GetMatch(int id)
         {
-            var match = await _context.Matches.FindAsync(id);
+            var match = await _context.Matches
+                .Include(m => m.HomeTeam)
+                .Include(m => m.AwayTeam)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (match == null)
             {
@@ -38,6 +48,19 @@ namespace BasketBall_LiveScore.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Match>> PostMatch(Match match)
         {
+            _logger.LogInformation("Received match data: {MatchData}", match);
+
+            var homeTeam = await _context.Teams.FindAsync(match.HomeTeamId);
+            var awayTeam = await _context.Teams.FindAsync(match.AwayTeamId);
+
+            if (homeTeam == null || awayTeam == null)
+            {
+                return BadRequest("Invalid HomeTeamId or AwayTeamId.");
+            }
+
+            match.HomeTeam = homeTeam;
+            match.AwayTeam = awayTeam;
+
             _context.Matches.Add(match);
             await _context.SaveChangesAsync();
 
@@ -51,6 +74,17 @@ namespace BasketBall_LiveScore.Server.Controllers
             {
                 return BadRequest();
             }
+
+            var homeTeam = await _context.Teams.FindAsync(match.HomeTeamId);
+            var awayTeam = await _context.Teams.FindAsync(match.AwayTeamId);
+
+            if (homeTeam == null || awayTeam == null)
+            {
+                return BadRequest("Invalid HomeTeamId or AwayTeamId.");
+            }
+
+            match.HomeTeam = homeTeam;
+            match.AwayTeam = awayTeam;
 
             _context.Entry(match).State = EntityState.Modified;
 
