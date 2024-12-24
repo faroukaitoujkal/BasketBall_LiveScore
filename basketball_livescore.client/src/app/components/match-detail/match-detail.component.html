@@ -1,0 +1,11 @@
+<div class="container" *ngIf="match">
+  <h2>Match Details</h2>
+  <p><strong>Date:</strong> {{ match.matchDate | date:'short' }}</p>
+  <p><strong>Location:</strong> {{ match.location }}</p>
+  <p><strong>Home Team:</strong> {{ match.homeTeam?.name }}</p>
+  <p><strong>Away Team:</strong> {{ match.awayTeam?.name }}</p>
+  <p><strong>Number of Quarters:</strong> {{ match.numberOfQuarters }}</p>
+  <p><strong>Quarter Duration:</strong> {{ match.quarterDuration }}</p>
+  <p><strong>Timeout Duration:</strong> {{ match.timeoutDuration }}</p>
+  <p><strong>Encoded By:</strong> {{ match.encodedBy }}</p>
+</div>

@@ -1,0 +1,42 @@
+<div class="container">
+  <h2>Match List</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Home Team</th>
+        <th>Away Team</th>
+        <th>Quarters</th>
+        <th>Quarter Duration</th>
+        <th>Timeout Duration</th>
+        <th>Encoded By</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let match of matches">
+        <td>{{ match.matchDate | date:'short' }}</td>
+        <td>{{ match.location }}</td>
+        <td>
+          <button class="btn btn-link" (click)="viewMatchDetails(match.id!)">
+            {{ match.homeTeam?.name }}
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-link" (click)="viewMatchDetails(match.id!)">
+            {{ match.awayTeam?.name }}
+          </button>
+        </td>
+        <td>{{ match.numberOfQuarters }}</td>
+        <td>{{ match.quarterDuration }}</td>
+        <td>{{ match.timeoutDuration }}</td>
+        <td>{{ match.encodedBy }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="playMatch(match.id!)">Play Match</button>
+          <button class="btn btn-info" (click)="viewMatchDetails(match.id!)">View Details</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

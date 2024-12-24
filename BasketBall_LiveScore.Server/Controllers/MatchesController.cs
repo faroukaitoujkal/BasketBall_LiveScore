@@ -23,10 +23,14 @@ namespace BasketBall_LiveScore.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Match>>> GetMatches()
         {
-            return await _context.Matches
+            var matches = await _context.Matches
                 .Include(m => m.HomeTeam)
                 .Include(m => m.AwayTeam)
                 .ToListAsync();
+
+            _logger.LogInformation("Matches retrieved: {Matches}", matches);
+
+            return matches;
         }
 
         [HttpGet("{id}")]

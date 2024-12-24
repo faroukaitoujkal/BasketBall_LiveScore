@@ -1,0 +1,15 @@
+.container {
+  margin: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+p {
+  margin: 10px 0;
+}
+
+strong {
+  font-weight: bold;
+}

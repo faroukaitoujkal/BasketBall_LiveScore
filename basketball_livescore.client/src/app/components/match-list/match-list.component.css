@@ -1,0 +1,38 @@
+.container {
+  margin: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+.btn-link {
+  text-decoration: none;
+  color: #007bff;
+}
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
