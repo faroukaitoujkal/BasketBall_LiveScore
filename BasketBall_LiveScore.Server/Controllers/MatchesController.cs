@@ -30,7 +30,7 @@ namespace BasketBall_LiveScore.Server.Controllers
 
             _logger.LogInformation("Matches retrieved: {Matches}", matches);
 
-            return matches;
+            return Ok(matches);
         }
 
         [HttpGet("{id}")]
@@ -46,7 +46,7 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return NotFound();
             }
 
-            return match;
+            return Ok(match);
         }
 
         [HttpPost]

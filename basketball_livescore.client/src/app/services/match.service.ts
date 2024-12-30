@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class MatchService {
-  private apiUrl = 'https://localhost:7088/api/matches'; 
+  private apiUrl = 'https://localhost:7088/api/matches';
 
   constructor(private http: HttpClient) { }
 

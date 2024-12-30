@@ -18,16 +18,8 @@
       <tr *ngFor="let match of matches">
         <td>{{ match.matchDate | date:'short' }}</td>
         <td>{{ match.location }}</td>
-        <td>
-          <button class="btn btn-link" (click)="viewMatchDetails(match.id!)">
-            {{ match.homeTeam?.name }}
-          </button>
-        </td>
-        <td>
-          <button class="btn btn-link" (click)="viewMatchDetails(match.id!)">
-            {{ match.awayTeam?.name }}
-          </button>
-        </td>
+        <td>{{ match.homeTeam?.name }}</td>
+        <td>{{ match.awayTeam?.name }}</td>
         <td>{{ match.numberOfQuarters }}</td>
         <td>{{ match.quarterDuration }}</td>
         <td>{{ match.timeoutDuration }}</td>

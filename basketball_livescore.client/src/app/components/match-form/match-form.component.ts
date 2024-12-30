@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatchService } from '../../services/match.service';
 import { TeamService } from '../../services/team.service';
+import { AuthService } from '../../services/auth.service';
 import { Match } from '../../services/match.model';
 import { catchError, of } from 'rxjs';
 import { Team } from '../../services/team.model';
@@ -22,6 +23,7 @@ export class MatchFormComponent implements OnInit {
     private fb: FormBuilder,
     private matchService: MatchService,
     private teamService: TeamService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.matchForm = this.fb.group({
@@ -31,8 +33,7 @@ export class MatchFormComponent implements OnInit {
       awayTeamId: [null, Validators.required],
       numberOfQuarters: [2, [Validators.required, rangeValidator(2, 4)]],
       quarterDuration: [10, [Validators.required, rangeValidator(10, 12)]],
-      timeoutDuration: [1, [Validators.required, rangeValidator(1, 3)]],
-      encodedBy: ['', Validators.required]
+      timeoutDuration: [1, [Validators.required, rangeValidator(1, 3)]]
     }, { validators: uniqueTeamsValidator() });
   }
 
@@ -56,6 +57,7 @@ export class MatchFormComponent implements OnInit {
       const match: Match = {
         ...this.matchForm.value,
         matchDate: new Date(this.matchForm.value.matchDate),
+        encodedBy: this.authService.currentUserValue?.email,
         quarters: [],
         playerScores: [],
         fouls: [],

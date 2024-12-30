@@ -20,10 +20,10 @@ namespace BasketBall_LiveScore.Server.Models
         public int AwayTeamId { get; set; }
 
         [JsonIgnore]
-        public Team? HomeTeam { get; set; } 
+        public Team? HomeTeam { get; set; }
 
         [JsonIgnore]
-        public Team? AwayTeam { get; set; } 
+        public Team? AwayTeam { get; set; }
 
         [Required]
         public int NumberOfQuarters { get; set; }
