@@ -19,6 +19,7 @@ namespace BasketBall_LiveScore.Server.Data
         public DbSet<Substitution> Substitutions { get; set; }
         public DbSet<Quarter> Quarters { get; set; }
         public DbSet<TimeoutMatch> Timeouts { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

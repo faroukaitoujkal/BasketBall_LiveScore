@@ -1,4 +1,3 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">BasketBallApp</a>
@@ -8,16 +7,19 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/teams/create">Teams</a>
+          <a class="nav-link" routerLink="/teams/create">Teams</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/players/create">Players</a>
+          <a class="nav-link" routerLink="/players/create">Players</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/matches/create">Matches</a>
+          <a class="nav-link" routerLink="/matches/create">Matches</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/matches_list/create">Play Match</a>
+          <a class="nav-link" routerLink="/matches_list/create">Play Match</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()" routerLink="/login">Logout</a>
         </li>
       </ul>
     </div>
