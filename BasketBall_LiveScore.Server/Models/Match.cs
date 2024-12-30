@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace BasketBall_LiveScore.Server.Models
 {
@@ -43,5 +44,8 @@ namespace BasketBall_LiveScore.Server.Models
         public List<Quarter> Quarters { get; set; } = new List<Quarter>();
         public List<TimeoutMatch> Timeouts { get; set; } = new List<TimeoutMatch>();
         public List<string> LiveEncoders { get; set; } = new List<string>();
+
+        public List<int>? HomeTeamStartingPlayers { get; set; } 
+        public List<int>? AwayTeamStartingPlayers { get; set; } 
     }
 }

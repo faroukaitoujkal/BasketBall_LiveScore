@@ -11,18 +11,36 @@
     </div>
     <div class="form-group">
       <label for="homeTeamId">Home Team:</label>
-      <select id="homeTeamId" formControlName="homeTeamId" class="form-control">
+      <select id="homeTeamId" formControlName="homeTeamId" class="form-control" (change)="onHomeTeamChange()">
         <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
       </select>
     </div>
     <div class="form-group">
+      <label for="homeTeamStartingPlayers">Home Team Starting Players:</label>
+      <select id="homeTeamStartingPlayers"
+              [multiple]="true"
+              class="form-control"
+              (change)="onPlayerSelectionChange(true, $event.target.selectedOptions)">
+        <option *ngFor="let player of homeTeamPlayers" [value]="player.id">{{ player.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
       <label for="awayTeamId">Away Team:</label>
-      <select id="awayTeamId" formControlName="awayTeamId" class="form-control">
+      <select id="awayTeamId" formControlName="awayTeamId" class="form-control" (change)="onAwayTeamChange()">
         <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
       </select>
       <div *ngIf="matchForm.errors?.['uniqueTeams']" class="text-danger">
         Home team and away team cannot be the same.
       </div>
+    </div>
+    <div class="form-group">
+      <label for="awayTeamStartingPlayers">Away Team Starting Players:</label>
+      <select id="awayTeamStartingPlayers"
+              [multiple]="true"
+              class="form-control"
+              (change)="onPlayerSelectionChange(false, $event.target.selectedOptions)">
+        <option *ngFor="let player of awayTeamPlayers" [value]="player.id">{{ player.name }}</option>
+      </select>
     </div>
     <div class="form-group">
       <label for="numberOfQuarters">Number of Quarters:</label>

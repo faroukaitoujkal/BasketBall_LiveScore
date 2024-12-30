@@ -36,6 +36,21 @@ namespace BasketBall_LiveScore.Server.Controllers
             return player;
         }
 
+        [HttpGet("team/{teamId}")]
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayersByTeam(int teamId)
+        {
+            var players = await _context.Players
+                .Where(p => p.TeamId == teamId)
+                .ToListAsync();
+
+            if (players == null || !players.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(players);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Player>> PostPlayer(Player player)
         {

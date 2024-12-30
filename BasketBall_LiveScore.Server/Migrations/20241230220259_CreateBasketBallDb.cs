@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BasketBall_LiveScore.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateBasketBallLiveScoreModels : Migration
+    public partial class CreateBasketBallDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,20 @@ namespace BasketBall_LiveScore.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Matches",
                 columns: table => new
                 {
@@ -34,8 +48,13 @@ namespace BasketBall_LiveScore.Server.Migrations
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HomeTeamId = table.Column<int>(type: "int", nullable: false),
                     AwayTeamId = table.Column<int>(type: "int", nullable: false),
+                    NumberOfQuarters = table.Column<int>(type: "int", nullable: false),
+                    QuarterDuration = table.Column<int>(type: "int", nullable: false),
+                    TimeoutDuration = table.Column<double>(type: "float", nullable: false),
                     EncodedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LiveEncoders = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LiveEncoders = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HomeTeamStartingPlayers = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AwayTeamStartingPlayers = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -285,6 +304,9 @@ namespace BasketBall_LiveScore.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Timeouts");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Players");

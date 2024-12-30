@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatchService } from '../../services/match.service';
 import { TeamService } from '../../services/team.service';
+import { PlayerService } from '../../services/player.service';
 import { AuthService } from '../../services/auth.service';
 import { Match } from '../../services/match.model';
 import { catchError, of } from 'rxjs';
 import { Team } from '../../services/team.model';
+import { Player } from '../../services/player.model';
 import { rangeValidator } from '../range.validator';
 import { uniqueTeamsValidator } from '../unique-teams.validator';
 
@@ -18,11 +20,14 @@ import { uniqueTeamsValidator } from '../unique-teams.validator';
 export class MatchFormComponent implements OnInit {
   matchForm: FormGroup;
   teams: Team[] = [];
+  homeTeamPlayers: Player[] = [];
+  awayTeamPlayers: Player[] = [];
 
   constructor(
     private fb: FormBuilder,
     private matchService: MatchService,
     private teamService: TeamService,
+    private playerService: PlayerService,
     private authService: AuthService,
     private router: Router
   ) {
@@ -33,7 +38,9 @@ export class MatchFormComponent implements OnInit {
       awayTeamId: [null, Validators.required],
       numberOfQuarters: [2, [Validators.required, rangeValidator(2, 4)]],
       quarterDuration: [10, [Validators.required, rangeValidator(10, 12)]],
-      timeoutDuration: [1, [Validators.required, rangeValidator(1, 3)]]
+      timeoutDuration: [1, [Validators.required, rangeValidator(1, 3)]],
+      homeTeamStartingPlayers: this.fb.array([], [Validators.minLength(5), Validators.maxLength(5)]),
+      awayTeamStartingPlayers: this.fb.array([], [Validators.minLength(5), Validators.maxLength(5)]),
     }, { validators: uniqueTeamsValidator() });
   }
 
@@ -52,12 +59,65 @@ export class MatchFormComponent implements OnInit {
     );
   }
 
+  loadPlayers(teamId: number, isHomeTeam: boolean): void {
+    this.playerService.getPlayersByTeam(teamId).subscribe(
+      (data: Player[]) => {
+        if (isHomeTeam) {
+          this.homeTeamPlayers = data;
+        } else {
+          this.awayTeamPlayers = data;
+        }
+      },
+      error => {
+        console.error('Error loading players', error);
+      }
+    );
+  }
+
+  onHomeTeamChange(): void {
+    const homeTeamId = this.matchForm.get('homeTeamId')?.value;
+    if (homeTeamId) {
+      this.loadPlayers(homeTeamId, true);
+    }
+  }
+
+  onAwayTeamChange(): void {
+    const awayTeamId = this.matchForm.get('awayTeamId')?.value;
+    if (awayTeamId) {
+      this.loadPlayers(awayTeamId, false);
+    }
+  }
+
+  onPlayerSelectionChange(isHomeTeam: boolean, selectedOptions: any): void {
+    const playerFormArray = isHomeTeam
+      ? this.matchForm.get('homeTeamStartingPlayers') as FormArray
+      : this.matchForm.get('awayTeamStartingPlayers') as FormArray;
+
+    while (playerFormArray.length) {
+      playerFormArray.removeAt(0);
+    }
+
+    const selectedPlayerIds = Array.from(selectedOptions).map((option: any) => (option as HTMLOptionElement).value);
+
+    selectedPlayerIds.forEach(playerId => playerFormArray.push(this.fb.control(playerId)));
+  }
+
   onSubmit(): void {
     if (this.matchForm.valid) {
+      const homePlayers = this.matchForm.value.homeTeamStartingPlayers;
+      const awayPlayers = this.matchForm.value.awayTeamStartingPlayers;
+
+      if (homePlayers.length !== 5 || awayPlayers.length !== 5) {
+        alert('Each team must have exactly 5 starting players.');
+        return;
+      }
+
       const match: Match = {
         ...this.matchForm.value,
         matchDate: new Date(this.matchForm.value.matchDate),
         encodedBy: this.authService.currentUserValue?.email,
+        homeTeamStartingPlayers: homePlayers.map((playerId: string) => +playerId),  
+        awayTeamStartingPlayers: awayPlayers.map((playerId: string) => +playerId),  
         quarters: [],
         playerScores: [],
         fouls: [],
@@ -65,6 +125,8 @@ export class MatchFormComponent implements OnInit {
         timeouts: []
       };
 
+      console.log('Match payload:', match);  
+ 
       this.matchService.createMatch(match).pipe(
         catchError(error => {
           console.error('HTTP Error:', error.message);
@@ -77,6 +139,8 @@ export class MatchFormComponent implements OnInit {
           this.router.navigate(['/matches']);
         }
       });
+    } else {
+      console.log('Form is invalid');
     }
   }
 }

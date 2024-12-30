@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BasketBall_LiveScore.Server.Controllers
 {
@@ -54,6 +55,16 @@ namespace BasketBall_LiveScore.Server.Controllers
         {
             _logger.LogInformation("Received match data: {MatchData}", match);
 
+            if (match.HomeTeamStartingPlayers == null || match.HomeTeamStartingPlayers.Count != 5)
+            {
+                return BadRequest("Home team must have exactly 5 starting players.");
+            }
+
+            if (match.AwayTeamStartingPlayers == null || match.AwayTeamStartingPlayers.Count != 5)
+            {
+                return BadRequest("Away team must have exactly 5 starting players.");
+            }
+
             var homeTeam = await _context.Teams.FindAsync(match.HomeTeamId);
             var awayTeam = await _context.Teams.FindAsync(match.AwayTeamId);
 
@@ -62,8 +73,21 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return BadRequest("Invalid HomeTeamId or AwayTeamId.");
             }
 
-            match.HomeTeam = homeTeam;
-            match.AwayTeam = awayTeam;
+            foreach (var playerId in match.HomeTeamStartingPlayers)
+            {
+                if (await _context.Players.FindAsync(playerId) == null)
+                {
+                    return BadRequest($"Invalid player ID {playerId} in HomeTeamStartingPlayers.");
+                }
+            }
+
+            foreach (var playerId in match.AwayTeamStartingPlayers)
+            {
+                if (await _context.Players.FindAsync(playerId) == null)
+                {
+                    return BadRequest($"Invalid player ID {playerId} in AwayTeamStartingPlayers.");
+                }
+            }
 
             _context.Matches.Add(match);
             await _context.SaveChangesAsync();

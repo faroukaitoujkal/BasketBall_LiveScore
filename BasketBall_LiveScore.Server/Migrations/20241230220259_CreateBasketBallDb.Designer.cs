@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BasketBall_LiveScore.Server.Migrations
 {
     [DbContext(typeof(BasketballContext))]
-    [Migration("20241230162133_AddUserTable")]
-    partial class AddUserTable
+    [Migration("20241230220259_CreateBasketBallDb")]
+    partial class CreateBasketBallDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,12 +69,18 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.Property<int>("AwayTeamId")
                         .HasColumnType("int");
 
+                    b.PrimitiveCollection<string>("AwayTeamStartingPlayers")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EncodedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("HomeTeamId")
                         .HasColumnType("int");
+
+                    b.PrimitiveCollection<string>("HomeTeamStartingPlayers")
+                        .HasColumnType("nvarchar(max)");
 
                     b.PrimitiveCollection<string>("LiveEncoders")
                         .IsRequired()

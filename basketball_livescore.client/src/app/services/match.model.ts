@@ -1,4 +1,5 @@
-  import { Team } from "./team.model"; 
+import { Team } from "./team.model";
+import { Player } from "./player.model";
 
   export interface Match {
     id?: number;
@@ -12,5 +13,7 @@
     encodedBy?: string;
     liveEncoders?: string[];
     homeTeam?: Team; 
-    awayTeam?: Team; 
+    awayTeam?: Team;
+    homeTeamStartingPlayers?: Player[];
+    awayTeamStartingPlayers?: Player[]; 
   }

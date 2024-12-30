@@ -66,12 +66,18 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.Property<int>("AwayTeamId")
                         .HasColumnType("int");
 
+                    b.PrimitiveCollection<string>("AwayTeamStartingPlayers")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EncodedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("HomeTeamId")
                         .HasColumnType("int");
+
+                    b.PrimitiveCollection<string>("HomeTeamStartingPlayers")
+                        .HasColumnType("nvarchar(max)");
 
                     b.PrimitiveCollection<string>("LiveEncoders")
                         .IsRequired()
