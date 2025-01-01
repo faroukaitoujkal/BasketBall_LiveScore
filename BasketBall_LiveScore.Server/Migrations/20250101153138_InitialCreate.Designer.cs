@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BasketBall_LiveScore.Server.Migrations
 {
     [DbContext(typeof(BasketballContext))]
-    [Migration("20241230220259_CreateBasketBallDb")]
-    partial class CreateBasketBallDb
+    [Migration("20250101153138_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

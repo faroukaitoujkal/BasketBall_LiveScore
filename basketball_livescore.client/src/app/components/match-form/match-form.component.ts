@@ -11,6 +11,7 @@ import { Team } from '../../services/team.model';
 import { Player } from '../../services/player.model';
 import { rangeValidator } from '../range.validator';
 import { uniqueTeamsValidator } from '../unique-teams.validator';
+import { User } from '../../services/user.model';
 
 @Component({
   selector: 'app-match-form',
@@ -22,6 +23,7 @@ export class MatchFormComponent implements OnInit {
   teams: Team[] = [];
   homeTeamPlayers: Player[] = [];
   awayTeamPlayers: Player[] = [];
+  users: User[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -41,11 +43,13 @@ export class MatchFormComponent implements OnInit {
       timeoutDuration: [1, [Validators.required, rangeValidator(1, 3)]],
       homeTeamStartingPlayers: this.fb.array([], [Validators.minLength(5), Validators.maxLength(5)]),
       awayTeamStartingPlayers: this.fb.array([], [Validators.minLength(5), Validators.maxLength(5)]),
+      liveEncoders: this.fb.array([], [Validators.minLength(1)])
     }, { validators: uniqueTeamsValidator() });
   }
 
   ngOnInit(): void {
     this.loadTeams();
+    this.loadUsers();
   }
 
   loadTeams(): void {
@@ -55,6 +59,17 @@ export class MatchFormComponent implements OnInit {
       },
       error => {
         console.error('Error loading teams', error);
+      }
+    );
+  }
+
+  loadUsers(): void {
+    this.authService.getUsers().subscribe(
+      (data: User[]) => {
+        this.users = data;
+      },
+      error => {
+        console.error('Error loading users', error);
       }
     );
   }
@@ -116,8 +131,9 @@ export class MatchFormComponent implements OnInit {
         ...this.matchForm.value,
         matchDate: new Date(this.matchForm.value.matchDate),
         encodedBy: this.authService.currentUserValue?.email,
-        homeTeamStartingPlayers: homePlayers.map((playerId: string) => +playerId),  
-        awayTeamStartingPlayers: awayPlayers.map((playerId: string) => +playerId),  
+        homeTeamStartingPlayers: homePlayers.map((playerId: number) => ({ id: playerId })),
+        awayTeamStartingPlayers: awayPlayers.map((playerId: number) => ({ id: playerId })),
+        liveEncoders: this.matchForm.value.liveEncoders,
         quarters: [],
         playerScores: [],
         fouls: [],
@@ -125,8 +141,8 @@ export class MatchFormComponent implements OnInit {
         timeouts: []
       };
 
-      console.log('Match payload:', match);  
- 
+      console.log('Match payload:', match);
+
       this.matchService.createMatch(match).pipe(
         catchError(error => {
           console.error('HTTP Error:', error.message);

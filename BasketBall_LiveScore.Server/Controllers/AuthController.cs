@@ -59,6 +59,13 @@ namespace BasketBall_LiveScore.Server.Controllers
             return Ok(user);
         }
 
+        [HttpGet("users")]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers() // on précise le chemin car j'ai eu un probléme de route je get sur /auth au lieu de /auth/users
+        {
+            var users = await _context.Users.ToListAsync();
+            return Ok(users);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, User user)
         {

@@ -14,15 +14,18 @@
       <select id="homeTeamId" formControlName="homeTeamId" class="form-control" (change)="onHomeTeamChange()">
         <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
       </select>
+      <div *ngIf="matchForm.errors?.['uniqueTeams']" class="text-danger">
+        Home team and away team cannot be the same.
+      </div>
     </div>
     <div class="form-group">
       <label for="homeTeamStartingPlayers">Home Team Starting Players:</label>
-      <select id="homeTeamStartingPlayers"
-              [multiple]="true"
-              class="form-control"
-              (change)="onPlayerSelectionChange(true, $event.target.selectedOptions)">
+      <select id="homeTeamStartingPlayers" formArrayName="homeTeamStartingPlayers" class="form-control" multiple>
         <option *ngFor="let player of homeTeamPlayers" [value]="player.id">{{ player.name }}</option>
       </select>
+      <div *ngIf="matchForm.get('homeTeamStartingPlayers')?.errors?.['minlength']" class="text-danger">
+        You must select 5 starting players.
+      </div>
     </div>
     <div class="form-group">
       <label for="awayTeamId">Away Team:</label>
@@ -35,12 +38,21 @@
     </div>
     <div class="form-group">
       <label for="awayTeamStartingPlayers">Away Team Starting Players:</label>
-      <select id="awayTeamStartingPlayers"
-              [multiple]="true"
-              class="form-control"
-              (change)="onPlayerSelectionChange(false, $event.target.selectedOptions)">
+      <select id="awayTeamStartingPlayers" formArrayName="awayTeamStartingPlayers" class="form-control" multiple>
         <option *ngFor="let player of awayTeamPlayers" [value]="player.id">{{ player.name }}</option>
       </select>
+      <div *ngIf="matchForm.get('awayTeamStartingPlayers')?.errors?.['minlength']" class="text-danger">
+        You must select 5 starting players.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="liveEncoders">Live Encoders:</label>
+      <select id="liveEncoders" formArrayName="liveEncoders" class="form-control" multiple>
+        <option *ngFor="let encoder of users" [value]="encoder">{{ encoder.email }}</option>
+      </select>
+      <div *ngIf="matchForm.get('liveEncoders')?.errors?.['minlength']" class="text-danger">
+        You must select at least 1 live encoder.
+      </div>
     </div>
     <div class="form-group">
       <label for="numberOfQuarters">Number of Quarters:</label>
