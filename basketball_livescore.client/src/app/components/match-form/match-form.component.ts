@@ -122,10 +122,10 @@ export class MatchFormComponent implements OnInit {
       const homePlayers = this.matchForm.value.homeTeamStartingPlayers;
       const awayPlayers = this.matchForm.value.awayTeamStartingPlayers;
 
-      if (homePlayers.length !== 5 || awayPlayers.length !== 5) {
+      /*if (homePlayers.length !== 5 || awayPlayers.length !== 5) {
         alert('Each team must have exactly 5 starting players.');
         return;
-      }
+      }*/
 
       const match: Match = {
         ...this.matchForm.value,

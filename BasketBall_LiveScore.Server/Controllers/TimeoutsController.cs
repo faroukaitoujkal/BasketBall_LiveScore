@@ -44,6 +44,33 @@ namespace BasketBall_LiveScore.Server.Controllers
             return CreatedAtAction("GetTimeout", new { id = timeout.Id }, timeout);
         }
 
+        [HttpPost("create-from-match/{matchId}")]
+        public async Task<ActionResult<TimeoutMatch>> CreateTimeoutFromMatch(int matchId, [FromBody] TimeoutMatch timeout)
+        {
+            // Récupérer le match correspondant à matchId
+            var match = await _context.Matches.FindAsync(matchId);
+            if (match == null)
+            {
+                return NotFound($"Match avec ID {matchId} introuvable.");
+            }
+
+            // S'assurer que l'ID du Match n'est pas modifié manuellement
+            timeout.MatchId = matchId;  // Associe le Match par son ID
+
+            // Détacher le match s'il est déjà suivi dans le contexte
+            _context.Entry(match).State = EntityState.Detached;
+
+            // Assigner des valeurs par défaut ou calculées si nécessaire
+            timeout.Duration = TimeSpan.FromMinutes(match.TimeoutDuration); // Par exemple
+            timeout.GameTime = timeout.GameTime;  // Si fourni dans la requête
+
+            // Ajouter et sauvegarder dans la base de données
+            _context.Timeouts.Add(timeout);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTimeout), new { id = timeout.Id }, timeout);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTimeout(int id, TimeoutMatch timeout)
         {
@@ -93,5 +120,4 @@ namespace BasketBall_LiveScore.Server.Controllers
             return _context.Timeouts.Any(e => e.Id == id);
         }
     }
-
 }

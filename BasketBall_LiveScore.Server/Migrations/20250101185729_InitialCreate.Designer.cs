@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BasketBall_LiveScore.Server.Migrations
 {
     [DbContext(typeof(BasketballContext))]
-    [Migration("20250101153138_InitialCreate")]
+    [Migration("20250101185729_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

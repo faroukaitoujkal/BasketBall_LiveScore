@@ -34,5 +34,6 @@ export class MatchesListComponent implements OnInit {
 
   playMatch(matchId: number): void {
     console.log(`Playing match with ID: ${matchId}`);
+    this.router.navigate(['/play-match', matchId]);
   }
 }

@@ -1,0 +1,57 @@
+.match-details {
+  margin-bottom: 20px;
+}
+
+.timer-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.timer-controls button {
+  margin: 5px;
+}
+
+.timeout-info {
+  background-color: #f8d7da;
+  padding: 10px;
+  border-radius: 5px;
+  color: #721c24;
+  margin-top: 10px;
+}
+
+.timeouts {
+  margin-top: 30px;
+}
+
+  .timeouts button {
+    margin: 10px 0;
+  }
+
+.timeout-item {
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+}
+
+  .timeout-item p {
+    margin: 0;
+  }
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+  ul li {
+    padding: 5px 0;
+  }
+
+h3, h4 {
+  color: #333;
+}
+
+h4 {
+  margin-top: 0;
+}
