@@ -1,57 +1,38 @@
-.match-details {
-  margin-bottom: 20px;
-}
-
-.timer-container {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.timer-controls button {
-  margin: 5px;
-}
-
-.timeout-info {
-  background-color: #f8d7da;
-  padding: 10px;
-  border-radius: 5px;
-  color: #721c24;
-  margin-top: 10px;
-}
-
-.timeouts {
+.game-area {
+  display: flex;
+  justify-content: space-between;
   margin-top: 30px;
 }
 
-  .timeouts button {
-    margin: 10px 0;
-  }
-
-.timeout-item {
-  padding: 10px;
-  border: 1px solid #ddd;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  background-color: #f4f4f4;
+.team-side {
+  width: 40%;
 }
 
-  .timeout-item p {
-    margin: 0;
-  }
+.home-team {
+  text-align: left;
+}
 
-ul {
+.away-team {
+  text-align: right;
+}
+
+.team-side h4 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.team-side ul {
   list-style-type: none;
   padding: 0;
 }
 
-  ul li {
-    padding: 5px 0;
-  }
-
-h3, h4 {
-  color: #333;
+.team-side li {
+  padding: 5px;
+  background-color: #f4f4f4;
+  margin: 5px 0;
+  border-radius: 5px;
 }
 
-h4 {
-  margin-top: 0;
+.team-side p {
+  margin: 0;
 }

@@ -2,43 +2,47 @@
   <h4>Détails du Match</h4>
   <p><strong>ID du Match:</strong> {{ matchId }}</p>
   <p><strong>Durée des Timeouts:</strong> {{ formatTime(timeoutDuration) }}</p>
-  <p><strong>Lieu du Match:</strong> {{ location }}</p>
-  <p><strong>Équipe à domicile:</strong> {{ homeTeamId }}</p>
-  <p><strong>Équipe extérieure:</strong> {{ awayTeamId }}</p>
-  <p><strong>Encodé par:</strong> {{ encodedBy }}</p>
 </div>
 
-<div class="timer-container">
-  <h3>Chrono: {{ formatTime(timer) }}</h3>
-
-  <!-- Indication si un timeout est en cours -->
-  <div *ngIf="isTimeoutInProgress" class="timeout-info">
-    <p><strong>Timeout en cours...</strong></p>
+<div class="game-area">
+  <!-- Affichage des joueurs de l'équipe à domicile -->
+  <div class="team-side home-team">
+    <h4>Équipe à Domicile</h4>
+    <ul>
+      <li *ngFor="let player of homePlayers">
+        <p>{{ player.name }} - {{ player.number }}</p> <!-- Afficher le nom et la position du joueur -->
+      </li>
+    </ul>
   </div>
 
-  <div *ngIf="!isTimeoutInProgress" class="timer-controls">
+  <!-- Chronomètre et contrôle du match au centre -->
+  <div class="timer-container">
+    <h3>Chrono: {{ formatTime(timer) }}</h3>
     <button class="btn btn-success" (click)="startTimer()" [disabled]="isRunning">Start</button>
     <button class="btn btn-danger" (click)="stopTimer()" [disabled]="!isRunning">Stop</button>
+  </div>
+
+  <!-- Affichage des joueurs de l'équipe extérieure -->
+  <div class="team-side away-team">
+    <h4>Équipe Extérieure</h4>
+    <ul>
+      <li *ngFor="let player of awayPlayers">
+        <p>{{ player.name }} - {{ player.number }}</p> <!-- Afficher le nom et la position du joueur -->
+      </li>
+    </ul>
   </div>
 </div>
 
 <div class="timeouts">
   <h4>Timeouts</h4>
-  <button class="btn btn-primary" (click)="createTimeoutForMatch(matchId)" [disabled]="isTimeoutInProgress">
-    Créer un Timeout pour ce match
-  </button>
-  <ul *ngIf="timeouts.length > 0">
+  <button (click)="createTimeoutForMatch(matchId)">Créer un Timeout pour ce match</button>
+  <ul>
     <li *ngFor="let timeout of timeouts">
-      <div class="timeout-item">
-        <p>
-          <strong>Quart:</strong> {{ timeout.quarter }},
-          <strong>Temps du match:</strong> {{ timeout.gameTime }},
-          <strong>Durée:</strong> {{ timeout.duration }}
-        </p>
-      </div>
+      <p>
+        <strong>Quart:</strong> {{ timeout.quarter }},
+        <strong>Temps du match:</strong> {{ timeout.gameTime }},
+        <strong>Durée:</strong> {{ timeout.duration }}
+      </p>
     </li>
   </ul>
-  <div *ngIf="timeouts.length === 0">
-    <p>Aucun timeout enregistré pour ce match.</p>
-  </div>
 </div>

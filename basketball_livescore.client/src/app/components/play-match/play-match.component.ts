@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match.service';
 import { TimeoutService, TimeoutMatch } from '../../services/timeout.service';
 import { Match } from '../../services/match.model';
+import { Player } from '../../services/player.model'; // Assurez-vous que Player est bien défini
+import { PlayerService } from '../../services/player.service';
 
 @Component({
   selector: 'app-play-match',
@@ -23,9 +25,13 @@ export class PlayMatchComponent implements OnInit {
   location: string = '';
   encodedBy: string = '';
 
+  homePlayers: Player[] = [];  // Liste des joueurs de l'équipe à domicile
+  awayPlayers: Player[] = [];  // Liste des joueurs de l'équipe extérieure
+
   constructor(
     private matchService: MatchService,
-    private timeoutService: TimeoutService
+    private timeoutService: TimeoutService,
+    private playerService: PlayerService
   ) { }
 
   ngOnInit(): void {
@@ -64,12 +70,25 @@ export class PlayMatchComponent implements OnInit {
       this.awayTeamId = match.awayTeamId;
       this.location = match.location;
       this.encodedBy = match.encodedBy || 'default@example.com'; // Provide a default value
+      this.loadPlayers();  // Recharger les joueurs lorsque les détails du match sont chargés
     });
   }
 
   loadTimeouts(): void {
     this.timeoutService.getTimeoutsByMatch(this.matchId).subscribe((timeouts: TimeoutMatch[]) => {
       this.timeouts = timeouts;
+    });
+  }
+
+  loadPlayers(): void {
+    this.playerService.getPlayersByTeam(this.homeTeamId).subscribe((players: Player[]) => {
+      console.log('Players for home team:', players);  // Vérifiez si les joueurs sont renvoyés
+      this.homePlayers = players.slice(0, 5);  // Prendre les 5 premiers joueurs
+    });
+
+    this.playerService.getPlayersByTeam(this.awayTeamId).subscribe((players: Player[]) => {
+      console.log('Players for away team:', players);  // Vérifiez si les joueurs sont renvoyés
+      this.awayPlayers = players.slice(0, 5);  // Prendre les 5 premiers joueurs
     });
   }
 
