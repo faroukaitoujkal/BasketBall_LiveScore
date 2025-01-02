@@ -41,7 +41,8 @@ export class PlayMatchComponent implements OnInit {
       gameTime: '00:00',
       foulType: 'P0',
       id: 0,
-      playerId: 0
+      playerId: 0,
+      matchId: this.matchId  // Initialisation avec matchId
   };
 
   constructor(
@@ -169,7 +170,8 @@ export class PlayMatchComponent implements OnInit {
         quarter: this.foul.quarter,
         gameTime: this.foul.gameTime,
         foulType: this.foul.foulType,
-        id: this.foul.id
+        id: this.foul.id,
+        matchId: this.matchId  // Assurez-vous que matchId est bien inclus ici
       };
 
       // Appeler le service pour créer la faute

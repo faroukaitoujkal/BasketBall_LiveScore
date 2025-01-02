@@ -10,4 +10,5 @@ export interface Foul {
   foulType: string;   // Type de la faute (P0, P1, P2, P3)
   quarter: number;    // Quart-temps (1 à 4)
   gameTime: string;   // Temps du match (format MM:SS)
+  matchId: number;    // ID du match (ajouté pour associer la faute à un match)
 }
