@@ -33,6 +33,46 @@
   </div>
 </div>
 
+<!-- Formulaire pour enregistrer une faute -->
+<div class="foul-record">
+  <h4>Enregistrer une Faute</h4>
+  <form (ngSubmit)="recordFoul()">
+    <div class="form-group">
+      <label for="player">Joueur</label>
+      <select id="player" [(ngModel)]="foul.player.id" name="playerId" required>
+        <option *ngFor="let player of homePlayers" [value]="player.id">
+          {{ player.name }}
+        </option>
+        <option *ngFor="let player of awayPlayers" [value]="player.id">
+          {{ player.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="quarter">Quart-temps</label>
+      <input id="quarter" [(ngModel)]="foul.quarter" name="quarter" type="number" min="1" max="4" required />
+    </div>
+
+    <div class="form-group">
+      <label for="gameTime">Temps du match</label>
+      <input id="gameTime" [(ngModel)]="foul.gameTime" name="gameTime" type="text" placeholder="MM:SS" required />
+    </div>
+
+    <div class="form-group">
+      <label for="foulType">Type de Faute</label>
+      <select id="foulType" [(ngModel)]="foul.foulType" name="foulType" required>
+        <option value="P0">P0</option>
+        <option value="P1">P1</option>
+        <option value="P2">P2</option>
+        <option value="P3">P3</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer Faute</button>
+  </form>
+</div>
+
 <div class="timeouts">
   <h4>Timeouts</h4>
   <button (click)="createTimeoutForMatch(matchId)">Créer un Timeout pour ce match</button>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match.service';
 import { TimeoutService, TimeoutMatch } from '../../services/timeout.service';
+import { FoulService, Foul } from '../../services/foul.service';  // Importation de FoulService
 import { Match } from '../../services/match.model';
 import { Player } from '../../services/player.model'; // Assurez-vous que Player est bien défini
 import { PlayerService } from '../../services/player.service';
@@ -28,10 +29,26 @@ export class PlayMatchComponent implements OnInit {
   homePlayers: Player[] = [];  // Liste des joueurs de l'équipe à domicile
   awayPlayers: Player[] = [];  // Liste des joueurs de l'équipe extérieure
 
+  // Variables pour le formulaire de fautes
+  foul: Foul = {
+      player: {
+          id: 0,
+          name: '',
+          number: 0,
+          teamId: 0
+      },
+      quarter: 1,
+      gameTime: '00:00',
+      foulType: 'P0',
+      id: 0,
+      playerId: 0
+  };
+
   constructor(
     private matchService: MatchService,
     private timeoutService: TimeoutService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private foulService: FoulService  // Injection du FoulService
   ) { }
 
   ngOnInit(): void {
@@ -128,5 +145,44 @@ export class PlayMatchComponent implements OnInit {
         this.startTimer(); // Reprendre le timer même en cas d'erreur
       }
     );
+  }
+
+  recordFoul(): void {
+    console.log('ID du joueur:', this.foul.player.id);  // Vérifiez la valeur de l'ID
+
+    // Trouver le joueur à partir de la liste des joueurs
+    const selectedPlayer = [...this.homePlayers, ...this.awayPlayers].find(player => Number(player.id) === Number(this.foul.player.id));
+
+    // Ajouter un log pour voir ce que vous obtenez
+    console.log('Joueur sélectionné:', selectedPlayer);
+
+    if (selectedPlayer && selectedPlayer.id !== undefined) {
+      // Créer un nouvel objet Foul avec la structure correcte
+      const newFoul: Foul = {
+        playerId: selectedPlayer.id,  // Utilisation de playerId
+        player: {
+          id: selectedPlayer.id,
+          name: selectedPlayer.name,
+          number: selectedPlayer.number,
+          teamId: selectedPlayer.teamId
+        },
+        quarter: this.foul.quarter,
+        gameTime: this.foul.gameTime,
+        foulType: this.foul.foulType,
+        id: this.foul.id
+      };
+
+      // Appeler le service pour créer la faute
+      this.foulService.createFoul(newFoul).subscribe(
+        (response) => {
+          console.log('Faute enregistrée avec succès:', response);
+        },
+        (error) => {
+          console.error('Erreur lors de l\'enregistrement de la faute:', error);
+        }
+      );
+    } else {
+      console.error('Joueur non trouvé ou ID invalide!');
+    }
   }
 }
