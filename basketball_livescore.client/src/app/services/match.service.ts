@@ -27,6 +27,11 @@ export class MatchService {
     return this.http.get<Match>(`${this.apiUrl}/${id}`);
   }
 
+  getMatchScores(matchId: number): Observable<{ homeTeamScore: number; awayTeamScore: number }> {
+    const url = `${this.apiUrl}/${matchId}/scores`;
+    return this.http.get<{ homeTeamScore: number; awayTeamScore: number }>(url);
+  }
+
   updateMatch(id: number, match: Match): Observable<Match> {
     return this.http.put<Match>(`${this.apiUrl}/${id}`, match);
   }

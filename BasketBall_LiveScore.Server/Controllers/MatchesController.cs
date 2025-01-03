@@ -50,6 +50,22 @@ namespace BasketBall_LiveScore.Server.Controllers
             return Ok(match);
         }
 
+        [HttpGet("{id}/scores")]
+        public async Task<ActionResult<object>> GetMatchScores(int id)
+        {
+            var match = await _context.Matches.FindAsync(id);
+            if (match == null)
+            {
+                return NotFound($"Match avec ID {id} introuvable.");
+            }
+
+            return new
+            {
+                HomeTeamScore = match.HomeTeamScore,
+                AwayTeamScore = match.AwayTeamScore
+            };
+        }
+
         [HttpPost]
         public async Task<ActionResult<Match>> PostMatch(Match match)
         {

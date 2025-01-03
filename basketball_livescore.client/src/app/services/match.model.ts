@@ -16,4 +16,6 @@ export interface Match {
   awayTeam?: Team;
   homeTeamStartingPlayers?: Player[];
   awayTeamStartingPlayers?: Player[];
+  homeTeamScore: number;
+  awayTeamScore: number;
 }

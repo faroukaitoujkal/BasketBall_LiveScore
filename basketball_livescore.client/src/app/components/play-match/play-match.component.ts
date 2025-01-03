@@ -35,6 +35,9 @@ export class PlayMatchComponent implements OnInit {
   selectedPlayerId: number = 0;
   selectedPoints: number = 1;
 
+  homeTeamScore: number = 0;
+  awayTeamScore: number = 0;
+
   foul: Foul = {
     player: {
       id: 0,
@@ -60,6 +63,7 @@ export class PlayMatchComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMatchDetails();
+    this.loadScores();
   }
 
   startTimer(): void {
@@ -115,6 +119,20 @@ export class PlayMatchComponent implements OnInit {
       this.awayPlayers = awayPlayers.slice(0, 5); // Prendre les 5 premiers joueurs
       this.updateAllPlayers();
     });
+  }
+
+  loadScores(): void {
+    this.matchService.getMatchScores(this.matchId).subscribe(
+      (scores) => {
+        console.log('Scores récupérés avec succès:', scores);
+        this.homeTeamScore = scores.homeTeamScore;
+        this.awayTeamScore = scores.awayTeamScore;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des scores:', error);
+        console.log('Détails de l\'erreur:', error.message);
+      }
+    );
   }
 
   updateAllPlayers(): void {
@@ -200,6 +218,7 @@ export class PlayMatchComponent implements OnInit {
     this.scoreService.addScore(newScore).subscribe(
       (response) => {
         console.log('Score enregistré avec succès:', response);
+        this.loadScores(); // Recharger les scores après l'ajout
       },
       (error) => {
         console.error("Erreur lors de l'enregistrement du score:", error);

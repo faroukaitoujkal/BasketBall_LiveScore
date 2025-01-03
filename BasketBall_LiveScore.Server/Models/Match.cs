@@ -46,6 +46,10 @@ namespace BasketBall_LiveScore.Server.Models
         public List<string> LiveEncoders { get; set; } = new List<string>();
 
         public List<int>? HomeTeamStartingPlayers { get; set; } 
-        public List<int>? AwayTeamStartingPlayers { get; set; } 
+        public List<int>? AwayTeamStartingPlayers { get; set; }
+
+        // Ajout des scores des équipes
+        public int HomeTeamScore { get; set; } = 0;
+        public int AwayTeamScore { get; set; } = 0;
     }
 }

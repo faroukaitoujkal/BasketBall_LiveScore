@@ -58,6 +58,16 @@ namespace BasketBall_LiveScore.Server.Controllers
             // Ajouter le score du joueur
             _context.PlayerScores.Add(playerScore);
 
+            // Incrémenter le score de l'équipe correspondante
+            if (player.TeamId == match.HomeTeamId)
+            {
+                match.HomeTeamScore += playerScore.Points;
+            }
+            else if (player.TeamId == match.AwayTeamId)
+            {
+                match.AwayTeamScore += playerScore.Points;
+            }
+
             // Sauvegarder les changements
             await _context.SaveChangesAsync();
 
