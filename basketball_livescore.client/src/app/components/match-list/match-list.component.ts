@@ -18,25 +18,28 @@ export class MatchesListComponent implements OnInit {
   }
 
   loadMatches(): void {
-    this.matchService.getMatches().subscribe(
-      (data: Match[]) => {
+    this.matchService.getMatches().subscribe({
+      next: (data: Match[]) => {
         this.matches = data;
 
-        // Charger les noms des équipes pour chaque match
+        // Load team names for each match
         this.matches.forEach((match) => {
           this.matchService.getTeamName(match.homeTeamId).subscribe((name: string) => {
-            match.homeTeam = { id: match.homeTeamId, name } as any; // Assignez dynamiquement un objet `Team`
+            match.homeTeam = { id: match.homeTeamId, name } as any;
           });
 
           this.matchService.getTeamName(match.awayTeamId).subscribe((name: string) => {
-            match.awayTeam = { id: match.awayTeamId, name } as any; // Assignez dynamiquement un objet `Team`
+            match.awayTeam = { id: match.awayTeamId, name } as any;
           });
         });
       },
-      (error) => {
+      error: (error) => {
         console.error('Error loading matches', error);
+      },
+      complete: () => {
+        console.log('Matches loaded successfully');
       }
-    );
+    });
   }
 
   viewMatchDetails(matchId: number): void {

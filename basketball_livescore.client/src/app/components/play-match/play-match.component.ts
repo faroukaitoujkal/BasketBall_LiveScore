@@ -155,15 +155,18 @@ export class PlayMatchComponent implements OnInit {
   }
 
   loadScores(): void {
-    this.matchService.getMatchScores(this.matchId).subscribe(
-      (scores) => {
+    this.matchService.getMatchScores(this.matchId).subscribe({
+      next: (scores) => {
         this.homeTeamScore = scores.homeTeamScore;
         this.awayTeamScore = scores.awayTeamScore;
       },
-      (error) => {
+      error: (error) => {
         console.error('Erreur lors du chargement des scores:', error);
+      },
+      complete: () => {
+        console.log('Scores chargés avec succès');
       }
-    );
+    });
   }
 
   updateAllPlayers(): void {
@@ -187,19 +190,23 @@ export class PlayMatchComponent implements OnInit {
     this.isTimeoutInProgress = true;
     this.stopTimer();
 
-    this.timeoutService.createTimeoutFromMatch(matchId, timeoutData).subscribe(
-      (response) => {
+    this.timeoutService.createTimeoutFromMatch(matchId, timeoutData).subscribe({
+      next: (response) => {
         this.loadTimeouts();
         setTimeout(() => {
           this.isTimeoutInProgress = false;
           this.startTimer();
         }, this.timeoutDuration * 1000);
       },
-      (error) => {
+      error: (error) => {
         this.isTimeoutInProgress = false;
         this.startTimer();
+        console.error('Erreur lors de la création du timeout:', error);
+      },
+      complete: () => {
+        console.log('Timeout créé avec succès');
       }
-    );
+    });
   }
 
   recordScore(): void {
@@ -246,16 +253,19 @@ export class PlayMatchComponent implements OnInit {
     console.log('Création du score:', newScore);
 
     // Appel au service pour ajouter le score
-    this.scoreService.addScore(newScore).subscribe(
-      (response) => {
+    this.scoreService.addScore(newScore).subscribe({
+      next: (response) => {
         console.log('Score enregistré avec succès:', response);
         this.loadScores(); // Recharger les scores après l'ajout
       },
-      (error) => {
+      error: (error) => {
         console.error("Erreur lors de l'enregistrement du score:", error);
         console.log('Détails de l\'erreur:', error);
+      },
+      complete: () => {
+        console.log('Ajout du score terminé');
       }
-    );
+    });
 
     console.log('Fin de la méthode recordScore');
   }
@@ -281,14 +291,17 @@ export class PlayMatchComponent implements OnInit {
         matchId: this.matchId,
       };
 
-      this.foulService.createFoul(newFoul).subscribe(
-        (response) => {
+      this.foulService.createFoul(newFoul).subscribe({
+        next: (response) => {
           console.log('Faute enregistrée avec succès:', response);
         },
-        (error) => {
+        error: (error) => {
           console.error('Erreur lors de l\'enregistrement de la faute:', error);
+        },
+        complete: () => {
+          console.log('Enregistrement de la faute terminé');
         }
-      );
+      });
     } else {
       console.error('Joueur non trouvé ou ID invalide!');
     }
@@ -303,13 +316,16 @@ export class PlayMatchComponent implements OnInit {
       id: 0, // ID automatique côté serveur
     };
 
-    this.substitutionService.recordSubstitution(substitutionData).subscribe(
-      (response) => {
+    this.substitutionService.recordSubstitution(substitutionData).subscribe({
+      next: (response) => {
         console.log('Substitution enregistrée avec succès:', response);
       },
-      (error) => {
+      error: (error) => {
         console.error('Erreur lors de l\'enregistrement de la substitution:', error);
+      },
+      complete: () => {
+        console.log('Enregistrement de la substitution terminé');
       }
-    );
+    });
   }
 }
