@@ -192,7 +192,7 @@ export class PlayMatchComponent implements OnInit {
         Location: this.location,
         EncodedBy: this.encodedBy,
       },
-      quarter: this.quarter,
+      quarter: this.currentQuarter,
       gameTime: this.formatTime(this.timer),
       duration: this.formatTime(this.timeoutDuration),
     };
@@ -312,11 +312,6 @@ export class PlayMatchComponent implements OnInit {
     // Création de l'objet PlayerScore
     const newScore: PlayerScore = {
       playerId: selectedPlayer.id!,  // ID du joueur
-      player: {                       // Infos détaillées sur le joueur
-        name: selectedPlayer.name,
-        number: selectedPlayer.number,
-        teamId: selectedPlayer.teamId,
-      },
       points: this.selectedPoints,     // Points marqués
       scoreTime: new Date().toISOString(),  // Heure du score
       matchId: this.matchId,           // ID du match
