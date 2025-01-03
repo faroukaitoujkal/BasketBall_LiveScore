@@ -136,6 +136,20 @@
     </div>
   </div>
 
+  <div class="control-panel mt-4">
+    <h4>Quart-temps actuel : {{ currentQuarter }} / {{ numberOfQuarters }}</h4>
+    <h4>Temps : {{ formatTime(timer) }}</h4>
+    <button class="btn btn-primary me-2" (click)="startQuarter()" [disabled]="isQuarterActive">
+      Démarrer Quart-temps
+    </button>
+    <button class="btn btn-danger me-2" (click)="endQuarter()" [disabled]="!isQuarterActive">
+      Terminer Quart-temps
+    </button>
+    <button class="btn btn-warning" (click)="resetMatch()">
+      Réinitialiser Match
+    </button>
+  </div>
+
   <!-- Section des timeouts -->
   <div class="timeouts card mt-4">
     <h4 class="card-header">Timeouts</h4>

@@ -22,6 +22,11 @@ export class PlayMatchComponent implements OnInit {
   isRunning: boolean = false;
   isTimeoutInProgress: boolean = false;
 
+  numberOfQuarters: number = 4; // Par défaut, 4 quart-temps
+  quarterDuration: number = 600; // En secondes (10 minutes)
+  currentQuarter: number = 1; // Quart-temps en cours
+  isQuarterActive: boolean = false; // Si un quart-temps est actif
+
   matchId!: number; // MatchId sera initialisé dynamiquement
   quarter: number = 1;
   timeoutDuration: number = 60;
@@ -116,6 +121,8 @@ export class PlayMatchComponent implements OnInit {
 
   loadMatchDetails(): void {
     this.matchService.getMatch(this.matchId).subscribe((match: Match) => {
+      this.numberOfQuarters = match.numberOfQuarters; // Assurez-vous que `quarters` est dans le modèle
+      this.quarterDuration = match.quarterDuration * 60; // Convertir en secondes
       this.timeoutDuration = match.timeoutDuration * 60;
       this.homeTeamId = match.homeTeamId;
       this.awayTeamId = match.awayTeamId;
@@ -207,6 +214,47 @@ export class PlayMatchComponent implements OnInit {
         console.log('Timeout créé avec succès');
       }
     });
+  }
+
+  startQuarter(): void {
+    if (this.currentQuarter > this.numberOfQuarters) {
+      console.warn('Tous les quart-temps sont terminés.');
+      return;
+    }
+
+    this.timer = 0; // Réinitialiser le timer
+    this.isQuarterActive = true;
+    this.isRunning = true;
+
+    this.intervalId = setInterval(() => {
+      if (this.timer >= this.quarterDuration) {
+        this.endQuarter();
+      } else {
+        this.timer++;
+      }
+    }, 1000);
+  }
+
+  endQuarter(): void {
+    clearInterval(this.intervalId);
+    this.isQuarterActive = false;
+    this.isRunning = false;
+
+    if (this.currentQuarter < this.numberOfQuarters) {
+      this.currentQuarter++;
+    } else {
+      // Afficher l'alerte lorsque tous les quart-temps sont terminés
+      alert('Fin du match !');
+      console.log('Fin du match !');
+    }
+  }
+
+  resetMatch(): void {
+    clearInterval(this.intervalId);
+    this.currentQuarter = 1;
+    this.timer = 0;
+    this.isRunning = false;
+    this.isQuarterActive = false;
   }
 
   recordScore(): void {
