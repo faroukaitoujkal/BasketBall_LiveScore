@@ -1,114 +1,125 @@
-<div class="match-details">
-  <h4>Détails du Match</h4>
-  <p><strong>ID du Match:</strong> {{ matchId }}</p>
-  <p><strong>Durée des Timeouts:</strong> {{ formatTime(timeoutDuration) }}</p>
-</div>
-
-<div class="game-area">
-  <!-- Affichage des joueurs de l'équipe à domicile -->
-  <div class="team-side home-team">
-    <h4>Équipe à Domicile</h4>
-    <ul>
-      <li *ngFor="let player of homePlayers">
-        <p>{{ player.name }} - {{ player.number }}</p>
-      </li>
-    </ul>
+<div class="container">
+  <!-- Section des détails du match -->
+  <div class="match-details card">
+    <h4 class="card-header">Détails du Match</h4>
+    <div class="card-body">
+      <p><strong>ID du Match:</strong> {{ matchId }}</p>
+      <p><strong>Durée des Timeouts:</strong> {{ formatTime(timeoutDuration) }}</p>
+    </div>
   </div>
 
-  <!-- Chronomètre et contrôle du match au centre -->
-  <div class="timer-container">
-    <h3>Chrono: {{ formatTime(timer) }}</h3>
-    <button class="btn btn-success" (click)="startTimer()" [disabled]="isRunning">Start</button>
-    <button class="btn btn-danger" (click)="stopTimer()" [disabled]="!isRunning">Stop</button>
-  </div>
-
-  <!-- Affichage des joueurs de l'équipe extérieure -->
-  <div class="team-side away-team">
-    <h4>Équipe Extérieure</h4>
-    <ul>
-      <li *ngFor="let player of awayPlayers">
-        <p>{{ player.name }} - {{ player.number }}</p>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<div class="scores">
-  <h3>Scores</h3>
-  <p>Home Team: {{ homeTeamScore }}</p>
-  <p>Away Team: {{ awayTeamScore }}</p>
-</div>
-
-<!-- Formulaire pour enregistrer une faute -->
-<div class="foul-record">
-  <h4>Enregistrer une Faute</h4>
-  <form (ngSubmit)="recordFoul()" #foulForm="ngForm">
-    <div class="form-group">
-      <label for="player">Joueur</label>
-      <select id="player" [(ngModel)]="foul.player.id" name="playerId" required>
-        <option *ngFor="let player of allPlayers" [value]="player.id">
-          {{ player.name }}
-        </option>
-      </select>
+  <!-- Zone principale du jeu -->
+  <div class="game-area row mt-4">
+    <!-- Équipe à domicile -->
+    <div class="team-side home-team col-md-4 card">
+      <h4 class="card-header">{{ homeTeamName }}</h4>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let player of homePlayers">
+          <p>{{ player.name }} - <strong>#{{ player.number }}</strong></p>
+        </li>
+      </ul>
     </div>
 
-    <div class="form-group">
-      <label for="quarter">Quart-temps</label>
-      <input id="quarter" [(ngModel)]="foul.quarter" name="quarter" type="number" min="1" max="4" required />
+    <!-- Chronomètre -->
+    <div class="timer-container col-md-4 text-center">
+      <h3 class="mt-3">Chrono: {{ formatTime(timer) }}</h3>
+      <div class="mt-2">
+        <button class="btn btn-success me-2" (click)="startTimer()" [disabled]="isRunning">Start</button>
+        <button class="btn btn-danger" (click)="stopTimer()" [disabled]="!isRunning">Stop</button>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="gameTime">Temps du match</label>
-      <input id="gameTime" [(ngModel)]="foul.gameTime" name="gameTime" type="text" placeholder="MM:SS" required />
+    <!-- Équipe extérieure -->
+    <div class="team-side away-team col-md-4 card">
+      <h4 class="card-header">{{ awayTeamName }}</h4>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let player of awayPlayers">
+          <p>{{ player.name }} - <strong>#{{ player.number }}</strong></p>
+        </li>
+      </ul>
     </div>
-
-    <div class="form-group">
-      <label for="foulType">Type de Faute</label>
-      <select id="foulType" [(ngModel)]="foul.foulType" name="foulType" required>
-        <option value="P0">P0</option>
-        <option value="P1">P1</option>
-        <option value="P2">P2</option>
-        <option value="P3">P3</option>
-      </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary" [disabled]="!foulForm.valid">Enregistrer Faute</button>
-  </form>
-</div>
-
-<!-- Enregistrement d'un score -->
-<div>
-  <h3>Enregistrer un score</h3>
-  <div class="form-group">
-    <label for="selectedPlayer">Joueur</label>
-    <select id="selectedPlayer" [(ngModel)]="selectedPlayerId" name="selectedPlayer">
-      <option *ngFor="let player of allPlayers" [value]="player.id">
-        {{ player.name }} ({{ player.teamId === homeTeamId ? 'Domicile' : 'Extérieur' }})
-      </option>
-    </select>
   </div>
 
-  <div class="form-group">
-    <label for="selectedPoints">Points</label>
-    <select id="selectedPoints" [(ngModel)]="selectedPoints" name="selectedPoints">
-      <option *ngFor="let point of [1, 2, 3]" [value]="point">{{ point }} Points</option>
-    </select>
+  <!-- Section des scores -->
+  <div class="scores card mt-4">
+    <h3 class="card-header">Scores</h3>
+    <div class="card-body">
+      <p><strong>Équipe Domicile:</strong> {{ homeTeamScore }}</p>
+      <p><strong>Équipe Extérieure:</strong> {{ awayTeamScore }}</p>
+    </div>
   </div>
 
-  <button (click)="recordScore()" class="btn btn-primary">Enregistrer</button>
-</div>
+  <!-- Formulaire pour enregistrer une faute -->
+  <div class="foul-record card mt-4">
+    <h4 class="card-header">Enregistrer une Faute</h4>
+    <div class="card-body">
+      <form (ngSubmit)="recordFoul()" #foulForm="ngForm">
+        <div class="form-group mb-3">
+          <label for="player">Joueur</label>
+          <select id="player" [(ngModel)]="foul.player.id" name="playerId" class="form-control" required>
+            <option *ngFor="let player of allPlayers" [value]="player.id">
+              {{ player.name }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="quarter">Quart-temps</label>
+          <input id="quarter" [(ngModel)]="foul.quarter" name="quarter" type="number" min="1" max="4" class="form-control" required />
+        </div>
+        <div class="form-group mb-3">
+          <label for="gameTime">Temps du match</label>
+          <input id="gameTime" [(ngModel)]="foul.gameTime" name="gameTime" type="text" placeholder="MM:SS" class="form-control" required />
+        </div>
+        <div class="form-group mb-3">
+          <label for="foulType">Type de Faute</label>
+          <select id="foulType" [(ngModel)]="foul.foulType" name="foulType" class="form-control" required>
+            <option value="P0">P0</option>
+            <option value="P1">P1</option>
+            <option value="P2">P2</option>
+            <option value="P3">P3</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-100" [disabled]="!foulForm.valid">Enregistrer Faute</button>
+      </form>
+    </div>
+  </div>
 
-<!-- Timeouts -->
-<div class="timeouts">
-  <h4>Timeouts</h4>
-  <button (click)="createTimeoutForMatch(matchId)" class="btn btn-warning">Créer un Timeout</button>
-  <ul>
-    <li *ngFor="let timeout of timeouts">
-      <p>
-        <strong>Quart:</strong> {{ timeout.quarter }},
-        <strong>Temps du match:</strong> {{ timeout.gameTime }},
-        <strong>Durée:</strong> {{ timeout.duration }}
-      </p>
-    </li>
-  </ul>
+  <!-- Section pour enregistrer un score -->
+  <div class="card mt-4">
+    <h4 class="card-header">Enregistrer un score</h4>
+    <div class="card-body">
+      <div class="form-group mb-3">
+        <label for="selectedPlayer">Joueur</label>
+        <select id="selectedPlayer" [(ngModel)]="selectedPlayerId" name="selectedPlayer" class="form-control">
+          <option *ngFor="let player of allPlayers" [value]="player.id">
+            {{ player.name }} ({{ player.teamId === homeTeamId ? 'Domicile' : 'Extérieur' }})
+          </option>
+        </select>
+      </div>
+      <div class="form-group mb-3">
+        <label for="selectedPoints">Points</label>
+        <select id="selectedPoints" [(ngModel)]="selectedPoints" name="selectedPoints" class="form-control">
+          <option *ngFor="let point of [1, 2, 3]" [value]="point">{{ point }} Points</option>
+        </select>
+      </div>
+      <button (click)="recordScore()" class="btn btn-primary w-100">Enregistrer</button>
+    </div>
+  </div>
+
+  <!-- Section des timeouts -->
+  <div class="timeouts card mt-4">
+    <h4 class="card-header">Timeouts</h4>
+    <div class="card-body">
+      <button (click)="createTimeoutForMatch(matchId)" class="btn btn-warning w-100 mb-3">Créer un Timeout</button>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let timeout of timeouts">
+          <p>
+            <strong>Quart:</strong> {{ timeout.quarter }},
+            <strong>Temps du match:</strong> {{ timeout.gameTime }},
+            <strong>Durée:</strong> {{ timeout.duration }}
+          </p>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

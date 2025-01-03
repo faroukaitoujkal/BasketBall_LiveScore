@@ -38,6 +38,9 @@ export class PlayMatchComponent implements OnInit {
   homeTeamScore: number = 0;
   awayTeamScore: number = 0;
 
+  homeTeamName: string = 'Équipe à Domicile';
+  awayTeamName: string = 'Équipe Extérieure';
+
   foul: Foul = {
     player: {
       id: 0,
@@ -97,6 +100,16 @@ export class PlayMatchComponent implements OnInit {
       this.awayTeamId = match.awayTeamId;
       this.location = match.location;
       this.encodedBy = match.encodedBy || 'default@example.com';
+
+      // Récupérer les noms des équipes
+      this.matchService.getTeamName(this.homeTeamId).subscribe((teamName: string) => {
+        this.homeTeamName = teamName;
+      });
+
+      this.matchService.getTeamName(this.awayTeamId).subscribe((teamName: string) => {
+        this.awayTeamName = teamName;
+      });
+
       this.loadPlayers();
       this.loadTimeouts();
     });

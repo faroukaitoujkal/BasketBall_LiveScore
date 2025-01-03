@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Match } from './match.model';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +30,11 @@ export class MatchService {
   getMatchScores(matchId: number): Observable<{ homeTeamScore: number; awayTeamScore: number }> {
     const url = `${this.apiUrl}/${matchId}/scores`;
     return this.http.get<{ homeTeamScore: number; awayTeamScore: number }>(url);
+  }
+
+  getTeamName(teamId: number): Observable<string> {
+    return this.http.get<{ name: string }>(`https://localhost:7088/api/teams/${teamId}/name`)
+      .pipe(map(response => response.name));
   }
 
   updateMatch(id: number, match: Match): Observable<Match> {

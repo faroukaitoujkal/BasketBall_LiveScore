@@ -37,6 +37,17 @@ namespace BasketBall_LiveScore.Server.Controllers
             return team;
         }
 
+        [HttpGet("{teamId}/name")]
+        public IActionResult GetTeamName(int teamId)
+        {
+            var team = _context.Teams.FirstOrDefault(t => t.Id == teamId);
+            if (team == null)
+            {
+                return NotFound();
+            }
+            return Ok(new { name = team.Name });
+        }
+
         [HttpPost]
         public async Task<ActionResult<Team>> PostTeam(Team team)
         {

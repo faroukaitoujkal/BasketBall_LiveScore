@@ -1,38 +1,212 @@
-.game-area {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-}
-
-.team-side {
-  width: 40%;
-}
-
-.home-team {
-  text-align: left;
-}
-
-.away-team {
-  text-align: right;
-}
-
-.team-side h4 {
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.team-side ul {
-  list-style-type: none;
+/* Styles généraux */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
   padding: 0;
 }
 
-.team-side li {
-  padding: 5px;
-  background-color: #f4f4f4;
-  margin: 5px 0;
-  border-radius: 5px;
+.container {
+  margin: 20px auto;
+  max-width: 1200px;
 }
 
-.team-side p {
-  margin: 0;
+/* Cartes */
+.card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+/* Listes */
+.list-group-item {
+  font-size: 14px;
+  border: none;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+  .list-group-item:last-child {
+    border-bottom: none;
+  }
+
+/* Boutons */
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+}
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+
+.btn-warning {
+  background-color: #ffc107;
+  color: black;
+  border: none;
+}
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+/* Formulaires */
+.form-group {
+  margin-bottom: 15px;
+}
+
+  .form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+.form-control {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Chronomètre */
+.timer-container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+  .timer-container h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+/* Sections */
+.team-side {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+  .team-side h4 {
+    font-size: 20px;
+    color: white; /* Couleur des titres des équipes */
+    margin-bottom: 15px;
+  }
+
+  .team-side ul {
+    list-style: none;
+    padding: 0;
+  }
+
+    .team-side ul li {
+      padding: 5px 0;
+      font-size: 16px;
+      border-bottom: 1px solid #ddd;
+    }
+
+      .team-side ul li:last-child {
+        border-bottom: none;
+      }
+
+/* Scores */
+.scores {
+  text-align: center;
+}
+
+  .scores h3 {
+    font-size: 24px;
+    color: white; /* Couleur des titres des équipes */
+    margin-bottom: 10px;
+  }
+
+  .scores p {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+
+/* Timeouts */
+.timeouts ul {
+  list-style: none;
+  padding: 0;
+}
+
+  .timeouts ul li {
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+    .timeouts ul li p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .team-side {
+    margin-bottom: 15px;
+  }
+
+  .timer-container {
+    margin-bottom: 15px;
+  }
 }
