@@ -16,17 +16,17 @@
     </thead>
     <tbody>
       <tr *ngFor="let match of matches">
-        <td>{{ match.matchDate | date:'short' }}</td>
+        <td>{{ match.matchDate | date: 'short' }}</td>
         <td>{{ match.location }}</td>
-        <td>{{ match.homeTeam?.name }}</td>
-        <td>{{ match.awayTeam?.name }}</td>
+        <td>{{ match.homeTeam?.name || 'Unknown' }}</td>
+        <td>{{ match.awayTeam?.name || 'Unknown' }}</td>
         <td>{{ match.numberOfQuarters }}</td>
         <td>{{ match.quarterDuration }}</td>
         <td>{{ match.timeoutDuration }}</td>
         <td>{{ match.encodedBy }}</td>
         <td>
           <button class="btn btn-primary" (click)="playMatch(match.id!)">Play Match</button>
-          <button class="btn btn-info" (click)="viewMatchDetails(match.id!)">View Details</button>
+          <!-- <button class="btn btn-info" (click)="viewMatchDetails(match.id!)">View Details</button> -->
         </td>
       </tr>
     </tbody>

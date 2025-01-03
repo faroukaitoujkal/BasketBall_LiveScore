@@ -16,16 +16,24 @@ namespace BasketBall_LiveScore.Server.Controllers
             _context = context;
         }
 
+        // Récupérer toutes les substitutions
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Substitution>>> GetSubstitutions()
         {
-            return await _context.Substitutions.ToListAsync();
+            return await _context.Substitutions
+                .Include(s => s.PlayerIn)  // Inclure les détails du joueur entrant
+                .Include(s => s.PlayerOut) // Inclure les détails du joueur sortant
+                .ToListAsync();
         }
 
+        // Récupérer une substitution par son ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Substitution>> GetSubstitution(int id)
         {
-            var substitution = await _context.Substitutions.FindAsync(id);
+            var substitution = await _context.Substitutions
+                .Include(s => s.PlayerIn)
+                .Include(s => s.PlayerOut)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (substitution == null)
             {
@@ -35,21 +43,52 @@ namespace BasketBall_LiveScore.Server.Controllers
             return substitution;
         }
 
+        // Ajouter une nouvelle substitution
         [HttpPost]
         public async Task<ActionResult<Substitution>> PostSubstitution(Substitution substitution)
         {
+            if (substitution.PlayerInId == substitution.PlayerOutId)
+            {
+                return BadRequest("Un joueur ne peut pas entrer et sortir en même temps.");
+            }
+
+            // Vérifier que les joueurs existent dans la base de données
+            var playerIn = await _context.Players.FindAsync(substitution.PlayerInId);
+            var playerOut = await _context.Players.FindAsync(substitution.PlayerOutId);
+
+            if (playerIn == null || playerOut == null)
+            {
+                return NotFound("Un ou plusieurs joueurs non trouvés.");
+            }
+
             _context.Substitutions.Add(substitution);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSubstitution", new { id = substitution.Id }, substitution);
         }
 
+        // Mettre à jour une substitution existante
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSubstitution(int id, Substitution substitution)
         {
             if (id != substitution.Id)
             {
                 return BadRequest();
+            }
+
+            // Vérifier si la substitution existe dans la base
+            var existingSubstitution = await _context.Substitutions.FindAsync(id);
+            if (existingSubstitution == null)
+            {
+                return NotFound();
+            }
+
+            // Vérifier que les joueurs sont valides
+            var playerIn = await _context.Players.FindAsync(substitution.PlayerInId);
+            var playerOut = await _context.Players.FindAsync(substitution.PlayerOutId);
+            if (playerIn == null || playerOut == null)
+            {
+                return NotFound("Un ou plusieurs joueurs non trouvés.");
             }
 
             _context.Entry(substitution).State = EntityState.Modified;
@@ -73,6 +112,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             return NoContent();
         }
 
+        // Supprimer une substitution par son ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubstitution(int id)
         {
@@ -88,6 +128,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             return NoContent();
         }
 
+        // Vérifier si une substitution existe dans la base de données
         private bool SubstitutionExists(int id)
         {
             return _context.Substitutions.Any(e => e.Id == id);

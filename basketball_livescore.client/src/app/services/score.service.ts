@@ -7,11 +7,11 @@ import { PlayerScore } from '../components/player-score.model';
   providedIn: 'root'
 })
 export class ScoreService {
-  private baseUrl = 'https://localhost:7088/api/playerscores';
+  private apiUrl = 'https://localhost:7088/api/playerscores';
 
   constructor(private http: HttpClient) { }
 
   addScore(score: PlayerScore): Observable<PlayerScore> {
-    return this.http.post<PlayerScore>(`${this.baseUrl}/add-score`, score);
+    return this.http.post<PlayerScore>(`${this.apiUrl}/add-score`, score);
   }
 }

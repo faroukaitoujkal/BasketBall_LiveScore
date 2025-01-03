@@ -42,4 +42,8 @@ export class AuthService {
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users`);
   }
+
+  getCurrentUser(): User | null {
+    return this.currentUserValue;
+  }
 }

@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatchService } from '../../services/match.service';
 import { TimeoutService, TimeoutMatch } from '../../services/timeout.service';
 import { FoulService, Foul } from '../../services/foul.service';
-import { Match } from '../../services/match.model';
-import { Player } from '../../services/player.model';
 import { PlayerService } from '../../services/player.service';
 import { ScoreService } from '../../services/score.service';
+import { SubstitutionService } from '../../services/substitution.service';
+import { Match } from '../../services/match.model';
+import { Player } from '../../services/player.model';
 import { PlayerScore } from '../player-score.model';
+import { Substitution } from '../substitution.model';
 
 @Component({
   selector: 'app-play-match',
@@ -19,7 +22,7 @@ export class PlayMatchComponent implements OnInit {
   isRunning: boolean = false;
   isTimeoutInProgress: boolean = false;
 
-  matchId: number = 1;
+  matchId!: number; // MatchId sera initialisé dynamiquement
   quarter: number = 1;
   timeoutDuration: number = 60;
   timeouts: TimeoutMatch[] = [];
@@ -30,7 +33,15 @@ export class PlayMatchComponent implements OnInit {
 
   homePlayers: Player[] = [];
   awayPlayers: Player[] = [];
-  allPlayers: Player[] = []; // Liste combinée des joueurs
+  allPlayers: Player[] = [];
+
+  substitution: Substitution = {
+    id: 0,
+    playerInId: 0,
+    playerOutId: 0,
+    quarter: 1,
+    gameTime: '00:00',
+  };
 
   selectedPlayerId: number = 0;
   selectedPoints: number = 1;
@@ -38,8 +49,8 @@ export class PlayMatchComponent implements OnInit {
   homeTeamScore: number = 0;
   awayTeamScore: number = 0;
 
-  homeTeamName: string = 'Équipe à Domicile';
-  awayTeamName: string = 'Équipe Extérieure';
+  homeTeamName: string = '';
+  awayTeamName: string = '';
 
   foul: Foul = {
     player: {
@@ -53,10 +64,12 @@ export class PlayMatchComponent implements OnInit {
     foulType: 'P0',
     id: 0,
     playerId: 0,
-    matchId: this.matchId,
+    matchId: 0, // Mis à jour dynamiquement
   };
 
   constructor(
+    private route: ActivatedRoute, // Pour accéder aux paramètres d'URL
+    private substitutionService: SubstitutionService,
     private scoreService: ScoreService,
     private matchService: MatchService,
     private timeoutService: TimeoutService,
@@ -65,8 +78,16 @@ export class PlayMatchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadMatchDetails();
-    this.loadScores();
+    // Récupérer le matchId depuis l'URL
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.matchId = +id; // Convertir en nombre
+      this.foul.matchId = this.matchId; // Assigner à l'objet `foul`
+      this.loadMatchDetails(); // Charger les détails du match
+      this.loadScores();
+    } else {
+      console.error('No match ID provided in the route.');
+    }
   }
 
   startTimer(): void {
@@ -101,7 +122,7 @@ export class PlayMatchComponent implements OnInit {
       this.location = match.location;
       this.encodedBy = match.encodedBy || 'default@example.com';
 
-      // Récupérer les noms des équipes
+      // Charger les noms des équipes
       this.matchService.getTeamName(this.homeTeamId).subscribe((teamName: string) => {
         this.homeTeamName = teamName;
       });
@@ -122,14 +143,13 @@ export class PlayMatchComponent implements OnInit {
   }
 
   loadPlayers(): void {
-    // Charger les joueurs des deux équipes en une seule opération
     this.playerService.getPlayersByTeam(this.homeTeamId).subscribe((homePlayers: Player[]) => {
-      this.homePlayers = homePlayers.slice(0, 5); // Prendre les 5 premiers joueurs
+      this.homePlayers = homePlayers.slice(0, 5);
       this.updateAllPlayers();
     });
 
     this.playerService.getPlayersByTeam(this.awayTeamId).subscribe((awayPlayers: Player[]) => {
-      this.awayPlayers = awayPlayers.slice(0, 5); // Prendre les 5 premiers joueurs
+      this.awayPlayers = awayPlayers.slice(0, 5);
       this.updateAllPlayers();
     });
   }
@@ -137,13 +157,11 @@ export class PlayMatchComponent implements OnInit {
   loadScores(): void {
     this.matchService.getMatchScores(this.matchId).subscribe(
       (scores) => {
-        console.log('Scores récupérés avec succès:', scores);
         this.homeTeamScore = scores.homeTeamScore;
         this.awayTeamScore = scores.awayTeamScore;
       },
       (error) => {
         console.error('Erreur lors du chargement des scores:', error);
-        console.log('Détails de l\'erreur:', error.message);
       }
     );
   }
@@ -251,10 +269,10 @@ export class PlayMatchComponent implements OnInit {
       const newFoul: Foul = {
         playerId: selectedPlayer.id,
         player: {
-            name: selectedPlayer.name,
-            number: selectedPlayer.number,
-            teamId: selectedPlayer.teamId,
-            id: 0
+          name: selectedPlayer.name,
+          number: selectedPlayer.number,
+          teamId: selectedPlayer.teamId,
+          id: 0
         },
         quarter: this.foul.quarter,
         gameTime: this.foul.gameTime,
@@ -274,5 +292,24 @@ export class PlayMatchComponent implements OnInit {
     } else {
       console.error('Joueur non trouvé ou ID invalide!');
     }
+  }
+
+  recordSubstitution(): void {
+    const substitutionData: Substitution = {
+      playerInId: this.substitution.playerInId,
+      playerOutId: this.substitution.playerOutId,
+      quarter: this.substitution.quarter,
+      gameTime: this.substitution.gameTime,
+      id: 0, // ID automatique côté serveur
+    };
+
+    this.substitutionService.recordSubstitution(substitutionData).subscribe(
+      (response) => {
+        console.log('Substitution enregistrée avec succès:', response);
+      },
+      (error) => {
+        console.error('Erreur lors de l\'enregistrement de la substitution:', error);
+      }
+    );
   }
 }

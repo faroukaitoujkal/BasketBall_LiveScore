@@ -106,6 +106,36 @@
     </div>
   </div>
 
+  <!-- Section pour enregistrer une substitution -->
+  <div class="substitution-record card mt-4">
+    <h4 class="card-header">Enregistrer une Substitution</h4>
+    <div class="card-body">
+      <form (ngSubmit)="recordSubstitution()" #substitutionForm="ngForm">
+        <div class="form-group mb-3">
+          <label for="playerIn">Joueur entrant</label>
+          <select id="playerIn" [(ngModel)]="substitution.playerInId" name="playerInId" class="form-control" required>
+            <option *ngFor="let player of allPlayers" [value]="player.id">{{ player.name }}</option>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="playerOut">Joueur sortant</label>
+          <select id="playerOut" [(ngModel)]="substitution.playerOutId" name="playerOutId" class="form-control" required>
+            <option *ngFor="let player of allPlayers" [value]="player.id">{{ player.name }}</option>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="quarter">Quart-temps</label>
+          <input id="quarter" [(ngModel)]="substitution.quarter" name="quarter" type="number" min="1" max="4" class="form-control" required />
+        </div>
+        <div class="form-group mb-3">
+          <label for="gameTime">Temps du match</label>
+          <input id="gameTime" [(ngModel)]="substitution.gameTime" name="gameTime" type="text" placeholder="MM:SS" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Enregistrer Substitution</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Section des timeouts -->
   <div class="timeouts card mt-4">
     <h4 class="card-header">Timeouts</h4>
