@@ -47,11 +47,19 @@ namespace BasketBall_LiveScore.Server.Controllers
         {
             // Vérifier si le joueur existe
             var player = await _context.Players.FindAsync(foul.PlayerId);
-            /*if (player == null)
+            if (player == null)
             {
                 // Si le joueur n'existe pas, retourner une erreur
                 return NotFound(new { message = "Joueur non trouvé." });
-            }*/
+            }
+
+            // Vérifier si l'entité Player est déjà suivie
+            var entry = _context.Entry(player);
+            if (entry.State == EntityState.Detached)
+            {
+                // Si l'entité est détachée, l'attacher
+                _context.Players.Attach(player);
+            }
 
             // Associer la faute au joueur existant
             foul.Player = player;

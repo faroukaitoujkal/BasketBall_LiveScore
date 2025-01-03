@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match.service';
 import { TimeoutService, TimeoutMatch } from '../../services/timeout.service';
-import { FoulService, Foul } from '../../services/foul.service';  // Importation de FoulService
+import { FoulService, Foul } from '../../services/foul.service';
 import { Match } from '../../services/match.model';
-import { Player } from '../../services/player.model'; // Assurez-vous que Player est bien défini
+import { Player } from '../../services/player.model';
 import { PlayerService } from '../../services/player.service';
+import { ScoreService } from '../../services/score.service';
+import { PlayerScore } from '../player-score.model';
 
 @Component({
   selector: 'app-play-match',
@@ -15,46 +17,49 @@ export class PlayMatchComponent implements OnInit {
   timer: number = 0;
   intervalId: any = null;
   isRunning: boolean = false;
-  isTimeoutInProgress: boolean = false; // Ajout d'un indicateur pour le timeout
+  isTimeoutInProgress: boolean = false;
 
-  matchId: number = 1; // ID du match (peut être dynamique)
+  matchId: number = 1;
   quarter: number = 1;
-  timeoutDuration: number = 60; // En secondes par défaut
+  timeoutDuration: number = 60;
   timeouts: TimeoutMatch[] = [];
   homeTeamId: number = 0;
   awayTeamId: number = 0;
   location: string = '';
   encodedBy: string = '';
 
-  homePlayers: Player[] = [];  // Liste des joueurs de l'équipe à domicile
-  awayPlayers: Player[] = [];  // Liste des joueurs de l'équipe extérieure
+  homePlayers: Player[] = [];
+  awayPlayers: Player[] = [];
+  allPlayers: Player[] = []; // Liste combinée des joueurs
 
-  // Variables pour le formulaire de fautes
+  selectedPlayerId: number = 0;
+  selectedPoints: number = 1;
+
   foul: Foul = {
-      player: {
-          id: 0,
-          name: '',
-          number: 0,
-          teamId: 0
-      },
-      quarter: 1,
-      gameTime: '00:00',
-      foulType: 'P0',
+    player: {
       id: 0,
-      playerId: 0,
-      matchId: this.matchId  // Initialisation avec matchId
+      name: '',
+      number: 0,
+      teamId: 0,
+    },
+    quarter: 1,
+    gameTime: '00:00',
+    foulType: 'P0',
+    id: 0,
+    playerId: 0,
+    matchId: this.matchId,
   };
 
   constructor(
+    private scoreService: ScoreService,
     private matchService: MatchService,
     private timeoutService: TimeoutService,
     private playerService: PlayerService,
-    private foulService: FoulService  // Injection du FoulService
+    private foulService: FoulService
   ) { }
 
   ngOnInit(): void {
     this.loadMatchDetails();
-    this.loadTimeouts();
   }
 
   startTimer(): void {
@@ -62,7 +67,7 @@ export class PlayMatchComponent implements OnInit {
       this.isRunning = true;
       this.intervalId = setInterval(() => {
         if (!this.isTimeoutInProgress) {
-          this.timer++; // Incrémente le timer seulement si le timeout n'est pas en cours
+          this.timer++;
         }
       }, 1000);
     }
@@ -83,12 +88,13 @@ export class PlayMatchComponent implements OnInit {
 
   loadMatchDetails(): void {
     this.matchService.getMatch(this.matchId).subscribe((match: Match) => {
-      this.timeoutDuration = match.timeoutDuration * 60; // Convertir en secondes
+      this.timeoutDuration = match.timeoutDuration * 60;
       this.homeTeamId = match.homeTeamId;
       this.awayTeamId = match.awayTeamId;
       this.location = match.location;
-      this.encodedBy = match.encodedBy || 'default@example.com'; // Provide a default value
-      this.loadPlayers();  // Recharger les joueurs lorsque les détails du match sont chargés
+      this.encodedBy = match.encodedBy || 'default@example.com';
+      this.loadPlayers();
+      this.loadTimeouts();
     });
   }
 
@@ -99,82 +105,132 @@ export class PlayMatchComponent implements OnInit {
   }
 
   loadPlayers(): void {
-    this.playerService.getPlayersByTeam(this.homeTeamId).subscribe((players: Player[]) => {
-      console.log('Players for home team:', players);  // Vérifiez si les joueurs sont renvoyés
-      this.homePlayers = players.slice(0, 5);  // Prendre les 5 premiers joueurs
+    // Charger les joueurs des deux équipes en une seule opération
+    this.playerService.getPlayersByTeam(this.homeTeamId).subscribe((homePlayers: Player[]) => {
+      this.homePlayers = homePlayers.slice(0, 5); // Prendre les 5 premiers joueurs
+      this.updateAllPlayers();
     });
 
-    this.playerService.getPlayersByTeam(this.awayTeamId).subscribe((players: Player[]) => {
-      console.log('Players for away team:', players);  // Vérifiez si les joueurs sont renvoyés
-      this.awayPlayers = players.slice(0, 5);  // Prendre les 5 premiers joueurs
+    this.playerService.getPlayersByTeam(this.awayTeamId).subscribe((awayPlayers: Player[]) => {
+      this.awayPlayers = awayPlayers.slice(0, 5); // Prendre les 5 premiers joueurs
+      this.updateAllPlayers();
     });
   }
 
-  // Création d'un timeout avec gestion du timer
+  updateAllPlayers(): void {
+    this.allPlayers = [...this.homePlayers, ...this.awayPlayers];
+  }
+
   createTimeoutForMatch(matchId: number): void {
     const timeoutData = {
       Match: {
         HomeTeamId: this.homeTeamId,
         AwayTeamId: this.awayTeamId,
-        TimeoutDuration: this.timeoutDuration / 60, // Convertir en minutes si nécessaire
+        TimeoutDuration: this.timeoutDuration / 60,
         Location: this.location,
-        EncodedBy: this.encodedBy
+        EncodedBy: this.encodedBy,
       },
       quarter: this.quarter,
-      gameTime: this.formatTime(this.timer), // Calculer la durée en format hh:mm:ss
-      duration: this.formatTime(this.timeoutDuration) // Durée du timeout en format hh:mm:ss
+      gameTime: this.formatTime(this.timer),
+      duration: this.formatTime(this.timeoutDuration),
     };
 
-    // Démarrer un timeout et mettre le timer en pause
-    this.isTimeoutInProgress = true; // Indique que le timeout est en cours
-    this.stopTimer(); // Arrêter le timer
+    this.isTimeoutInProgress = true;
+    this.stopTimer();
 
     this.timeoutService.createTimeoutFromMatch(matchId, timeoutData).subscribe(
       (response) => {
-        console.log('Timeout créé avec succès:', response);
-        this.loadTimeouts(); // Recharge les timeouts après création
-
-        // Après la durée du timeout, relancer le timer
+        this.loadTimeouts();
         setTimeout(() => {
-          this.isTimeoutInProgress = false; // Timeout terminé
-          this.startTimer(); // Relancer le timer
-        }, this.timeoutDuration * 1000); // Multiplie par 1000 pour avoir la durée en millisecondes
+          this.isTimeoutInProgress = false;
+          this.startTimer();
+        }, this.timeoutDuration * 1000);
       },
       (error) => {
-        console.error('Erreur lors de la création du timeout:', error);
-        this.isTimeoutInProgress = false; // Réinitialiser si erreur
-        this.startTimer(); // Reprendre le timer même en cas d'erreur
+        this.isTimeoutInProgress = false;
+        this.startTimer();
       }
     );
   }
 
-  recordFoul(): void {
-    console.log('ID du joueur:', this.foul.player.id);  // Vérifiez la valeur de l'ID
+  recordScore(): void {
+    console.log('Début de la méthode recordScore');
 
-    // Trouver le joueur à partir de la liste des joueurs
-    const selectedPlayer = [...this.homePlayers, ...this.awayPlayers].find(player => Number(player.id) === Number(this.foul.player.id));
+    // Recherche du joueur sélectionné
+    const selectedPlayer = this.allPlayers.find(
+      (player) => Number(player.id) === Number(this.selectedPlayerId)
+    );
 
-    // Ajouter un log pour voir ce que vous obtenez
     console.log('Joueur sélectionné:', selectedPlayer);
 
+    // Vérification si le joueur est trouvé
+    if (!selectedPlayer || selectedPlayer.id === undefined) {
+      console.error('Joueur non trouvé');
+      return;
+    }
+
+    // Convertir selectedPoints en nombre
+    this.selectedPoints = Number(this.selectedPoints);
+
+    // Vérification si les points sont valides
+    console.log('selectedPoints:', this.selectedPoints);
+    console.log('selectedPoints type:', typeof this.selectedPoints);
+
+    if (![1, 2, 3].includes(this.selectedPoints)) {
+      console.error('Points invalides, uniquement 1, 2 ou 3 sont valides');
+      return;
+    }
+
+    // Création de l'objet PlayerScore
+    const newScore: PlayerScore = {
+      playerId: selectedPlayer.id!,  // ID du joueur
+      player: {                       // Infos détaillées sur le joueur
+        name: selectedPlayer.name,
+        number: selectedPlayer.number,
+        teamId: selectedPlayer.teamId,
+      },
+      points: this.selectedPoints,     // Points marqués
+      scoreTime: new Date().toISOString(),  // Heure du score
+      matchId: this.matchId,           // ID du match
+    };
+
+    console.log('Création du score:', newScore);
+
+    // Appel au service pour ajouter le score
+    this.scoreService.addScore(newScore).subscribe(
+      (response) => {
+        console.log('Score enregistré avec succès:', response);
+      },
+      (error) => {
+        console.error("Erreur lors de l'enregistrement du score:", error);
+        console.log('Détails de l\'erreur:', error);
+      }
+    );
+
+    console.log('Fin de la méthode recordScore');
+  }
+
+  recordFoul(): void {
+    const selectedPlayer = [...this.homePlayers, ...this.awayPlayers].find(
+      (player) => Number(player.id) === Number(this.foul.player.id)
+    );
+
     if (selectedPlayer && selectedPlayer.id !== undefined) {
-      // Créer un nouvel objet Foul avec la structure correcte
       const newFoul: Foul = {
-        playerId: selectedPlayer.id,  // Utilisation de playerId
+        playerId: selectedPlayer.id,
         player: {
-          id: selectedPlayer.id,
-          name: selectedPlayer.name,
-          number: selectedPlayer.number,
-          teamId: selectedPlayer.teamId
+            name: selectedPlayer.name,
+            number: selectedPlayer.number,
+            teamId: selectedPlayer.teamId,
+            id: 0
         },
         quarter: this.foul.quarter,
         gameTime: this.foul.gameTime,
         foulType: this.foul.foulType,
         id: this.foul.id,
-        matchId: this.matchId  // Assurez-vous que matchId est bien inclus ici
+        matchId: this.matchId,
       };
 
-      // Appeler le service pour créer la faute
       this.foulService.createFoul(newFoul).subscribe(
         (response) => {
           console.log('Faute enregistrée avec succès:', response);

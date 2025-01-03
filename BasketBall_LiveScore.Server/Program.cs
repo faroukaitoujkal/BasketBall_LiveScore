@@ -1,8 +1,17 @@
 using BasketBall_LiveScore.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -33,7 +42,9 @@ builder.Services.AddSwaggerGen();
 
 // Add services to the container.
 builder.Services.AddDbContext<BasketballContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .EnableSensitiveDataLogging()
+);
 
 var app = builder.Build();
 

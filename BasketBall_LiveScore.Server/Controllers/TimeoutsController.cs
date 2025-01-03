@@ -57,7 +57,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             // Associez l'ID du Match au timeout
             timeout.MatchId = matchId;
 
-            // Supprimez toute référence à une entité Match pour éviter un conflit
+            // Assurez-vous que le timeout n'a pas de référence directe au match (éviter les conflits d'entités)
             timeout.Match = null;
 
             // Ajouter et sauvegarder dans la base de données

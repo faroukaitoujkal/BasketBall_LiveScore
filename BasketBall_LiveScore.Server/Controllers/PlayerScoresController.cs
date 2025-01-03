@@ -35,13 +35,34 @@ namespace BasketBall_LiveScore.Server.Controllers
             return playerScore;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<PlayerScore>> PostPlayerScore(PlayerScore playerScore)
+        [HttpPost("add-score")]
+        public async Task<ActionResult<PlayerScore>> AddScore([FromBody] PlayerScore playerScore)
         {
+            // Vérifier si le joueur existe
+            var player = await _context.Players.FindAsync(playerScore.PlayerId);
+            if (player == null)
+            {
+                return NotFound($"Joueur avec ID {playerScore.PlayerId} introuvable.");
+            }
+
+            // Vérifier si le match existe
+            var match = await _context.Matches.FindAsync(playerScore.MatchId);
+            if (match == null)
+            {
+                return NotFound($"Match avec ID {playerScore.MatchId} introuvable.");
+            }
+
+            // Définir le scoreTime pour le moment actuel
+            playerScore.ScoreTime = DateTime.UtcNow;
+
+            // Ajouter le score du joueur
             _context.PlayerScores.Add(playerScore);
+
+            // Sauvegarder les changements
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlayerScore", new { id = playerScore.Id }, playerScore);
+            // Retourner le résultat
+            return CreatedAtAction(nameof(GetPlayerScore), new { id = playerScore.Id }, playerScore);
         }
 
         [HttpPut("{id}")]

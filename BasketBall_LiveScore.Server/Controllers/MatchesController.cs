@@ -73,22 +73,44 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return BadRequest("Invalid HomeTeamId or AwayTeamId.");
             }
 
+            // Vérification et attachement des joueurs des deux équipes
             foreach (var playerId in match.HomeTeamStartingPlayers)
             {
-                if (await _context.Players.FindAsync(playerId) == null)
+                var player = await _context.Players.FindAsync(playerId);
+                if (player == null)
                 {
                     return BadRequest($"Invalid player ID {playerId} in HomeTeamStartingPlayers.");
+                }
+                else
+                {
+                    // Vérifier si le joueur est déjà suivi, sinon l'attacher
+                    var entry = _context.Entry(player);
+                    if (entry.State == EntityState.Detached)
+                    {
+                        _context.Players.Attach(player);
+                    }
                 }
             }
 
             foreach (var playerId in match.AwayTeamStartingPlayers)
             {
-                if (await _context.Players.FindAsync(playerId) == null)
+                var player = await _context.Players.FindAsync(playerId);
+                if (player == null)
                 {
                     return BadRequest($"Invalid player ID {playerId} in AwayTeamStartingPlayers.");
                 }
+                else
+                {
+                    // Vérifier si le joueur est déjà suivi, sinon l'attacher
+                    var entry = _context.Entry(player);
+                    if (entry.State == EntityState.Detached)
+                    {
+                        _context.Players.Attach(player);
+                    }
+                }
             }
 
+            // Ajouter le match à la base de données
             _context.Matches.Add(match);
             await _context.SaveChangesAsync();
 

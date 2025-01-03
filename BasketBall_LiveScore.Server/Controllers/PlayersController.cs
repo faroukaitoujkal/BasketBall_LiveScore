@@ -55,12 +55,15 @@ namespace BasketBall_LiveScore.Server.Controllers
         public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
             var team = await _context.Teams.FindAsync(player.TeamId);
-            /*if (team == null)
+            if (team == null)
             {
                 return BadRequest("Invalid TeamId.");
-            }*/
-            player.Team = team; 
+            }
 
+            // Attacher le joueur à l'équipe
+            player.Team = team;
+
+            // Ajouter et sauvegarder le joueur dans la base de données
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
 

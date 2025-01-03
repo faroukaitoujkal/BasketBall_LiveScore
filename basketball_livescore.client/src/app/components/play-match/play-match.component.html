@@ -10,7 +10,7 @@
     <h4>Équipe à Domicile</h4>
     <ul>
       <li *ngFor="let player of homePlayers">
-        <p>{{ player.name }} - {{ player.number }}</p> <!-- Afficher le nom et la position du joueur -->
+        <p>{{ player.name }} - {{ player.number }}</p>
       </li>
     </ul>
   </div>
@@ -27,7 +27,7 @@
     <h4>Équipe Extérieure</h4>
     <ul>
       <li *ngFor="let player of awayPlayers">
-        <p>{{ player.name }} - {{ player.number }}</p> <!-- Afficher le nom et la position du joueur -->
+        <p>{{ player.name }} - {{ player.number }}</p>
       </li>
     </ul>
   </div>
@@ -36,14 +36,11 @@
 <!-- Formulaire pour enregistrer une faute -->
 <div class="foul-record">
   <h4>Enregistrer une Faute</h4>
-  <form (ngSubmit)="recordFoul()">
+  <form (ngSubmit)="recordFoul()" #foulForm="ngForm">
     <div class="form-group">
       <label for="player">Joueur</label>
       <select id="player" [(ngModel)]="foul.player.id" name="playerId" required>
-        <option *ngFor="let player of homePlayers" [value]="player.id">
-          {{ player.name }}
-        </option>
-        <option *ngFor="let player of awayPlayers" [value]="player.id">
+        <option *ngFor="let player of allPlayers" [value]="player.id">
           {{ player.name }}
         </option>
       </select>
@@ -69,13 +66,36 @@
       </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Enregistrer Faute</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!foulForm.valid">Enregistrer Faute</button>
   </form>
 </div>
 
+<!-- Enregistrement d'un score -->
+<div>
+  <h3>Enregistrer un score</h3>
+  <div class="form-group">
+    <label for="selectedPlayer">Joueur</label>
+    <select id="selectedPlayer" [(ngModel)]="selectedPlayerId" name="selectedPlayer">
+      <option *ngFor="let player of allPlayers" [value]="player.id">
+        {{ player.name }} ({{ player.teamId === homeTeamId ? 'Domicile' : 'Extérieur' }})
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="selectedPoints">Points</label>
+    <select id="selectedPoints" [(ngModel)]="selectedPoints" name="selectedPoints">
+      <option *ngFor="let point of [1, 2, 3]" [value]="point">{{ point }} Points</option>
+    </select>
+  </div>
+
+  <button (click)="recordScore()" class="btn btn-primary">Enregistrer</button>
+</div>
+
+<!-- Timeouts -->
 <div class="timeouts">
   <h4>Timeouts</h4>
-  <button (click)="createTimeoutForMatch(matchId)">Créer un Timeout pour ce match</button>
+  <button (click)="createTimeoutForMatch(matchId)" class="btn btn-warning">Créer un Timeout</button>
   <ul>
     <li *ngFor="let timeout of timeouts">
       <p>

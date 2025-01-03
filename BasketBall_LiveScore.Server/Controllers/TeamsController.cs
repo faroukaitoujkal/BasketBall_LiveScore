@@ -44,7 +44,14 @@ namespace BasketBall_LiveScore.Server.Controllers
             {
                 foreach (var player in team.Players)
                 {
-                    player.TeamId = team.Id; // Associez chaque joueur à l'équipe
+                    player.TeamId = team.Id; // Associer chaque joueur à l'équipe
+
+                    // Vérifier si le joueur est déjà suivi, sinon l'attacher
+                    var entry = _context.Entry(player);
+                    if (entry.State == EntityState.Detached)
+                    {
+                        _context.Players.Attach(player);
+                    }
                 }
             }
 
