@@ -10,6 +10,8 @@ import { Match } from '../../services/match.model';
 import { Player } from '../../services/player.model';
 import { PlayerScore } from '../player-score.model';
 import { Substitution } from '../substitution.model';
+import { QuarterService } from '../../services/quarter.service';
+import { Quarter } from '../../services/quarter.model';
 
 @Component({
   selector: 'app-play-match',
@@ -79,7 +81,8 @@ export class PlayMatchComponent implements OnInit {
     private matchService: MatchService,
     private timeoutService: TimeoutService,
     private playerService: PlayerService,
-    private foulService: FoulService
+    private foulService: FoulService,
+    private quarterService: QuarterService 
   ) { }
 
   ngOnInit(): void {
@@ -240,10 +243,31 @@ export class PlayMatchComponent implements OnInit {
     this.isQuarterActive = false;
     this.isRunning = false;
 
+    const quarterDuration = new Date(this.timer * 1000).toISOString().substr(11, 8);  // Convertir le temps en format hh:mm:ss
+
+    // Création du quart-temps avec toutes les informations nécessaires
+    const quarter: Quarter = {
+      id: 0,  // L'ID sera généré automatiquement par la base de données
+      matchId: this.matchId, // L'ID du match, transmis de l'extérieur
+      quarterNumber: this.currentQuarter,  // Numéro du quart-temps
+      duration: quarterDuration           // Durée du quart-temps
+    };
+
+    // Envoi du quart-temps au service pour la sauvegarde
+    console.log('Création du quart-temps avec les données suivantes:', quarter);
+    this.quarterService.createQuarter(quarter).subscribe({
+      next: (response) => {
+        console.log('Quart-temps sauvegardé avec succès:', response);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la sauvegarde du quart-temps:', error);
+      }
+    });
+
     if (this.currentQuarter < this.numberOfQuarters) {
       this.currentQuarter++;
     } else {
-      // Afficher l'alerte lorsque tous les quart-temps sont terminés
+      // Fin du match
       alert('Fin du match !');
       console.log('Fin du match !');
     }
