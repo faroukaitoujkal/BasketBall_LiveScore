@@ -2,6 +2,7 @@ using BasketBall_LiveScore.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Serilog;
+using BasketBall_LiveScore.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,9 @@ builder.Services.AddDbContext<BasketballContext>(options =>
             .EnableSensitiveDataLogging()
 );
 
+// Register SignalR
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -60,11 +64,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseCors("AllowAll");
 
+app.UseAuthorization();
+
 app.MapControllers();
+
+app.MapHub<BasketBallHub>("/basketBallHub");
 
 app.MapFallbackToFile("/index.html");
 

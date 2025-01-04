@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "@primeng/themes": "^19.0.1",
     "primeng": "^19.0.1"
   }
