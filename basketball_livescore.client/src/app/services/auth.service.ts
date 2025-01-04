@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { User } from './user.model';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,9 @@ export class AuthService {
   }
 
   register(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/register`, user);
+    return this.http.post<User>(`${this.apiUrl}/register`, user).pipe(
+      catchError(this.handleError)
+    );
   }
 
   login(user: User): Observable<User> {
@@ -30,7 +32,8 @@ export class AuthService {
       tap(response => {
         localStorage.setItem('currentUser', JSON.stringify(response));
         this.currentUserSubject.next(response);
-      })
+      }),
+      catchError(this.handleError)
     );
   }
 
@@ -40,10 +43,22 @@ export class AuthService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
+    return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   getCurrentUser(): User | null {
     return this.currentUserValue;
+  }
+
+  getCurrentUserEmail(): string {
+    return this.currentUserValue?.email || ''; // Vérifie si l'email est présent dans l'utilisateur actuel
+  }
+
+  // Méthode pour gérer les erreurs HTTP
+  private handleError(error: any) {
+    console.error('Une erreur est survenue', error);
+    return throwError(error);
   }
 }

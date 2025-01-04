@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match.service';
 import { Match } from '../../services/match.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-match-list',
@@ -10,11 +11,13 @@ import { Router } from '@angular/router';
 })
 export class MatchesListComponent implements OnInit {
   matches: Match[] = [];
+  userEmail: string = ''; // Variable pour stocker l'email de l'utilisateur
 
-  constructor(private matchService: MatchService, private router: Router) { }
+  constructor(private matchService: MatchService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loadMatches();
+    this.userEmail = this.authService.getCurrentUserEmail();
   }
 
   loadMatches(): void {
@@ -40,6 +43,11 @@ export class MatchesListComponent implements OnInit {
         console.log('Matches loaded successfully');
       }
     });
+  }
+
+  isUserAuthorized(match: Match): boolean {
+    // Vérifier si l'email de l'utilisateur est dans la liste des LiveEncoders du match
+    return (match.liveEncoders ?? []).includes(this.userEmail);
   }
 
   viewMatchDetails(matchId: number): void {

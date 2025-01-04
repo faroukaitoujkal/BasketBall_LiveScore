@@ -25,8 +25,8 @@
         <td>{{ match.timeoutDuration }}</td>
         <td>{{ match.encodedBy }}</td>
         <td>
-          <button class="btn btn-primary" (click)="playMatch(match.id!)">Play Match</button>
-          <!-- <button class="btn btn-info" (click)="viewMatchDetails(match.id!)">View Details</button> -->
+          <button *ngIf="isUserAuthorized(match)" class="btn btn-primary" (click)="playMatch(match.id!)">Play Match</button>
+          <button *ngIf="!isUserAuthorized(match)" class="btn btn-secondary" disabled>Access Denied</button>
         </td>
       </tr>
     </tbody>
