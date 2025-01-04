@@ -43,7 +43,6 @@ namespace BasketBall_LiveScore.Server.Controllers
             return substitution;
         }
 
-        // Ajouter une nouvelle substitution
         [HttpPost]
         public async Task<ActionResult<Substitution>> PostSubstitution(Substitution substitution)
         {
@@ -61,6 +60,20 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return NotFound("Un ou plusieurs joueurs non trouvés.");
             }
 
+            // Vérifier que matchId est bien défini
+            if (substitution.MatchId == 0)
+            {
+                return BadRequest("Le matchId ne peut pas être nul ou invalide.");
+            }
+
+            // Vérifier si le match existe
+            var match = await _context.Matches.FindAsync(substitution.MatchId);
+            if (match == null)
+            {
+                return NotFound("Le match spécifié n'a pas été trouvé.");
+            }
+
+            // Ajouter la substitution à la base de données
             _context.Substitutions.Add(substitution);
             await _context.SaveChangesAsync();
 

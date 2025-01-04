@@ -44,11 +44,11 @@ export class PlayMatchComponent implements OnInit {
   allPlayers: Player[] = [];
 
   substitution: Substitution = {
-    id: 0,
-    playerInId: 0,
-    playerOutId: 0,
-    quarter: 1,
-    gameTime: '00:00',
+      playerInId: 0,
+      playerOutId: 0,
+      quarter: 1,
+      gameTime: '00:00',
+      matchId: 0,
   };
 
   selectedPlayerId: number = 0;
@@ -72,7 +72,7 @@ export class PlayMatchComponent implements OnInit {
     foulType: 'P0',
     id: 0,
     playerId: 0,
-    matchId: 0, // Mis à jour dynamiquement
+    matchId: 0, 
   };
 
   constructor(
@@ -92,6 +92,7 @@ export class PlayMatchComponent implements OnInit {
     if (id) {
       this.matchId = +id; // Convertir en nombre
       this.foul.matchId = this.matchId; // Assigner à l'objet `foul`
+      this.substitution.matchId = this.matchId; // Assigner à l'objet `substitution`
       this.loadMatchDetails(); // Charger les détails du match
       this.loadScores();
     } else {
@@ -361,7 +362,7 @@ export class PlayMatchComponent implements OnInit {
           id: 0
         },
         quarter: this.currentQuarter,
-        gameTime: this.foul.gameTime,
+        gameTime: this.formatTime(this.timer),  
         foulType: this.foul.foulType,
         id: this.foul.id,
         matchId: this.matchId,
@@ -388,8 +389,8 @@ export class PlayMatchComponent implements OnInit {
       playerInId: this.substitution.playerInId,
       playerOutId: this.substitution.playerOutId,
       quarter: this.currentQuarter,
-      gameTime: this.substitution.gameTime,
-      id: 0, // ID automatique côté serveur
+      gameTime: this.formatTime(this.timer),
+      matchId: this.matchId,           
     };
 
     this.substitutionService.recordSubstitution(substitutionData).subscribe({
