@@ -9,6 +9,26 @@
   <p><strong>Timeout Duration:</strong> {{ match.timeoutDuration }}</p>
   <p><strong>Encoded By:</strong> {{ match.encodedBy }}</p>
 
+  <h3>Scores</h3>
+  <div *ngIf="playerScores.length > 0" class="card">
+    <div class="card-body">
+      <ul class="list-group">
+        <li *ngFor="let score of playerScores" class="list-group-item d-flex justify-content-between align-items-center">
+          <span class="badge bg-success rounded-pill">{{ score.scoreTime | date: 'short' }}</span>
+          <div>
+            <strong>Player:</strong> {{ score.playerId }}<br>
+            <strong>Points:</strong> {{ score.points }}<br>
+            <strong>Time:</strong> {{ score.scoreTime }}
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="playerScores.length === 0" class="alert alert-info mt-3">
+    <p>No scores recorded for this match.</p>
+  </div>
+
   <h3>Fouls</h3>
   <div *ngIf="fouls.length > 0">
     <ul>

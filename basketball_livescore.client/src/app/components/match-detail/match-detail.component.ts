@@ -4,6 +4,8 @@ import { MatchService } from '../../services/match.service';
 import { FoulService } from '../../services/foul.service';
 import { Match } from '../../services/match.model';
 import { Foul } from '../../services/foul.model';
+import { PlayerScore } from '../player-score.model';
+import { ScoreService } from '../../services/score.service';
 
 @Component({
   selector: 'app-match-detail',
@@ -12,17 +14,20 @@ import { Foul } from '../../services/foul.model';
 })
 export class MatchDetailComponent implements OnInit {
   match: Match | undefined;
-  fouls: Foul[] = []; // Liste des fautes du match
+  fouls: Foul[] = [];
+  playerScores: PlayerScore[] = []; // Liste des scores des joueurs
 
   constructor(
     private route: ActivatedRoute,
     private matchService: MatchService,
-    private foulService: FoulService
+    private foulService: FoulService,
+    private playerScoreService: ScoreService
   ) { }
 
   ngOnInit(): void {
     this.loadMatch();
     this.loadFouls();
+    this.loadPlayerScores();
   }
 
   loadMatch(): void {
@@ -46,6 +51,15 @@ export class MatchDetailComponent implements OnInit {
       error => {
         console.error('Error loading fouls', error);
       }
+    );
+  }
+
+  loadPlayerScores(): void {
+    const matchId = Number(this.route.snapshot.paramMap.get('id')!);
+    this.playerScoreService.getScoresByMatch(matchId).subscribe(
+      (data: PlayerScore[]) => {
+        this.playerScores = data;
+      },
     );
   }
 }

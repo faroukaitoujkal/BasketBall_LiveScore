@@ -35,6 +35,21 @@ namespace BasketBall_LiveScore.Server.Controllers
             return playerScore;
         }
 
+        [HttpGet("match/{matchId}")]
+        public async Task<ActionResult<IEnumerable<PlayerScore>>> GetScoresByMatch(int matchId)
+        {
+            var scores = await _context.PlayerScores
+                                       .Where(ps => ps.MatchId == matchId)
+                                       .ToListAsync();
+
+            if (scores == null || scores.Count == 0)
+            {
+                return NotFound($"Aucun score trouvé pour le match avec l'ID {matchId}.");
+            }
+
+            return Ok(scores);
+        }
+
         [HttpPost("add-score")]
         public async Task<ActionResult<PlayerScore>> AddScore([FromBody] PlayerScore playerScore)
         {

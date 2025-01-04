@@ -1,15 +1,26 @@
-.container {
-  margin: 20px;
+.fouls-section .card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.fouls-section .list-group-item {
+  border: none;
+  padding: 10px;
+}
+
+.fouls-section .badge {
+  font-size: 0.9em;
+}
+
+.alert-info {
+  text-align: center;
+}
+
+h3 {
+  color: #007bff;
 }
 
 h2 {
-  margin-bottom: 20px;
-}
-
-p {
-  margin: 10px 0;
-}
-
-strong {
-  font-weight: bold;
+  color: #343a40;
 }

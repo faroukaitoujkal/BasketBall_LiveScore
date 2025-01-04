@@ -14,4 +14,8 @@ export class ScoreService {
   addScore(score: PlayerScore): Observable<PlayerScore> {
     return this.http.post<PlayerScore>(`${this.apiUrl}/add-score`, score);
   }
+
+  getScoresByMatch(matchId: number): Observable<PlayerScore[]> {
+    return this.http.get<PlayerScore[]>(`${this.apiUrl}/match/${matchId}`);
+  }
 }
