@@ -23,10 +23,10 @@ export class PlayMatchComponent implements OnInit {
   intervalId: any = null;
   isRunning: boolean = false;
   isTimeoutInProgress: boolean = false;
+  isMatchFinished: boolean = false;
 
   numberOfQuarters: number = 4; // Par défaut, 4 quart-temps
   quarterDuration: number = 600; // En secondes (10 minutes)
-  currentQuarter: number = 1; // Quart-temps en cours
   isQuarterActive: boolean = false; // Si un quart-temps est actif
 
   matchId!: number; // MatchId sera initialisé dynamiquement
@@ -37,6 +37,7 @@ export class PlayMatchComponent implements OnInit {
   awayTeamId: number = 0;
   location: string = '';
   encodedBy: string = '';
+  currentQuarter: number = 1; 
 
   homePlayers: Player[] = [];
   awayPlayers: Player[] = [];
@@ -131,6 +132,7 @@ export class PlayMatchComponent implements OnInit {
       this.awayTeamId = match.awayTeamId;
       this.location = match.location;
       this.encodedBy = match.encodedBy || 'default@example.com';
+      this.currentQuarter = match.currentQuarter ?? 1; 
 
       // Charger les noms des équipes
       this.matchService.getTeamName(this.homeTeamId).subscribe((teamName: string) => {
@@ -225,13 +227,21 @@ export class PlayMatchComponent implements OnInit {
       return;
     }
 
-    this.timer = 0; // Réinitialiser le timer
+    if (this.isQuarterActive) {
+      console.warn('Un quart-temps est déjà en cours.');
+      return;
+    }
+
+    this.timer = 0;
     this.isQuarterActive = true;
     this.isRunning = true;
 
+    console.log(`Début du quart-temps ${this.currentQuarter}.`);
+
+    // Lancer le timer pour le quart-temps
     this.intervalId = setInterval(() => {
       if (this.timer >= this.quarterDuration) {
-        this.endQuarter();
+        this.endQuarter(); // Fin du quart-temps lorsque la durée est atteinte
       } else {
         this.timer++;
       }
@@ -243,42 +253,41 @@ export class PlayMatchComponent implements OnInit {
     this.isQuarterActive = false;
     this.isRunning = false;
 
-    const quarterDuration = new Date(this.timer * 1000).toISOString().substr(11, 8);  // Convertir le temps en format hh:mm:ss
+    const quarterDuration = new Date(this.timer * 1000).toISOString().substr(11, 8); // Convertir le temps en hh:mm:ss
 
-    // Création du quart-temps avec toutes les informations nécessaires
     const quarter: Quarter = {
-      id: 0,  // L'ID sera généré automatiquement par la base de données
-      matchId: this.matchId, // L'ID du match, transmis de l'extérieur
-      quarterNumber: this.currentQuarter,  // Numéro du quart-temps
-      duration: quarterDuration           // Durée du quart-temps
+      id: 0,
+      matchId: this.matchId,
+      quarterNumber: this.currentQuarter,
+      duration: quarterDuration,
     };
 
-    // Envoi du quart-temps au service pour la sauvegarde
-    console.log('Création du quart-temps avec les données suivantes:', quarter);
     this.quarterService.createQuarter(quarter).subscribe({
       next: (response) => {
         console.log('Quart-temps sauvegardé avec succès:', response);
+
+        // Incrémenter le currentQuarter après avoir fini le quart-temps
+        if (this.currentQuarter < this.numberOfQuarters) {
+          this.currentQuarter++;
+        } else {
+          this.isMatchFinished = true;
+          alert('Fin du match !');
+          console.log('Fin du match !');
+        }
+
+        this.matchService.updateCurrentQuarter(this.matchId, this.currentQuarter).subscribe({
+          next: () => {
+            console.log(`Current quarter updated to ${this.currentQuarter} in the match table.`);
+          },
+          error: (error) => {
+            console.error('Erreur lors de la mise à jour du current quarter:', error);
+          }
+        });
       },
       error: (error) => {
         console.error('Erreur lors de la sauvegarde du quart-temps:', error);
       }
     });
-
-    if (this.currentQuarter < this.numberOfQuarters) {
-      this.currentQuarter++;
-    } else {
-      // Fin du match
-      alert('Fin du match !');
-      console.log('Fin du match !');
-    }
-  }
-
-  resetMatch(): void {
-    clearInterval(this.intervalId);
-    this.currentQuarter = 1;
-    this.timer = 0;
-    this.isRunning = false;
-    this.isQuarterActive = false;
   }
 
   recordScore(): void {
@@ -351,7 +360,7 @@ export class PlayMatchComponent implements OnInit {
           teamId: selectedPlayer.teamId,
           id: 0
         },
-        quarter: this.foul.quarter,
+        quarter: this.currentQuarter,
         gameTime: this.foul.gameTime,
         foulType: this.foul.foulType,
         id: this.foul.id,
@@ -378,7 +387,7 @@ export class PlayMatchComponent implements OnInit {
     const substitutionData: Substitution = {
       playerInId: this.substitution.playerInId,
       playerOutId: this.substitution.playerOutId,
-      quarter: this.substitution.quarter,
+      quarter: this.currentQuarter,
       gameTime: this.substitution.gameTime,
       id: 0, // ID automatique côté serveur
     };

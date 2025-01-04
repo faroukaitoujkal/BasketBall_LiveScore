@@ -38,6 +38,8 @@ namespace BasketBall_LiveScore.Server.Models
         [Required]
         public string EncodedBy { get; set; }
 
+        public int CurrentQuarter { get; set; } = 1; 
+
         public List<PlayerScore> PlayerScores { get; set; } = new List<PlayerScore>();
         public List<Foul> Fouls { get; set; } = new List<Foul>();
         public List<Substitution> Substitutions { get; set; } = new List<Substitution>();

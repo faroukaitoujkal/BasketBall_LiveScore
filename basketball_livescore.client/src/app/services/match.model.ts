@@ -11,6 +11,7 @@ export interface Match {
   quarterDuration: number;
   timeoutDuration: number;
   encodedBy?: string;
+  currentQuarter?: number; 
   liveEncoders?: string[];
   homeTeam?: Team;
   awayTeam?: Team;

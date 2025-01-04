@@ -138,7 +138,8 @@ export class MatchFormComponent implements OnInit {
         playerScores: [],
         fouls: [],
         substitutions: [],
-        timeouts: []
+        timeouts: [],
+        currentQuarter: 1 
       };
 
       console.log('Match payload:', match);

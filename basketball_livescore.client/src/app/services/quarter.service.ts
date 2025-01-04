@@ -12,7 +12,6 @@ export class QuarterService {
 
   constructor(private http: HttpClient) { }
 
-  // Méthode pour créer un quart-temps
   createQuarter(quarter: Quarter): Observable<Quarter> {
     return this.http.post<Quarter>(this.apiUrl, quarter);
   }

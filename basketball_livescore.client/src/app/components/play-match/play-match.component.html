@@ -62,10 +62,10 @@
             </option>
           </select>
         </div>
-        <div class="form-group mb-3">
+        <!-- <div class="form-group mb-3">
           <label for="quarter">Quart-temps</label>
           <input id="quarter" [(ngModel)]="foul.quarter" name="quarter" type="number" min="1" max="4" class="form-control" required />
-        </div>
+        </div> -->
         <div class="form-group mb-3">
           <label for="gameTime">Temps du match</label>
           <input id="gameTime" [(ngModel)]="foul.gameTime" name="gameTime" type="text" placeholder="MM:SS" class="form-control" required />
@@ -123,10 +123,10 @@
             <option *ngFor="let player of allPlayers" [value]="player.id">{{ player.name }}</option>
           </select>
         </div>
-        <div class="form-group mb-3">
+        <!-- <div class="form-group mb-3">
           <label for="quarter">Quart-temps</label>
           <input id="quarter" [(ngModel)]="substitution.quarter" name="quarter" type="number" min="1" max="4" class="form-control" required />
-        </div>
+        </div> -->
         <div class="form-group mb-3">
           <label for="gameTime">Temps du match</label>
           <input id="gameTime" [(ngModel)]="substitution.gameTime" name="gameTime" type="text" placeholder="MM:SS" class="form-control" required />
@@ -139,14 +139,17 @@
   <div class="control-panel mt-4">
     <h4>Quart-temps actuel : {{ currentQuarter }} / {{ numberOfQuarters }}</h4>
     <h4>Temps : {{ formatTime(timer) }}</h4>
-    <button class="btn btn-primary me-2" (click)="startQuarter()" [disabled]="isQuarterActive">
+
+    <button class="btn btn-primary me-2"
+            (click)="startQuarter()"
+            [disabled]="currentQuarter > numberOfQuarters || isQuarterActive || isMatchFinished">
       Démarrer Quart-temps
     </button>
-    <button class="btn btn-danger me-2" (click)="endQuarter()" [disabled]="!isQuarterActive">
+
+    <button class="btn btn-danger me-2"
+            (click)="endQuarter()"
+            [disabled]="!isQuarterActive || isMatchFinished">
       Terminer Quart-temps
-    </button>
-    <button class="btn btn-warning" (click)="resetMatch()">
-      Réinitialiser Match
     </button>
   </div>
 

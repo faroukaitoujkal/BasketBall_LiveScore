@@ -48,7 +48,7 @@ namespace BasketBall_LiveScore.Server.Controllers
             }
 
             // Valider que le numéro de quart-temps est valide (doit être entre 1 et 4)
-            if (quarter.QuarterNumber < 1 || quarter.QuarterNumber > 4)
+            if (quarter.QuarterNumber <= 0 || quarter.QuarterNumber > 4)
             {
                 return BadRequest("Le numéro de quart-temps doit être entre 1 et 4.");
             }

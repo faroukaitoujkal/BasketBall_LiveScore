@@ -41,6 +41,11 @@ export class MatchService {
     return this.http.put<Match>(`${this.apiUrl}/${id}`, match);
   }
 
+  updateCurrentQuarter(matchId: number, currentQuarter: number): Observable<void> {
+    const url = `https://localhost:7088/api/matches/${matchId}/currentQuarter`;
+    return this.http.put<void>(url, currentQuarter); 
+  }
+
   deleteMatch(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
