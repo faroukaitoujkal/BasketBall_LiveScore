@@ -27,6 +27,7 @@
         <td>
           <button *ngIf="isUserAuthorized(match)" class="btn btn-primary" (click)="playMatch(match.id!)">Play Match</button>
           <button *ngIf="!isUserAuthorized(match)" class="btn btn-secondary" disabled>Access Denied</button>
+          <button class="btn btn-info" (click)="viewMatchDetails(match.id!)">View Details</button>
         </td>
       </tr>
     </tbody>

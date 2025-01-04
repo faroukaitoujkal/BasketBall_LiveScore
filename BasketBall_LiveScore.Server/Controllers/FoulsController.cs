@@ -41,6 +41,21 @@ namespace BasketBall_LiveScore.Server.Controllers
             return foul;
         }
 
+        [HttpGet("match/{matchId}")]
+        public async Task<ActionResult<IEnumerable<Foul>>> GetFoulsByMatch(int matchId)
+        {
+            var fouls = await _context.Fouls
+                .Where(f => f.MatchId == matchId)
+                .ToListAsync();
+
+            if (fouls == null || !fouls.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(fouls);
+        }
+
         // Ajouter une faute
         [HttpPost]
         public async Task<ActionResult<Foul>> PostFoul(Foul foul)

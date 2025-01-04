@@ -8,4 +8,19 @@
   <p><strong>Quarter Duration:</strong> {{ match.quarterDuration }}</p>
   <p><strong>Timeout Duration:</strong> {{ match.timeoutDuration }}</p>
   <p><strong>Encoded By:</strong> {{ match.encodedBy }}</p>
+
+  <h3>Fouls</h3>
+  <div *ngIf="fouls.length > 0">
+    <ul>
+      <li *ngFor="let foul of fouls">
+        <strong>Player ID:</strong> {{ foul.playerId }} -
+        <strong>Foul Type:</strong> {{ foul.foulType }} -
+        <strong>Quarter:</strong> {{ foul.quarter }} -
+        <strong>Game Time:</strong> {{ foul.gameTime }}
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="fouls.length === 0">
+    <p>No fouls recorded for this match.</p>
+  </div>
 </div>
