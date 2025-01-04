@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BasketBall_LiveScore.Server.Migrations
 {
     [DbContext(typeof(BasketballContext))]
-    [Migration("20250101185729_InitialCreate")]
+    [Migration("20250104193327_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -40,7 +40,7 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.Property<TimeSpan>("GameTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("MatchId")
+                    b.Property<int>("MatchId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerId")
@@ -69,8 +69,14 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.Property<int>("AwayTeamId")
                         .HasColumnType("int");
 
+                    b.Property<int>("AwayTeamScore")
+                        .HasColumnType("int");
+
                     b.PrimitiveCollection<string>("AwayTeamStartingPlayers")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CurrentQuarter")
+                        .HasColumnType("int");
 
                     b.Property<string>("EncodedBy")
                         .IsRequired()
@@ -79,8 +85,14 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.Property<int>("HomeTeamId")
                         .HasColumnType("int");
 
+                    b.Property<int>("HomeTeamScore")
+                        .HasColumnType("int");
+
                     b.PrimitiveCollection<string>("HomeTeamStartingPlayers")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
 
                     b.PrimitiveCollection<string>("LiveEncoders")
                         .IsRequired()
@@ -144,7 +156,7 @@ namespace BasketBall_LiveScore.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("MatchId")
+                    b.Property<int>("MatchId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerId")
@@ -200,7 +212,7 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.Property<TimeSpan>("GameTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("MatchId")
+                    b.Property<int>("MatchId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerInId")
@@ -292,7 +304,9 @@ namespace BasketBall_LiveScore.Server.Migrations
                 {
                     b.HasOne("BasketBall_LiveScore.Server.Models.Match", null)
                         .WithMany("Fouls")
-                        .HasForeignKey("MatchId");
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BasketBall_LiveScore.Server.Models.Player", "Player")
                         .WithMany()
@@ -337,7 +351,9 @@ namespace BasketBall_LiveScore.Server.Migrations
                 {
                     b.HasOne("BasketBall_LiveScore.Server.Models.Match", null)
                         .WithMany("PlayerScores")
-                        .HasForeignKey("MatchId");
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BasketBall_LiveScore.Server.Models.Player", "Player")
                         .WithMany()
@@ -363,7 +379,9 @@ namespace BasketBall_LiveScore.Server.Migrations
                 {
                     b.HasOne("BasketBall_LiveScore.Server.Models.Match", null)
                         .WithMany("Substitutions")
-                        .HasForeignKey("MatchId");
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BasketBall_LiveScore.Server.Models.Player", "PlayerIn")
                         .WithMany()

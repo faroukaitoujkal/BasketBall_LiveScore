@@ -135,6 +135,8 @@ export class PlayMatchComponent implements OnInit {
       this.encodedBy = match.encodedBy || 'default@example.com';
       this.currentQuarter = match.currentQuarter ?? 1; 
 
+      this.isMatchFinished = match.isFinished || false;
+
       // Charger les noms des équipes
       this.matchService.getTeamName(this.homeTeamId).subscribe((teamName: string) => {
         this.homeTeamName = teamName;
@@ -272,8 +274,18 @@ export class PlayMatchComponent implements OnInit {
           this.currentQuarter++;
         } else {
           this.isMatchFinished = true;
-          alert('Fin du match !');
-          console.log('Fin du match !');
+
+          // Mettre à jour le match comme terminé
+          this.matchService.updateMatchStatus(this.matchId, true).subscribe({
+            next: () => {
+              alert('Fin du match !');
+              console.log('Le match est terminé et mis à jour dans la base de données.');
+            },
+            error: (error) => {
+              console.error('Erreur lors de la mise à jour du statut du match:', error);
+              alert('Erreur lors de la mise à jour du statut du match.');
+            }
+          });
         }
 
         this.matchService.updateCurrentQuarter(this.matchId, this.currentQuarter).subscribe({
@@ -287,6 +299,7 @@ export class PlayMatchComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erreur lors de la sauvegarde du quart-temps:', error);
+        alert('Erreur lors de la sauvegarde du quart-temps.');
       }
     });
   }

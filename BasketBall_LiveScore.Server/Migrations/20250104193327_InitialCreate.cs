@@ -52,9 +52,13 @@ namespace BasketBall_LiveScore.Server.Migrations
                     QuarterDuration = table.Column<int>(type: "int", nullable: false),
                     TimeoutDuration = table.Column<double>(type: "float", nullable: false),
                     EncodedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CurrentQuarter = table.Column<int>(type: "int", nullable: false),
                     LiveEncoders = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HomeTeamStartingPlayers = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AwayTeamStartingPlayers = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AwayTeamStartingPlayers = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HomeTeamScore = table.Column<int>(type: "int", nullable: false),
+                    AwayTeamScore = table.Column<int>(type: "int", nullable: false),
+                    IsFinished = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,7 +151,7 @@ namespace BasketBall_LiveScore.Server.Migrations
                     FoulType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quarter = table.Column<int>(type: "int", nullable: false),
                     GameTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    MatchId = table.Column<int>(type: "int", nullable: true)
+                    MatchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,7 +160,8 @@ namespace BasketBall_LiveScore.Server.Migrations
                         name: "FK_Fouls_Matches_MatchId",
                         column: x => x.MatchId,
                         principalTable: "Matches",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Fouls_Players_PlayerId",
                         column: x => x.PlayerId,
@@ -174,7 +179,7 @@ namespace BasketBall_LiveScore.Server.Migrations
                     PlayerId = table.Column<int>(type: "int", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false),
                     ScoreTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MatchId = table.Column<int>(type: "int", nullable: true)
+                    MatchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -183,7 +188,8 @@ namespace BasketBall_LiveScore.Server.Migrations
                         name: "FK_PlayerScores_Matches_MatchId",
                         column: x => x.MatchId,
                         principalTable: "Matches",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PlayerScores_Players_PlayerId",
                         column: x => x.PlayerId,
@@ -202,7 +208,7 @@ namespace BasketBall_LiveScore.Server.Migrations
                     PlayerOutId = table.Column<int>(type: "int", nullable: false),
                     Quarter = table.Column<int>(type: "int", nullable: false),
                     GameTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    MatchId = table.Column<int>(type: "int", nullable: true)
+                    MatchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -211,7 +217,8 @@ namespace BasketBall_LiveScore.Server.Migrations
                         name: "FK_Substitutions_Matches_MatchId",
                         column: x => x.MatchId,
                         principalTable: "Matches",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Substitutions_Players_PlayerInId",
                         column: x => x.PlayerInId,

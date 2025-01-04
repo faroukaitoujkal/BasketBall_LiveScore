@@ -19,4 +19,5 @@ export interface Match {
   awayTeamStartingPlayers?: Player[];
   homeTeamScore: number;
   awayTeamScore: number;
+  isFinished: boolean;
 }

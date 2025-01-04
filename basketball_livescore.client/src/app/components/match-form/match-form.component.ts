@@ -139,7 +139,8 @@ export class MatchFormComponent implements OnInit {
         fouls: [],
         substitutions: [],
         timeouts: [],
-        currentQuarter: 1 
+        currentQuarter: 1,
+        isFinished: false
       };
 
       console.log('Match payload:', match);

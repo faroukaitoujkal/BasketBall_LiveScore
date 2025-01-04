@@ -133,6 +133,26 @@ namespace BasketBall_LiveScore.Server.Controllers
             return CreatedAtAction("GetMatch", new { id = match.Id }, match);
         }
 
+        [HttpPut("{id}/finish")]
+        public async Task<IActionResult> FinishMatch(int id)
+        {
+            var match = await _context.Matches.FindAsync(id);
+            if (match == null)
+            {
+                return NotFound();
+            }
+
+            if (match.IsFinished)
+            {
+                return BadRequest("Le match est déjà terminé.");
+            }
+
+            match.IsFinished = true;
+            await _context.SaveChangesAsync();
+
+            return NoContent(); 
+        }
+
         [HttpPut("{id}/currentQuarter")]
         public async Task<IActionResult> UpdateCurrentQuarter(int id, [FromBody] int currentQuarter)
         {

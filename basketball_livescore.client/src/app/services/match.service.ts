@@ -41,6 +41,13 @@ export class MatchService {
     return this.http.put<Match>(`${this.apiUrl}/${id}`, match);
   }
 
+  updateMatchStatus(matchId: number, isFinished: boolean): Observable<void> {
+    const url = `${this.apiUrl}/${matchId}/finish`;
+    return this.http.put<void>(url, { isFinished }).pipe(
+      tap(() => console.log(`Match status updated: MatchId=${matchId}, isFinished=${isFinished}`))
+    );
+  }
+
   updateCurrentQuarter(matchId: number, currentQuarter: number): Observable<void> {
     const url = `https://localhost:7088/api/matches/${matchId}/currentQuarter`;
     return this.http.put<void>(url, currentQuarter); 

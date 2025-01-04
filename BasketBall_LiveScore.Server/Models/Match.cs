@@ -12,7 +12,7 @@ namespace BasketBall_LiveScore.Server.Models
         public DateTime MatchDate { get; set; }
 
         [Required]
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
         [Required]
         public int HomeTeamId { get; set; }
@@ -36,7 +36,7 @@ namespace BasketBall_LiveScore.Server.Models
         public double TimeoutDuration { get; set; }
 
         [Required]
-        public string EncodedBy { get; set; }
+        public string? EncodedBy { get; set; }
 
         public int CurrentQuarter { get; set; } = 1; 
 
@@ -52,5 +52,8 @@ namespace BasketBall_LiveScore.Server.Models
 
         public int HomeTeamScore { get; set; } = 0;
         public int AwayTeamScore { get; set; } = 0;
+
+        public bool IsFinished { get; set; } = false; 
+
     }
 }

@@ -88,6 +88,9 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.PrimitiveCollection<string>("HomeTeamStartingPlayers")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
+
                     b.PrimitiveCollection<string>("LiveEncoders")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
