@@ -35,6 +35,17 @@ namespace BasketBall_LiveScore.Server.Controllers
             return timeout;
         }
 
+        [HttpGet("match/{matchId}")]
+        public async Task<ActionResult<IEnumerable<TimeoutMatch>>> GetTimeoutsByMatch(int matchId)
+        {
+            var timeouts = await _context.Timeouts.Where(t => t.MatchId == matchId).ToListAsync();
+            if (timeouts == null || !timeouts.Any())
+            {
+                return NotFound("No timeouts found for this match.");
+            }
+            return timeouts;
+        }
+
         /*[HttpPost]
         public async Task<ActionResult<TimeoutMatch>> PostTimeout(TimeoutMatch timeout)
         {

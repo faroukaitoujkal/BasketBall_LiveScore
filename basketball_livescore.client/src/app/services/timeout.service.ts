@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Timeout } from './timeout.model';
 
 export interface TimeoutMatch {
   id: number;
@@ -19,7 +20,11 @@ export class TimeoutService {
   constructor(private http: HttpClient) { }
 
   getTimeoutsByMatch(matchId: number): Observable<TimeoutMatch[]> {
-    return this.http.get<TimeoutMatch[]>(`${this.apiUrl}?matchId=${matchId}`);
+    return this.http.get<TimeoutMatch[]>(`${this.apiUrl}/match/${matchId}`);  
+  }
+
+  getTimeoutsByMatchs(matchId: number): Observable<Timeout[]> {  // pour la page de détail
+    return this.http.get<Timeout[]>(`${this.apiUrl}/match/${matchId}`);
   }
 
   createTimeout(timeout: TimeoutMatch): Observable<TimeoutMatch> {

@@ -43,4 +43,20 @@
   <div *ngIf="fouls.length === 0">
     <p>No fouls recorded for this match.</p>
   </div>
-</div>
+
+  <h3>Timeouts</h3>
+  <div *ngIf="timeouts.length > 0" class="card">
+    <div class="card-body">
+      <ul class="list-group">
+        <li *ngFor="let timeout of timeouts" class="list-group-item">
+          <strong>Quarter:</strong> {{ timeout.quarter }}<br>
+          <strong>Duration:</strong> {{ timeout.duration }}<br>
+          <strong>Duration:</strong> {{ timeout.gameTime }}<br>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div *ngIf="timeouts.length === 0" class="alert alert-info mt-3">
+    <p>No timeouts recorded for this match.</p>
+  </div>
+
