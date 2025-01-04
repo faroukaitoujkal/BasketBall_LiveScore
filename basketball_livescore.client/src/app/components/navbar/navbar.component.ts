@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
+  userEmail: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -16,6 +17,8 @@ export class NavbarComponent implements OnInit {
     this.authService.currentUser.subscribe(user => {
       this.isLoggedIn = !!user;
     });
+
+    this.userEmail = this.authService.getCurrentUserEmail(); 
   }
 
   logout(): void {

@@ -1,10 +1,11 @@
 <div class="container">
   <!-- Section des détails du match -->
   <div class="match-details card">
-    <h4 class="card-header">Détails du Match</h4>
+    <h4 class="card-header">Match Details</h4>
     <div class="card-body">
-      <p><strong>ID du Match:</strong> {{ matchId }}</p>
-      <p><strong>Durée des Timeouts:</strong> {{ formatTime(timeoutDuration) }}</p>
+      <p><strong>Match ID:</strong> {{ matchId }}</p>
+      <p>{{ homeTeamName }} <strong>VS</strong> {{ awayTeamName }}</p>
+      <p><strong>Location:</strong> {{ location }}</p>
     </div>
   </div>
 
@@ -22,7 +23,7 @@
 
     <!-- Chronomètre -->
     <div class="timer-container col-md-4 text-center">
-      <h3 class="mt-3">Chrono: {{ formatTime(timer) }}</h3>
+      <h3 class="mt-3">Timer: {{ formatTime(timer) }}</h3>
       <div class="mt-2">
         <button class="btn btn-success me-2" (click)="startTimer()" [disabled]="isRunning">Start</button>
         <button class="btn btn-danger" (click)="stopTimer()" [disabled]="!isRunning">Stop</button>
@@ -44,26 +45,26 @@
   <div class="scores card mt-4">
     <h3 class="card-header">Scores</h3>
     <div class="card-body">
-      <p><strong>Équipe Domicile:</strong> {{ homeTeamScore }}</p>
-      <p><strong>Équipe Extérieure:</strong> {{ awayTeamScore }}</p>
+      <p><strong>{{ homeTeamName }}:</strong> {{ homeTeamScore }}</p>
+      <p><strong>{{ awayTeamName }}:</strong> {{ awayTeamScore }}</p>
     </div>
   </div>
 
   <!-- Formulaire pour enregistrer une faute -->
   <div class="foul-record card mt-4">
-    <h4 class="card-header">Enregistrer une Faute</h4>
+    <h4 class="card-header">Record a Foul</h4>
     <div class="card-body">
       <form (ngSubmit)="recordFoul()" #foulForm="ngForm">
         <div class="form-group mb-3">
-          <label for="player">Joueur</label>
+          <label for="player">Player</label>
           <select id="player" [(ngModel)]="foul.player.id" name="playerId" class="form-control" required>
             <option *ngFor="let player of allPlayers" [value]="player.id">
-              {{ player.name }}
+              {{ player.name }} ({{ player.teamId === homeTeamId ? 'Home' : 'Away' }})
             </option>
           </select>
         </div>
         <div class="form-group mb-3">
-          <label for="foulType">Type de Faute</label>
+          <label for="foulType">Foul Type</label>
           <select id="foulType" [(ngModel)]="foul.foulType" name="foulType" class="form-control" required>
             <option value="P0">P0</option>
             <option value="P1">P1</option>
@@ -71,20 +72,20 @@
             <option value="P3">P3</option>
           </select>
         </div>
-        <button type="submit" class="btn btn-primary w-100" [disabled]="!foulForm.valid">Enregistrer Faute</button>
+        <button type="submit" class="btn btn-primary w-100" [disabled]="!foulForm.valid">Record Foul</button>
       </form>
     </div>
   </div>
 
   <!-- Section pour enregistrer un score -->
   <div class="card mt-4">
-    <h4 class="card-header">Enregistrer un score</h4>
+    <h4 class="card-header">Record a Score</h4>
     <div class="card-body">
       <div class="form-group mb-3">
-        <label for="selectedPlayer">Joueur</label>
+        <label for="selectedPlayer">Player</label>
         <select id="selectedPlayer" [(ngModel)]="selectedPlayerId" name="selectedPlayer" class="form-control">
           <option *ngFor="let player of allPlayers" [value]="player.id">
-            {{ player.name }} ({{ player.teamId === homeTeamId ? 'Domicile' : 'Extérieur' }})
+            {{ player.name }} ({{ player.teamId === homeTeamId ? 'Home' : 'Away' }})
           </option>
         </select>
       </div>
@@ -94,7 +95,7 @@
           <option *ngFor="let point of [1, 2, 3]" [value]="point">{{ point }} Points</option>
         </select>
       </div>
-      <button (click)="recordScore()" class="btn btn-primary w-100">Enregistrer</button>
+      <button (click)="recordScore()" class="btn btn-primary w-100">Record</button>
     </div>
   </div>
 
@@ -107,18 +108,18 @@
         <div class="card-body">
           <form (ngSubmit)="recordSubstitution()" #substitutionForm="ngForm">
             <div class="form-group mb-3">
-              <label for="playerInHome">Joueur entrant</label>
+              <label for="playerInHome">Player In</label>
               <select id="playerInHome" [(ngModel)]="substitution.playerInId" name="playerInId" class="form-control" required>
                 <option *ngFor="let player of homePlayers" [value]="player.id">{{ player.name }}</option>
               </select>
             </div>
             <div class="form-group mb-3">
-              <label for="playerOutHome">Joueur sortant</label>
+              <label for="playerOutHome">Player Out</label>
               <select id="playerOutHome" [(ngModel)]="substitution.playerOutId" name="playerOutId" class="form-control" required>
                 <option *ngFor="let player of homePlayers" [value]="player.id">{{ player.name }}</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Enregistrer Substitution</button>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Record Substitution</button>
           </form>
         </div>
       </div>
@@ -131,35 +132,52 @@
         <div class="card-body">
           <form (ngSubmit)="recordSubstitution()" #substitutionForm="ngForm">
             <div class="form-group mb-3">
-              <label for="playerInAway">Joueur entrant</label>
+              <label for="playerInAway">Player In</label>
               <select id="playerInAway" [(ngModel)]="substitution.playerInId" name="playerInId" class="form-control" required>
                 <option *ngFor="let player of awayPlayers" [value]="player.id">{{ player.name }}</option>
               </select>
             </div>
             <div class="form-group mb-3">
-              <label for="playerOutAway">Joueur sortant</label>
+              <label for="playerOutAway">Player Out</label>
               <select id="playerOutAway" [(ngModel)]="substitution.playerOutId" name="playerOutId" class="form-control" required>
                 <option *ngFor="let player of awayPlayers" [value]="player.id">{{ player.name }}</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Enregistrer Substitution</button>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Record Substitution</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="control-panel mt-4">
+    <h4>Quart-temps actuel : {{ currentQuarter }} / {{ numberOfQuarters }}</h4>
+    <h4>Temps : {{ formatTime(timer) }}</h4>
+
+    <button class="btn btn-primary me-2"
+            (click)="startQuarter()"
+            [disabled]="currentQuarter > numberOfQuarters || isQuarterActive || isMatchFinished">
+      Start
+    </button>
+
+    <button class="btn btn-danger me-2"
+            (click)="endQuarter()"
+            [disabled]="!isQuarterActive || isMatchFinished">
+      Stop
+    </button>
+  </div>
+
   <!-- Section des timeouts -->
   <div class="timeouts card mt-4">
     <h4 class="card-header">Timeouts</h4>
     <div class="card-body">
-      <button (click)="createTimeoutForMatch(matchId)" class="btn btn-warning w-100 mb-3">Créer un Timeout</button>
+      <button (click)="createTimeoutForMatch(matchId)" class="btn btn-warning w-100 mb-3">Create Timeout</button>
       <ul class="list-group">
         <li class="list-group-item" *ngFor="let timeout of timeouts">
           <p>
-            <strong>Quart:</strong> {{ timeout.quarter }},
-            <strong>Temps du match:</strong> {{ timeout.gameTime }},
-            <strong>Durée:</strong> {{ timeout.duration }}
+            <strong>Quarter:</strong> {{ timeout.quarter }},
+            <strong>Game Time:</strong> {{ timeout.gameTime }},
+            <strong>Duration:</strong> {{ timeout.duration }}
           </p>
         </li>
       </ul>
