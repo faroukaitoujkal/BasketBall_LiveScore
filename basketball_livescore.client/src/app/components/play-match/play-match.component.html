@@ -98,43 +98,55 @@
     </div>
   </div>
 
-  <!-- Section pour enregistrer une substitution -->
-  <div class="substitution-record card mt-4">
-    <h4 class="card-header">Enregistrer une Substitution</h4>
-    <div class="card-body">
-      <form (ngSubmit)="recordSubstitution()" #substitutionForm="ngForm">
-        <div class="form-group mb-3">
-          <label for="playerIn">Joueur entrant</label>
-          <select id="playerIn" [(ngModel)]="substitution.playerInId" name="playerInId" class="form-control" required>
-            <option *ngFor="let player of allPlayers" [value]="player.id">{{ player.name }}</option>
-          </select>
+  <!-- Section des substitutions côte à côte -->
+  <div class="row mt-4">
+    <!-- Enregistrement des changements pour l'équipe Domicile -->
+    <div class="col-md-6">
+      <div class="substitution-record card">
+        <h4 class="card-header">Substitution {{ homeTeamName }}</h4>
+        <div class="card-body">
+          <form (ngSubmit)="recordSubstitution()" #substitutionForm="ngForm">
+            <div class="form-group mb-3">
+              <label for="playerInHome">Joueur entrant</label>
+              <select id="playerInHome" [(ngModel)]="substitution.playerInId" name="playerInId" class="form-control" required>
+                <option *ngFor="let player of homePlayers" [value]="player.id">{{ player.name }}</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="playerOutHome">Joueur sortant</label>
+              <select id="playerOutHome" [(ngModel)]="substitution.playerOutId" name="playerOutId" class="form-control" required>
+                <option *ngFor="let player of homePlayers" [value]="player.id">{{ player.name }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Enregistrer Substitution</button>
+          </form>
         </div>
-        <div class="form-group mb-3">
-          <label for="playerOut">Joueur sortant</label>
-          <select id="playerOut" [(ngModel)]="substitution.playerOutId" name="playerOutId" class="form-control" required>
-            <option *ngFor="let player of allPlayers" [value]="player.id">{{ player.name }}</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Enregistrer Substitution</button>
-      </form>
+      </div>
     </div>
-  </div>
 
-  <div class="control-panel mt-4">
-    <h4>Quart-temps actuel : {{ currentQuarter }} / {{ numberOfQuarters }}</h4>
-    <h4>Temps : {{ formatTime(timer) }}</h4>
-
-    <button class="btn btn-primary me-2"
-            (click)="startQuarter()"
-            [disabled]="currentQuarter > numberOfQuarters || isQuarterActive || isMatchFinished">
-      Démarrer Quart-temps
-    </button>
-
-    <button class="btn btn-danger me-2"
-            (click)="endQuarter()"
-            [disabled]="!isQuarterActive || isMatchFinished">
-      Terminer Quart-temps
-    </button>
+    <!-- Enregistrement des changements pour l'équipe Extérieure -->
+    <div class="col-md-6">
+      <div class="substitution-record card">
+        <h4 class="card-header">Substitution {{ awayTeamName }}</h4>
+        <div class="card-body">
+          <form (ngSubmit)="recordSubstitution()" #substitutionForm="ngForm">
+            <div class="form-group mb-3">
+              <label for="playerInAway">Joueur entrant</label>
+              <select id="playerInAway" [(ngModel)]="substitution.playerInId" name="playerInId" class="form-control" required>
+                <option *ngFor="let player of awayPlayers" [value]="player.id">{{ player.name }}</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="playerOutAway">Joueur sortant</label>
+              <select id="playerOutAway" [(ngModel)]="substitution.playerOutId" name="playerOutId" class="form-control" required>
+                <option *ngFor="let player of awayPlayers" [value]="player.id">{{ player.name }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="!substitutionForm.valid">Enregistrer Substitution</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Section des timeouts -->
