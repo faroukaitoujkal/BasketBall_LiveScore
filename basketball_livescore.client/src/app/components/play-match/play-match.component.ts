@@ -90,9 +90,25 @@ export class PlayMatchComponent implements OnInit {
 
   ngOnInit(): void {
     this.signalrService.startConnection();
-    this.signalrService.messageReceived$.subscribe((message) => {
-      console.log('Message reçu depuis SignalR:', message);
+
+    // Écouter les mises à jour des scores
+    this.signalrService.scoreUpdated$.subscribe((data) => {
+      if (data && data.matchId === this.matchId) {
+        this.homeTeamScore = data.homeTeamScore;
+        this.awayTeamScore = data.awayTeamScore;
+        this.loadScores(); // Recharger les détails des scores
+        console.log('Mise à jour reçue pour ce match:', data);
+      }
     });
+
+    // Écouter les créations de temps morts
+    this.signalrService.timeoutCreated$.subscribe((data) => {
+      if (data && data.matchId === this.matchId) {
+        this.loadTimeouts(); // Recharger les temps morts
+        console.log('Temps mort reçu pour ce match:', data);
+      }
+    });
+
     // Récupérer le matchId depuis l'URL
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -104,10 +120,6 @@ export class PlayMatchComponent implements OnInit {
     } else {
       console.error('No match ID provided in the route.');
     }
-  }
-
-  sendTestMessage(): void {
-    this.signalrService.sendMessage('Test message from Angular');
   }
 
   startTimer(): void {

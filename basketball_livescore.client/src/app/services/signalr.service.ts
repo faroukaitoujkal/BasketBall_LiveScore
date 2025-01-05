@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import signalR, { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +9,11 @@ export class SignalrService {
   private hubConnection: HubConnection;
   private messageReceivedSubject = new Subject<string>();
   public messageReceived$ = this.messageReceivedSubject.asObservable();
+  private scoreUpdatedSource = new BehaviorSubject<any>(null);
+  private timeoutCreatedSource = new BehaviorSubject<any>(null);
+
+  scoreUpdated$ = this.scoreUpdatedSource.asObservable();
+  timeoutCreated$ = this.timeoutCreatedSource.asObservable();
 
   constructor() {
     this.hubConnection = new HubConnectionBuilder()
@@ -26,12 +31,29 @@ export class SignalrService {
       .catch((err) => {
         console.error('SignalR connection failed: ', err);
       });
+
+    this.listenToScoreUpdates();
+    this.listenToTimeoutCreated(); 
   }
 
   public listenForMessages(): void {
     this.hubConnection.on('ReceiveMessage', (message: string) => {
       console.log('Message reçu :', message);
       this.messageReceivedSubject.next(message);
+    });
+  }
+
+  private listenToScoreUpdates(): void {
+    this.hubConnection.on('ScoreUpdated', (data) => {
+      console.log('Score mis à jour reçu:', data);
+      this.scoreUpdatedSource.next(data);
+    });
+  }
+
+  private listenToTimeoutCreated(): void {
+    this.hubConnection.on('TimeoutCreated', (data) => {
+      console.log('Temps mort créé reçu:', data);
+      this.timeoutCreatedSource.next(data);
     });
   }
 

@@ -1,6 +1,7 @@
 ﻿using BasketBall_LiveScore.Server.Data;
 using BasketBall_LiveScore.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BasketBall_LiveScore.Server.Controllers
@@ -10,10 +11,12 @@ namespace BasketBall_LiveScore.Server.Controllers
     public class TimeoutsController : ControllerBase
     {
         private readonly BasketballContext _context;
+        private readonly IHubContext<BasketBallHub> _hubContext;
 
-        public TimeoutsController(BasketballContext context)
+        public TimeoutsController(BasketballContext context, IHubContext<BasketBallHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -46,15 +49,6 @@ namespace BasketBall_LiveScore.Server.Controllers
             return timeouts;
         }
 
-        /*[HttpPost]
-        public async Task<ActionResult<TimeoutMatch>> PostTimeout(TimeoutMatch timeout)
-        {
-            _context.Timeouts.Add(timeout);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTimeout", new { id = timeout.Id }, timeout);
-        }*/
-
         [HttpPost("create-from-match/{matchId}")]
         public async Task<ActionResult<TimeoutMatch>> CreateTimeoutFromMatch(int matchId, [FromBody] TimeoutMatch timeout)
         {
@@ -74,6 +68,18 @@ namespace BasketBall_LiveScore.Server.Controllers
             // Ajouter et sauvegarder dans la base de données
             _context.Timeouts.Add(timeout);
             await _context.SaveChangesAsync();
+
+            // Diffuser les informations de temps mort via SignalR
+            var timeoutData = new
+            {
+                matchId = timeout.MatchId,
+                timeoutId = timeout.Id,
+                gameTime = timeout.GameTime,
+                quarter = timeout.Quarter,
+                duration = timeout.Duration
+            };
+
+            await _hubContext.Clients.All.SendAsync("TimeoutCreated", timeoutData);
 
             return CreatedAtAction(nameof(GetTimeout), new { id = timeout.Id }, timeout);
         }

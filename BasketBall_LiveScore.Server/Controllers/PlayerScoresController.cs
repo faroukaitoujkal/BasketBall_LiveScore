@@ -1,6 +1,7 @@
 ﻿using BasketBall_LiveScore.Server.Data;
 using BasketBall_LiveScore.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BasketBall_LiveScore.Server.Controllers
@@ -10,10 +11,13 @@ namespace BasketBall_LiveScore.Server.Controllers
     public class PlayerScoresController : ControllerBase
     {
         private readonly BasketballContext _context;
+        private readonly IHubContext<BasketBallHub> _hubContext;
 
-        public PlayerScoresController(BasketballContext context)
+
+        public PlayerScoresController(BasketballContext context, IHubContext<BasketBallHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -85,6 +89,17 @@ namespace BasketBall_LiveScore.Server.Controllers
 
             // Sauvegarder les changements
             await _context.SaveChangesAsync();
+
+            // Diffuser les informations de mise à jour via SignalR
+            var updatedData = new
+            {
+                matchId = playerScore.MatchId,
+                homeTeamScore = match.HomeTeamScore,
+                awayTeamScore = match.AwayTeamScore,
+                playerScore
+            };
+
+            await _hubContext.Clients.All.SendAsync("ScoreUpdated", updatedData);
 
             // Retourner le résultat
             return CreatedAtAction(nameof(GetPlayerScore), new { id = playerScore.Id }, playerScore);
