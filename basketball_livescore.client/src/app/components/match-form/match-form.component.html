@@ -1,3 +1,4 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <div class="container">
   <h2>Create Match</h2>
   <form [formGroup]="matchForm" (ngSubmit)="onSubmit()">
@@ -45,14 +46,29 @@
         You must select 5 starting players.
       </div>
     </div>
-    <div class="form-group">
-      <label for="liveEncoders">Live Encoders:</label>
-      <select id="liveEncoders" formArrayName="liveEncoders" class="form-control" multiple>
-        <option *ngFor="let encoder of users" [value]="encoder">{{ encoder.email }}</option>
-      </select>
-      <div *ngIf="matchForm.get('liveEncoders')?.errors?.['minlength']" class="text-danger">
-        You must select at least 1 live encoder.
+    <div formArrayName="liveEncoders" class="form-group">
+      <label for="liveEncoders">Live Encoders (Email List):</label>
+      <div *ngFor="let encoder of liveEncoders.controls; let i = index" class="input-group mb-3">
+        <input [formControlName]="i"
+               type="email"
+               class="form-control"
+               placeholder="Enter Encoder Email"
+               [ngClass]="{'is-invalid': encoder.invalid && encoder.touched}" />
+        <div *ngIf="encoder.invalid && encoder.touched" class="invalid-feedback">
+          Please enter a valid email.
+        </div>
+        <button type="button"
+                class="btn btn-danger"
+                (click)="removeLiveEncoder(i)"
+                *ngIf="liveEncoders.length > 1">
+          <i class="bi bi-x-circle"></i> Remove
+        </button>
       </div>
+      <button type="button"
+              class="btn btn-outline-secondary"
+              (click)="addLiveEncoder()">
+        <i class="bi bi-plus-circle"></i> Add Encoder
+      </button>
     </div>
     <div class="form-group">
       <label for="numberOfQuarters">Number of Quarters:</label>

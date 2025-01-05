@@ -52,6 +52,18 @@ export class MatchFormComponent implements OnInit {
     this.loadUsers();
   }
 
+  get liveEncoders(): FormArray {
+    return this.matchForm.get('liveEncoders') as FormArray;
+  }
+
+  addLiveEncoder(): void {
+    this.liveEncoders.push(this.fb.control('', [Validators.required, Validators.email]));
+  }
+
+  removeLiveEncoder(index: number): void {
+    this.liveEncoders.removeAt(index);
+  }
+
   loadTeams(): void {
     this.teamService.getTeams().subscribe(
       (data: Team[]) => {
@@ -122,18 +134,13 @@ export class MatchFormComponent implements OnInit {
       const homePlayers = this.matchForm.value.homeTeamStartingPlayers;
       const awayPlayers = this.matchForm.value.awayTeamStartingPlayers;
 
-      /*if (homePlayers.length !== 5 || awayPlayers.length !== 5) {
-        alert('Each team must have exactly 5 starting players.');
-        return;
-      }*/
-
       const match: Match = {
         ...this.matchForm.value,
         matchDate: new Date(this.matchForm.value.matchDate),
         encodedBy: this.authService.currentUserValue?.email,
         homeTeamStartingPlayers: homePlayers.map((playerId: number) => ({ id: playerId })),
         awayTeamStartingPlayers: awayPlayers.map((playerId: number) => ({ id: playerId })),
-        liveEncoders: this.matchForm.value.liveEncoders,
+        liveEncoders: this.matchForm.value.liveEncoders,  
         quarters: [],
         playerScores: [],
         fouls: [],

@@ -26,8 +26,8 @@ export interface Team {
 }
 
 export interface Foul {
-  team: string;  // "Home" ou "Away"
-  player: string;  // Nom du joueur fautif
-  description: string;  // Description de la faute
-  time: string;  // Temps où la faute a été réalisée
+  team: string; 
+  player: string;  
+  description: string;  
+  time: string;  
 }
