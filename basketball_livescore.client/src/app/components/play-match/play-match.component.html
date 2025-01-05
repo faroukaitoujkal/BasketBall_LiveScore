@@ -4,9 +4,9 @@
   <div class="match-details card">
     <h4 class="card-header">Match Details</h4>
     <div class="card-body">
-      <p><strong>Match ID:</strong> {{ matchId }}</p>
       <p>{{ homeTeamName }} <strong>VS</strong> {{ awayTeamName }}</p>
       <p><strong>Location:</strong> {{ location }}</p>
+      <p><strong>Date:</strong> {{ matchDate | date:'fullDate' }} at {{ matchDate | date:'shortTime' }}</p>
     </div>
   </div>
 

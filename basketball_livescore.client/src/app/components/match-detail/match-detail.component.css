@@ -34,8 +34,22 @@ body {
 }
 
 .vs {
+  font-size: 1.2rem;
+  margin: 0 20px;
+}
+
+.scores {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  margin-top: 20px;
+  color: #e74c3c;
+}
+
+.score {
   margin: 0 10px;
-  color: #7f8c8d;
+  font-weight: bold;
 }
 
 .match-info, .match-details {

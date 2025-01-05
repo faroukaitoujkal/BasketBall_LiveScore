@@ -17,11 +17,14 @@ import { PlayerService } from '../../services/player.service';
   styleUrls: ['./match-detail.component.css']
 })
 export class MatchDetailComponent implements OnInit {
-  match: Match | undefined;
+  match: Match | null = null;
+  matchIdd!: number; // MatchId sera initialisé dynamiquement
   fouls: Foul[] = [];
   playerScores: PlayerScore[] = [];
   timeouts: Timeout[] = []; // Liste des timeouts
   players: Player[] = []; // Liste des joueurs
+  homeTeamScore: number = 0;
+  awayTeamScore: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +32,7 @@ export class MatchDetailComponent implements OnInit {
     private foulService: FoulService,
     private playerScoreService: ScoreService,
     private timeoutService: TimeoutService,
-    private playerService: PlayerService // Ajout du service des joueurs
+    private playerService: PlayerService 
   ) { }
 
   ngOnInit(): void {
@@ -41,15 +44,63 @@ export class MatchDetailComponent implements OnInit {
   }
 
   loadMatch(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id')!);
-    this.matchService.getMatch(id).subscribe(
-      (data: Match) => {
-        this.match = data;
-      },
-      error => {
-        console.error('Error loading match', error);
-      }
-    );
+    const matchId = this.route.snapshot.paramMap.get('id');
+    if (matchId !== null) {
+      this.matchIdd = +matchId; // Convertir en nombre
+      this.matchService.getMatchById(matchId).subscribe({
+        next: (data: Match) => {
+          this.match = data;
+
+          // Load team names for the match
+          if (this.match) {
+            this.matchService.getTeamName(this.match.homeTeamId).subscribe((name: string) => {
+              if (this.match) {
+                this.match.homeTeam = { id: this.match.homeTeamId, name } as any;
+              }
+            });
+
+            this.matchService.getTeamName(this.match.awayTeamId).subscribe((name: string) => {
+              if (this.match) {
+                this.match.awayTeam = { id: this.match.awayTeamId, name } as any;
+              }
+            });
+          }
+
+          if (this.matchIdd !== null) {
+            this.loadFouls();
+            this.loadPlayerScores();
+            this.loadTimeouts(); // Chargez les timeouts
+            this.loadPlayers(); // Charger les joueurs
+            this.loadMatchScores();
+          }
+        },
+        error: (error) => {
+          console.error('Error loading match', error);
+        },
+        complete: () => {
+          console.log('Match loaded successfully');
+        }
+      });
+    } else {
+      console.error('No match ID provided');
+    }
+  }
+
+  loadMatchScores(): void {
+    if (this.matchIdd !== null) {
+      this.matchService.getMatchScores(this.matchIdd).subscribe({
+        next: (scores) => {
+          this.homeTeamScore = scores.homeTeamScore;
+          this.awayTeamScore = scores.awayTeamScore;
+        },
+        error: (error) => {
+          console.error('Erreur lors du chargement des scores:', error);
+        },
+        complete: () => {
+          console.log('Scores chargés avec succès');
+        }
+      });
+    }
   }
 
   loadFouls(): void {

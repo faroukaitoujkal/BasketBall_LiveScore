@@ -37,6 +37,7 @@ export class PlayMatchComponent implements OnInit {
   homeTeamId: number = 0;
   awayTeamId: number = 0;
   location: string = '';
+  matchDate!: Date | null; 
   encodedBy: string = '';
   currentQuarter: number = 1; 
 
@@ -166,6 +167,7 @@ export class PlayMatchComponent implements OnInit {
       this.homeTeamId = match.homeTeamId;
       this.awayTeamId = match.awayTeamId;
       this.location = match.location;
+      this.matchDate = match.matchDate;
       this.encodedBy = match.encodedBy || 'default@example.com';
       this.currentQuarter = match.currentQuarter ?? 1; 
 

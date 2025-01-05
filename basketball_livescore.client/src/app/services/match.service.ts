@@ -23,6 +23,10 @@ export class MatchService {
     );
   }
 
+  getMatchById(id: string): Observable<Match> {
+    return this.http.get<Match>(`${this.apiUrl}/${id}`);
+  }
+
   getMatch(id: number): Observable<Match> {
     return this.http.get<Match>(`${this.apiUrl}/${id}`);
   }
