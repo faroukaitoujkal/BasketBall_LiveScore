@@ -1,3 +1,4 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -68,19 +69,29 @@
             </div>
 
             <div class="mb-3" formArrayName="liveEncoders">
-              <label class="form-label-encoder">Live Encoders:</label>
+              <label class="form-label">Live Encoders:</label>
               <div *ngFor="let encoder of liveEncoders.controls; let i = index" class="input-group mb-2">
-                <input [formControlName]="i" type="email" class="form-control" placeholder="Enter Encoder Email"
+                <input [formControlName]="i"
+                       type="email"
+                       class="form-control"
+                       placeholder="Enter Encoder Email"
                        [ngClass]="{'is-invalid': encoder.invalid && encoder.touched}">
-                <button type="button" class="btn btn-outline-danger" (click)="removeLiveEncoder(i)" *ngIf="liveEncoders.length > 1">
-                  <i class="bi bi-x-circle"></i>
+                <button type="button"
+                        class="btn btn-danger"
+                        (click)="removeLiveEncoder(i)"
+                        *ngIf="liveEncoders.length > 1"
+                        aria-label="Remove Encoder">
+                  <i class="fas fa-trash"></i>
                 </button>
                 <div *ngIf="encoder.invalid && encoder.touched" class="invalid-feedback">
                   Please enter a valid email.
                 </div>
               </div>
-              <button type="button" class="btn btn-outline-secondary mt-2" (click)="addLiveEncoder()">
-                <i class="bi bi-plus-circle"></i> Add Encoder
+              <button type="button"
+                      class="btn btn-secondary mt-2"
+                      (click)="addLiveEncoder()"
+                      aria-label="Add Encoder">
+                <i class="fas fa-plus"></i> Add Encoder
               </button>
             </div>
 

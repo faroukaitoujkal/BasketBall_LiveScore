@@ -13,15 +13,13 @@
   font-weight: 700;
 }
 
-.form-label {
+.form-label, .form-label-encoder {
   font-weight: 600;
   color: #333;
 }
 
 .form-label-encoder {
-  font-weight: 600;
-  color: #333;
-  margin-right:10px;
+  margin-right: 10px;
 }
 
 .form-control, .form-select {
@@ -36,6 +34,7 @@
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
   }
 
+/* Button Styles */
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
@@ -73,6 +72,23 @@
     border-color: #dc3545;
   }
 
+.btn-danger {
+  color: white;
+  background-color: #dc3545;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+
+/* Icons within buttons */
+.btn i {
+  margin-right: 5px;
+}
+
+/* Player list container */
 .player-list {
   max-height: 200px;
   overflow-y: auto;
@@ -81,6 +97,7 @@
   padding: 0.5rem;
 }
 
+/* Text styles */
 .text-danger {
   font-size: 0.875rem;
 }
@@ -115,3 +132,22 @@
   .player-list::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+/* Input group styles for live encoders */
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+  .input-group .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    height: calc(1.5em + 1rem + 2px); /* Adjust button height to match input field */
+    font-size: 1rem; /* Adjust font size to match input field */
+  }
+
+    .input-group .btn i {
+      font-size: 1rem; /* Adjust icon size to match input field */
+    }
