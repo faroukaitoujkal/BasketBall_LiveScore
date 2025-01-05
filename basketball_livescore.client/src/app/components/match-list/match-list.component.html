@@ -1,5 +1,6 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
 <div class="container">
   <h2>Match List</h2>
   <div class="table-responsive">
@@ -18,8 +19,11 @@
         </tr>
       </thead>
       <tbody>
+        <tr *ngIf="matches?.length === 0">
+          <td colspan="9" class="text-center">No matches available at the moment.</td>
+        </tr>
         <tr *ngFor="let match of matches">
-          <td>{{ match.matchDate | date: 'short' }}</td>
+          <td>{{ match.matchDate | date: 'dd/MM/yyyy' }}</td>
           <td>{{ match.location }}</td>
           <td>{{ match.homeTeam?.name || 'Unknown' }}</td>
           <td>{{ match.awayTeam?.name || 'Unknown' }}</td>
@@ -28,13 +32,13 @@
           <td>{{ match.timeoutDuration }}</td>
           <td>{{ match.encodedBy }}</td>
           <td>
-            <button *ngIf="isUserAuthorized(match)" class="btn btn-success btn-sm" (click)="playMatch(match.id!)">
+            <button *ngIf="isUserAuthorized(match)" class="btn btn-success btn-sm" (click)="playMatch(match.id!)" aria-label="Play Match">
               <i class="fas fa-play"></i> Play
             </button>
-            <button *ngIf="!isUserAuthorized(match)" class="btn btn-secondary btn-sm" disabled>
+            <button *ngIf="!isUserAuthorized(match)" class="btn btn-secondary btn-sm" disabled aria-label="Access Denied">
               <i class="fas fa-lock"></i> Denied
             </button>
-            <button class="btn btn-info btn-sm" (click)="viewMatchDetails(match.id!)">
+            <button class="btn btn-info btn-sm" (click)="viewMatchDetails(match.id!)" aria-label="View Match Details">
               <i class="fas fa-info-circle"></i> Details
             </button>
           </td>
