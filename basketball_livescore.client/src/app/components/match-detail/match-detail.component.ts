@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatchService } from '../../services/match.service';
 import { FoulService } from '../../services/foul.service';
-import { TimeoutService } from '../../services/timeout.service'; // Ajoutez le service pour récupérer les timeouts
+import { TimeoutService } from '../../services/timeout.service'; 
 import { Match } from '../../services/match.model';
 import { Foul } from '../../services/foul.model';
 import { PlayerScore } from '../player-score.model';
 import { ScoreService } from '../../services/score.service';
 import { Timeout } from '../../services/timeout.model';
+import { Player } from '../../services/player.model';
+import { PlayerService } from '../../services/player.service';
 
 @Component({
   selector: 'app-match-detail',
@@ -19,13 +21,15 @@ export class MatchDetailComponent implements OnInit {
   fouls: Foul[] = [];
   playerScores: PlayerScore[] = [];
   timeouts: Timeout[] = []; // Liste des timeouts
+  players: Player[] = []; // Liste des joueurs
 
   constructor(
     private route: ActivatedRoute,
     private matchService: MatchService,
     private foulService: FoulService,
     private playerScoreService: ScoreService,
-    private timeoutService: TimeoutService // Ajoutez ici le service
+    private timeoutService: TimeoutService,
+    private playerService: PlayerService // Ajout du service des joueurs
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +37,7 @@ export class MatchDetailComponent implements OnInit {
     this.loadFouls();
     this.loadPlayerScores();
     this.loadTimeouts(); // Chargez les timeouts
+    this.loadPlayers(); // Charger les joueurs
   }
 
   loadMatch(): void {
@@ -78,5 +83,21 @@ export class MatchDetailComponent implements OnInit {
         console.error('Error loading timeouts', error);
       }
     );
+  }
+
+  loadPlayers(): void {
+    this.playerService.getPlayers().subscribe(
+      (data: Player[]) => {
+        this.players = data;
+      },
+      error => {
+        console.error('Error loading players', error);
+      }
+    );
+  }
+
+  getPlayerName(playerId: number): string {
+    const player = this.players.find(p => p.id === playerId);
+    return player ? player.name : 'Unknown Player';
   }
 }

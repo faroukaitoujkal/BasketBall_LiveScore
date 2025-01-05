@@ -1,62 +1,66 @@
 <div class="container" *ngIf="match">
-  <h2>Match Details</h2>
-  <p><strong>Date:</strong> {{ match.matchDate | date:'short' }}</p>
-  <p><strong>Location:</strong> {{ match.location }}</p>
-  <p><strong>Home Team:</strong> {{ match.homeTeam?.name }}</p>
-  <p><strong>Away Team:</strong> {{ match.awayTeam?.name }}</p>
-  <p><strong>Number of Quarters:</strong> {{ match.numberOfQuarters }}</p>
-  <p><strong>Quarter Duration:</strong> {{ match.quarterDuration }}</p>
-  <p><strong>Timeout Duration:</strong> {{ match.timeoutDuration }}</p>
-  <p><strong>Encoded By:</strong> {{ match.encodedBy }}</p>
-
-  <h3>Scores</h3>
-  <div *ngIf="playerScores.length > 0" class="card">
-    <div class="card-body">
-      <ul class="list-group">
-        <li *ngFor="let score of playerScores" class="list-group-item d-flex justify-content-between align-items-center">
-          <span class="badge bg-success rounded-pill">{{ score.scoreTime | date: 'short' }}</span>
-          <div>
-            <strong>Player:</strong> {{ score.playerId }}<br>
-            <strong>Points:</strong> {{ score.points }}<br>
-            <strong>Time:</strong> {{ score.scoreTime }}
-          </div>
-        </li>
-      </ul>
+  <div class="match-header">
+    <h1>Match Details</h1>
+    <div class="teams">
+      <span class="team home-team">{{ match.homeTeam?.name }}</span>
+      <span class="vs">vs</span>
+      <span class="team away-team">{{ match.awayTeam?.name }}</span>
     </div>
   </div>
 
-  <div *ngIf="playerScores.length === 0" class="alert alert-info mt-3">
-    <p>No scores recorded for this match.</p>
-  </div>
-
-  <h3>Fouls</h3>
-  <div *ngIf="fouls.length > 0">
-    <ul>
-      <li *ngFor="let foul of fouls">
-        <strong>Player ID:</strong> {{ foul.playerId }} -
-        <strong>Foul Type:</strong> {{ foul.foulType }} -
-        <strong>Quarter:</strong> {{ foul.quarter }} -
-        <strong>Game Time:</strong> {{ foul.gameTime }}
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="fouls.length === 0">
-    <p>No fouls recorded for this match.</p>
-  </div>
-
-  <h3>Timeouts</h3>
-  <div *ngIf="timeouts.length > 0" class="card">
-    <div class="card-body">
-      <ul class="list-group">
-        <li *ngFor="let timeout of timeouts" class="list-group-item">
-          <strong>Quarter:</strong> {{ timeout.quarter }}<br>
-          <strong>Duration:</strong> {{ timeout.duration }}<br>
-          <strong>Duration:</strong> {{ timeout.gameTime }}<br>
-        </li>
-      </ul>
+  <div class="match-info">
+    <div class="info-card">
+      <h2>Match Information</h2>
+      <p><i class="fas fa-calendar-alt"></i> {{ match.matchDate | date:'full' }}</p>
+      <p><i class="fas fa-map-marker-alt"></i> {{ match.location }}</p>
+      <p><i class="fas fa-stopwatch"></i> {{ match.numberOfQuarters }} quarters, {{ match.quarterDuration }} minutes each</p>
+      <p><i class="fas fa-pause-circle"></i> Timeout: {{ match.timeoutDuration }} minutes</p>
+      <p><i class="fas fa-user"></i> Encoded by: {{ match.encodedBy }}</p>
+      <p><i class="fas fa-hourglass-half"></i> Current quarter: {{ match.currentQuarter }}</p>
     </div>
   </div>
-  <div *ngIf="timeouts.length === 0" class="alert alert-info mt-3">
-    <p>No timeouts recorded for this match.</p>
-  </div>
 
+  <div class="match-details">
+    <div class="detail-card scores-section">
+      <h2>Scores</h2>
+      <div *ngIf="playerScores.length > 0" class="score-list">
+        <div *ngFor="let score of playerScores" class="score-item">
+          <span class="score-time">{{ score.scoreTime | date: 'shortTime' }}</span>
+          <span class="player-name">{{ getPlayerName(score.playerId) }}</span>
+          <span class="score-points">{{ score.points }} pts</span>
+        </div>
+      </div>
+      <div *ngIf="playerScores.length === 0" class="no-data">
+        <p>No scores recorded for this match.</p>
+      </div>
+    </div>
+
+    <div class="detail-card fouls-section">
+      <h2>Fouls</h2>
+      <div *ngIf="fouls.length > 0" class="foul-list">
+        <div *ngFor="let foul of fouls" class="foul-item">
+          <span class="player-name">{{ getPlayerName(foul.playerId) }}</span>
+          <span class="foul-type">{{ foul.foulType }}</span>
+          <span class="foul-time">Q{{ foul.quarter }} - {{ foul.gameTime }}</span>
+        </div>
+      </div>
+      <div *ngIf="fouls.length === 0" class="no-data">
+        <p>No fouls recorded for this match.</p>
+      </div>
+    </div>
+
+    <div class="detail-card timeouts-section">
+      <h2>Timeouts</h2>
+      <div *ngIf="timeouts.length > 0" class="timeout-list">
+        <div *ngFor="let timeout of timeouts" class="timeout-item">
+          <span class="timeout-quarter">Q{{ timeout.quarter }}</span>
+          <span class="timeout-duration">{{ timeout.duration }} min</span>
+          <span class="timeout-time">{{ timeout.gameTime }}</span>
+        </div>
+      </div>
+      <div *ngIf="timeouts.length === 0" class="no-data">
+        <p>No timeouts recorded for this match.</p>
+      </div>
+    </div>
+  </div>
+</div>

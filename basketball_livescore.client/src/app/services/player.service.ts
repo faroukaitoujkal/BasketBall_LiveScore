@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Player } from './player.model';
 
@@ -18,6 +18,12 @@ export class PlayerService {
 
   getPlayers(): Observable<Player[]> {
     return this.http.get<Player[]>(this.apiUrl);
+  }
+
+  getPlayersByIds(ids: number[]): Observable<Player[]> {
+    return this.http.get<Player[]>(`/api/players`, {
+      params: new HttpParams().set('ids', ids.join(','))
+    });
   }
 
   getPlayersByTeam(teamId: number): Observable<Player[]> {
