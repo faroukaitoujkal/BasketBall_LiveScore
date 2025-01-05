@@ -22,8 +22,8 @@ export class MatchFormComponent implements OnInit {
   matchForm: FormGroup;
   teams: Team[] = [];
   users: User[] = [];
-  homeTeamPlayers: Player[] = []; // Liste des joueurs pour l'équipe maison
-  awayTeamPlayers: Player[] = []; // Liste des joueurs pour l'équipe visiteuse
+  homeTeamPlayers: Player[] = []; 
+  awayTeamPlayers: Player[] = []; 
 
   constructor(
     private fb: FormBuilder,
@@ -35,14 +35,14 @@ export class MatchFormComponent implements OnInit {
   ) {
     this.matchForm = this.fb.group({
       matchDate: [new Date().toISOString().split('T')[0], Validators.required],
-      location: ['Stade de France', Validators.required],
+      location: ['', Validators.required],
       homeTeamId: [null, Validators.required],
       awayTeamId: [null, Validators.required],
       numberOfQuarters: [2, [Validators.required, rangeValidator(2, 4)]],
       quarterDuration: [10, [Validators.required, rangeValidator(10, 12)]],
       timeoutDuration: [1, [Validators.required, rangeValidator(1, 3)]],
-      homeTeamStartingPlayers: this.fb.array([], Validators.minLength(5)),
-      awayTeamStartingPlayers: this.fb.array([], Validators.minLength(5)),
+      homeTeamStartingPlayers: this.fb.array([], [Validators.minLength(5),Validators.maxLength(5)]),
+      awayTeamStartingPlayers: this.fb.array([], [Validators.minLength(5),Validators.maxLength(5)]),
       liveEncoders: this.fb.array([], [Validators.minLength(1)])
     }, { validators: uniqueTeamsValidator() });
   }

@@ -1,10 +1,25 @@
-<div class="container">
-  <h2>Create Team</h2>
-  <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="name">Team Name:</label>
-      <input type="text" id="name" formControlName="name" class="form-control">
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Create Team</h2>
+          <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Team Name:</label>
+              <input type="text" id="name" formControlName="name" class="form-control" placeholder="Enter team name">
+              <div *ngIf="teamForm.get('name')?.invalid && (teamForm.get('name')?.dirty || teamForm.get('name')?.touched)" class="text-danger mt-1">
+                <div *ngIf="teamForm.get('name')?.errors?.['required']">Team name is required.</div>
+                <div *ngIf="teamForm.get('name')?.errors?.['minlength']">Team name must be at least 2 characters long.</div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="teamForm.invalid">Create Team</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Create Team</button>
-  </form>
+  </div>
 </div>
+

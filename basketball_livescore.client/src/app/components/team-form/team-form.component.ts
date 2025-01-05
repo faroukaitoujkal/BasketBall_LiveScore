@@ -15,7 +15,7 @@ export class TeamFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private teamService: TeamService, private router: Router) {
     this.teamForm = this.fb.group({
-      name: ['', Validators.required]
+      name: ['', [Validators.required, Validators.minLength(2)]]
     });
   }
 

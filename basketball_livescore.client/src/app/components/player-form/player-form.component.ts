@@ -22,8 +22,8 @@ export class PlayerFormComponent implements OnInit {
     private router: Router
   ) {
     this.playerForm = this.fb.group({
-      name: ['', Validators.required],
-      number: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      number: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
       teamId: [null, Validators.required]
     });
   }

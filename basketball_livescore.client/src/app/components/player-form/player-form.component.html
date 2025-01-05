@@ -1,20 +1,44 @@
-<div class="container">
-  <h2>Create Player</h2>
-  <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" id="name" formControlName="name" class="form-control">
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Create Player</h2>
+          <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name:</label>
+              <input type="text" id="name" formControlName="name" class="form-control" placeholder="Enter player name">
+              <div *ngIf="playerForm.get('name')?.invalid && (playerForm.get('name')?.dirty || playerForm.get('name')?.touched)" class="text-danger mt-1">
+                <div *ngIf="playerForm.get('name')?.errors?.['required']">Player name is required.</div>
+                <div *ngIf="playerForm.get('name')?.errors?.['minlength']">Player name must be at least 2 characters long.</div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="number" class="form-label">Number:</label>
+              <input type="number" id="number" formControlName="number" class="form-control" placeholder="Enter player number">
+              <div *ngIf="playerForm.get('number')?.invalid && (playerForm.get('number')?.dirty || playerForm.get('number')?.touched)" class="text-danger mt-1">
+                <div *ngIf="playerForm.get('number')?.errors?.['required']">Player number is required.</div>
+                <div *ngIf="playerForm.get('number')?.errors?.['min']">Player number must be at least 1.</div>
+                <div *ngIf="playerForm.get('number')?.errors?.['max']">Player number must be at most 99.</div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="teamId" class="form-label">Team:</label>
+              <select id="teamId" formControlName="teamId" class="form-select">
+                <option value="" disabled selected>Select a team</option>
+                <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
+              </select>
+              <div *ngIf="playerForm.get('teamId')?.invalid && (playerForm.get('teamId')?.dirty || playerForm.get('teamId')?.touched)" class="text-danger mt-1">
+                <div *ngIf="playerForm.get('teamId')?.errors?.['required']">Team selection is required.</div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="playerForm.invalid">Create Player</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="number">Number:</label>
-      <input type="number" id="number" formControlName="number" class="form-control">
-    </div>
-    <div class="form-group">
-      <label for="teamId">Team:</label>
-      <select id="teamId" formControlName="teamId" class="form-control">
-        <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Create Player</button>
-  </form>
+  </div>
 </div>
+
