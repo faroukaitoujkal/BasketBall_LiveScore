@@ -12,6 +12,7 @@ import { PlayerScore } from '../player-score.model';
 import { Substitution } from '../substitution.model';
 import { QuarterService } from '../../services/quarter.service';
 import { Quarter } from '../../services/quarter.model';
+import { SignalrService } from '../../services/signalr.service';
 
 @Component({
   selector: 'app-play-match',
@@ -83,10 +84,15 @@ export class PlayMatchComponent implements OnInit {
     private timeoutService: TimeoutService,
     private playerService: PlayerService,
     private foulService: FoulService,
-    private quarterService: QuarterService 
+    private quarterService: QuarterService,
+    private signalrService: SignalrService
   ) { }
 
   ngOnInit(): void {
+    this.signalrService.startConnection();
+    this.signalrService.messageReceived$.subscribe((message) => {
+      console.log('Message reçu depuis SignalR:', message);
+    });
     // Récupérer le matchId depuis l'URL
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -98,6 +104,10 @@ export class PlayMatchComponent implements OnInit {
     } else {
       console.error('No match ID provided in the route.');
     }
+  }
+
+  sendTestMessage(): void {
+    this.signalrService.sendMessage('Test message from Angular');
   }
 
   startTimer(): void {

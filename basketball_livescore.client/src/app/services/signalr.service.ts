@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import signalR, { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -22,7 +22,6 @@ export class SignalrService {
       .start()
       .then(() => {
         console.log('SignalR connection established');
-        this.listenForMessages();
       })
       .catch((err) => {
         console.error('SignalR connection failed: ', err);
@@ -43,6 +42,16 @@ export class SignalrService {
       })
       .catch((err) => {
         console.error('Erreur d\'envoi du message :', err);
+      });
+  }
+
+  public getConnectionId(): void {
+    this.hubConnection.invoke('GetConnectionId')
+      .then((connectionId: string) => {
+        console.log('Connection ID:', connectionId);
+      })
+      .catch((err) => {
+        console.error('Error retrieving Connection ID:', err);
       });
   }
 }
