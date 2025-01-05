@@ -57,7 +57,6 @@ export class MatchDetailComponent implements OnInit {
               if (this.match) {
                 this.match.homeTeam = { id: this.match.homeTeamId, name } as any;
                 this.homeTeamId = this.match.homeTeamId; // Mise à jour de l'ID de l'équipe à domicile
-                this.loadPlayers(); // Chargez les joueurs après avoir récupéré l'ID de l'équipe à domicile
               }
             });
 
@@ -65,7 +64,12 @@ export class MatchDetailComponent implements OnInit {
               if (this.match) {
                 this.match.awayTeam = { id: this.match.awayTeamId, name } as any;
                 this.awayTeamId = this.match.awayTeamId; // Mise à jour de l'ID de l'équipe à l'extérieur
-                this.loadPlayers(); // Chargez les joueurs après avoir récupéré l'ID de l'équipe à l'extérieur
+                // Charger les joueurs après que les équipes ont été définies
+                if (this.awayTeamId > 0) {
+                  this.loadPlayers(); // Charge les joueurs seulement une fois toutes les équipes définies
+                } else {
+                  console.warn('Invalid away team ID');
+                }
               }
             });
           }
@@ -166,6 +170,16 @@ export class MatchDetailComponent implements OnInit {
     } else {
       console.warn('Invalid away team ID');
     }
+
+    // Charge tous les joueurs du match (si tu veux utiliser tous les joueurs pour getPlayerName)
+    this.playerService.getPlayers().subscribe(
+      (data: Player[]) => {
+        this.players = data;
+      },
+      error => {
+        console.error('Error loading players', error);
+      }
+    );
   }
 
   getPlayerName(playerId: number): string {
