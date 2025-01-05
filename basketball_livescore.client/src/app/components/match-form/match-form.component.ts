@@ -21,9 +21,9 @@ import { User } from '../../services/user.model';
 export class MatchFormComponent implements OnInit {
   matchForm: FormGroup;
   teams: Team[] = [];
-  homeTeamPlayers: Player[] = [];
-  awayTeamPlayers: Player[] = [];
   users: User[] = [];
+  homeTeamPlayers: Player[] = []; // Liste des joueurs pour l'équipe maison
+  awayTeamPlayers: Player[] = []; // Liste des joueurs pour l'équipe visiteuse
 
   constructor(
     private fb: FormBuilder,
@@ -41,8 +41,8 @@ export class MatchFormComponent implements OnInit {
       numberOfQuarters: [2, [Validators.required, rangeValidator(2, 4)]],
       quarterDuration: [10, [Validators.required, rangeValidator(10, 12)]],
       timeoutDuration: [1, [Validators.required, rangeValidator(1, 3)]],
-      homeTeamStartingPlayers: this.fb.array([], [Validators.minLength(5), Validators.maxLength(5)]),
-      awayTeamStartingPlayers: this.fb.array([], [Validators.minLength(5), Validators.maxLength(5)]),
+      homeTeamStartingPlayers: this.fb.array([], Validators.minLength(5)),
+      awayTeamStartingPlayers: this.fb.array([], Validators.minLength(5)),
       liveEncoders: this.fb.array([], [Validators.minLength(1)])
     }, { validators: uniqueTeamsValidator() });
   }
@@ -62,6 +62,14 @@ export class MatchFormComponent implements OnInit {
 
   removeLiveEncoder(index: number): void {
     this.liveEncoders.removeAt(index);
+  }
+
+  get homeTeamStartingPlayers(): FormArray {
+    return this.matchForm.get('homeTeamStartingPlayers') as FormArray;
+  }
+
+  get awayTeamStartingPlayers(): FormArray {
+    return this.matchForm.get('awayTeamStartingPlayers') as FormArray;
   }
 
   loadTeams(): void {
@@ -115,18 +123,44 @@ export class MatchFormComponent implements OnInit {
     }
   }
 
-  onPlayerSelectionChange(isHomeTeam: boolean, selectedOptions: any): void {
-    const playerFormArray = isHomeTeam
-      ? this.matchForm.get('homeTeamStartingPlayers') as FormArray
-      : this.matchForm.get('awayTeamStartingPlayers') as FormArray;
+  onPlayerSelectionChange(isHomeTeam: boolean, event: any): void {
+    const playerId = event.target.value;
 
-    while (playerFormArray.length) {
-      playerFormArray.removeAt(0);
+    if (isHomeTeam) {
+      if (event.target.checked) {
+        // Ajouter un joueur à l'équipe maison
+        this.homeTeamStartingPlayers.push(this.fb.control(playerId));
+      } else {
+        // Retirer un joueur de l'équipe maison
+        if (this.homeTeamStartingPlayers.controls) {
+          const index = this.homeTeamStartingPlayers.controls.findIndex(control => control.value === playerId);
+          if (index !== -1) {
+            this.homeTeamStartingPlayers.removeAt(index);
+          }
+        }
+      }
+    } else {
+      if (event.target.checked) {
+        // Ajouter un joueur à l'équipe visiteuse
+        this.awayTeamStartingPlayers.push(this.fb.control(playerId));
+      } else {
+        // Retirer un joueur de l'équipe visiteuse
+        if (this.awayTeamStartingPlayers.controls) {
+          const index = this.awayTeamStartingPlayers.controls.findIndex(control => control.value === playerId);
+          if (index !== -1) {
+            this.awayTeamStartingPlayers.removeAt(index);
+          }
+        }
+      }
     }
+  }
 
-    const selectedPlayerIds = Array.from(selectedOptions).map((option: any) => (option as HTMLOptionElement).value);
-
-    selectedPlayerIds.forEach(playerId => playerFormArray.push(this.fb.control(playerId)));
+  isSelected(players: FormArray, playerId: number | undefined): boolean {
+    // Vérifier si players est un tableau valide avant d'essayer de l'utiliser
+    if (!Array.isArray(players.controls) || playerId === undefined) {
+      return false;
+    }
+    return players.controls.some(control => control.value === playerId);
   }
 
   onSubmit(): void {
@@ -138,9 +172,9 @@ export class MatchFormComponent implements OnInit {
         ...this.matchForm.value,
         matchDate: new Date(this.matchForm.value.matchDate),
         encodedBy: this.authService.currentUserValue?.email,
-        homeTeamStartingPlayers: homePlayers.map((playerId: number) => ({ id: playerId })),
-        awayTeamStartingPlayers: awayPlayers.map((playerId: number) => ({ id: playerId })),
-        liveEncoders: this.matchForm.value.liveEncoders,  
+        homeTeamStartingPlayers: homePlayers,
+        awayTeamStartingPlayers: awayPlayers, 
+        liveEncoders: this.matchForm.value.liveEncoders,
         quarters: [],
         playerScores: [],
         fouls: [],

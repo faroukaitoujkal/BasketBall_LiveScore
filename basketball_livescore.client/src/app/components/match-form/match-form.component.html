@@ -19,11 +19,16 @@
         Home team and away team cannot be the same.
       </div>
     </div>
+    <!-- Home Team Starting Players -->
     <div class="form-group">
       <label for="homeTeamStartingPlayers">Home Team Starting Players:</label>
-      <select id="homeTeamStartingPlayers" formArrayName="homeTeamStartingPlayers" class="form-control" multiple>
-        <option *ngFor="let player of homeTeamPlayers" [value]="player.id">{{ player.name }}</option>
-      </select>
+      <div *ngFor="let player of homeTeamPlayers">
+        <input type="checkbox"
+               [value]="player.id"
+               (change)="onPlayerSelectionChange(true, $event)"
+               [checked]="isSelected(homeTeamStartingPlayers, player.id)" />
+        <label>{{ player.name }}</label>
+      </div>
       <div *ngIf="matchForm.get('homeTeamStartingPlayers')?.errors?.['minlength']" class="text-danger">
         You must select 5 starting players.
       </div>
@@ -37,11 +42,16 @@
         Home team and away team cannot be the same.
       </div>
     </div>
+    <!-- Away Team Starting Players -->
     <div class="form-group">
       <label for="awayTeamStartingPlayers">Away Team Starting Players:</label>
-      <select id="awayTeamStartingPlayers" formArrayName="awayTeamStartingPlayers" class="form-control" multiple>
-        <option *ngFor="let player of awayTeamPlayers" [value]="player.id">{{ player.name }}</option>
-      </select>
+      <div *ngFor="let player of awayTeamPlayers">
+        <input type="checkbox"
+               [value]="player.id"
+               (change)="onPlayerSelectionChange(false, $event)"
+               [checked]="isSelected(awayTeamStartingPlayers, player.id)" />
+        <label>{{ player.name }}</label>
+      </div>
       <div *ngIf="matchForm.get('awayTeamStartingPlayers')?.errors?.['minlength']" class="text-danger">
         You must select 5 starting players.
       </div>

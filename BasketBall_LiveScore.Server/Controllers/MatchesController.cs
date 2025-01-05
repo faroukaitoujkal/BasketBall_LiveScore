@@ -74,6 +74,7 @@ namespace BasketBall_LiveScore.Server.Controllers
         {
             _logger.LogInformation("Received match data: {MatchData}", match);
 
+            // Vérification que chaque équipe a exactement 5 joueurs de départ
             if (match.HomeTeamStartingPlayers == null || match.HomeTeamStartingPlayers.Count != 5)
             {
                 return BadRequest("Home team must have exactly 5 starting players.");
@@ -84,6 +85,7 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return BadRequest("Away team must have exactly 5 starting players.");
             }
 
+            // Vérification des équipes
             var homeTeam = await _context.Teams.FindAsync(match.HomeTeamId);
             var awayTeam = await _context.Teams.FindAsync(match.AwayTeamId);
 
@@ -92,7 +94,7 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return BadRequest("Invalid HomeTeamId or AwayTeamId.");
             }
 
-            // Vérification et attachement des joueurs des deux équipes
+            // Vérification des joueurs de l'équipe maison
             foreach (var playerId in match.HomeTeamStartingPlayers)
             {
                 var player = await _context.Players.FindAsync(playerId);
@@ -100,32 +102,15 @@ namespace BasketBall_LiveScore.Server.Controllers
                 {
                     return BadRequest($"Invalid player ID {playerId} in HomeTeamStartingPlayers.");
                 }
-                else
-                {
-                    // Vérifier si le joueur est déjà suivi, sinon l'attacher
-                    var entry = _context.Entry(player);
-                    if (entry.State == EntityState.Detached)
-                    {
-                        _context.Players.Attach(player);
-                    }
-                }
             }
 
+            // Vérification des joueurs de l'équipe visiteuse
             foreach (var playerId in match.AwayTeamStartingPlayers)
             {
                 var player = await _context.Players.FindAsync(playerId);
                 if (player == null)
                 {
                     return BadRequest($"Invalid player ID {playerId} in AwayTeamStartingPlayers.");
-                }
-                else
-                {
-                    // Vérifier si le joueur est déjà suivi, sinon l'attacher
-                    var entry = _context.Entry(player);
-                    if (entry.State == EntityState.Detached)
-                    {
-                        _context.Players.Attach(player);
-                    }
                 }
             }
 
