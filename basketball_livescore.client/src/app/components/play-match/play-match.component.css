@@ -138,6 +138,18 @@ body {
   padding: 15px;
 }
 
+.control-panel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Centrage vertical */
+  margin-top: 90px; /* Ajoute cette ligne pour descendre un peu le panel */
+}
+
+.control-panel {
+  text-align: center;
+}
+
   .team-side h4 {
     font-size: 20px;
     color: white; /* Couleur des titres des équipes */

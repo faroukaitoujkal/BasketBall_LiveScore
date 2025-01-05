@@ -6,14 +6,19 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class SignalrService {
-  private hubConnection: HubConnection;
+  matchId!: number; // MatchId sera initialisé dynamiquement
+  public hubConnection: HubConnection;
   private messageReceivedSubject = new Subject<string>();
   public messageReceived$ = this.messageReceivedSubject.asObservable();
   private scoreUpdatedSource = new BehaviorSubject<any>(null);
   private timeoutCreatedSource = new BehaviorSubject<any>(null);
+  private timerUpdatedSource = new BehaviorSubject<any>(null);
+  private _currentQuarterUpdated = new Subject<number>();
 
   scoreUpdated$ = this.scoreUpdatedSource.asObservable();
   timeoutCreated$ = this.timeoutCreatedSource.asObservable();
+  timerUpdated$ = this.timerUpdatedSource.asObservable();
+  currentQuarterUpdated$ = this._currentQuarterUpdated.asObservable();
 
   constructor() {
     this.hubConnection = new HubConnectionBuilder()
@@ -22,7 +27,9 @@ export class SignalrService {
       .build();
   }
 
-  public startConnection(): void {
+  public startConnection(matchId: number): void {
+    this.matchId = matchId;  // Utiliser le matchId passé par le composant
+
     this.hubConnection
       .start()
       .then(() => {
@@ -33,7 +40,9 @@ export class SignalrService {
       });
 
     this.listenToScoreUpdates();
-    this.listenToTimeoutCreated(); 
+    this.listenToTimeoutCreated();
+    // this.listenToTimerUpdates(this.matchId);  
+    this.listenForQuarterUpdates();
   }
 
   public listenForMessages(): void {
@@ -55,6 +64,27 @@ export class SignalrService {
       console.log('Temps mort créé reçu:', data);
       this.timeoutCreatedSource.next(data);
     });
+  }
+
+  /*private listenToTimerUpdates(matchId: number): void {
+    this.hubConnection.on('TimerUpdated', (data) => {
+      console.log('Mise à jour du timer reçue:', data);
+      if (data.matchId === matchId) {
+        this.timerUpdatedSource.next(data.currentTime);  // Mettre à jour le timer dans toutes les pages
+      }
+    });
+  }*/
+
+  listenForQuarterUpdates(): void {
+    this.hubConnection.on('QuarterUpdated', (quarter: number) => {
+      this._currentQuarterUpdated.next(quarter);  // Notify subscribers
+    });
+  }
+
+  updateCurrentQuarter(matchId: number, currentQuarter: number): void {
+    this.hubConnection
+      .invoke('UpdateQuarter', matchId, currentQuarter)
+      .catch((err) => console.error('Error sending quarter update:', err));
   }
 
   public sendMessage(message: string): void {

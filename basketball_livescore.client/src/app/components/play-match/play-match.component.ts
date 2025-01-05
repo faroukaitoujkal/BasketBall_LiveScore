@@ -89,7 +89,7 @@ export class PlayMatchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.signalrService.startConnection();
+    this.signalrService.startConnection(this.matchId); // Passer le matchId ici
 
     // Écouter les mises à jour des scores
     this.signalrService.scoreUpdated$.subscribe((data) => {
@@ -107,6 +107,17 @@ export class PlayMatchComponent implements OnInit {
         this.loadTimeouts(); // Recharger les temps morts
         console.log('Temps mort reçu pour ce match:', data);
       }
+    });
+
+    /*this.signalrService.timerUpdated$.subscribe((data) => {
+      if (data && data.matchId === this.matchId) {
+        this.timer = data.currentTime; // Synchroniser le timer avec les autres pages
+      }
+    });*/
+
+    this.signalrService.currentQuarterUpdated$.subscribe((quarter) => {
+      this.currentQuarter = quarter;
+      console.log('Current quarter updated:', this.currentQuarter);
     });
 
     // Récupérer le matchId depuis l'URL
@@ -128,6 +139,7 @@ export class PlayMatchComponent implements OnInit {
       this.intervalId = setInterval(() => {
         if (!this.isTimeoutInProgress) {
           this.timer++;
+          // this.signalrService.hubConnection.send("UpdateTimer", this.matchId, this.timer); 
         }
       }, 1000);
     }
@@ -271,6 +283,8 @@ export class PlayMatchComponent implements OnInit {
         this.timer++;
       }
     }, 1000);
+
+    this.signalrService.updateCurrentQuarter(this.matchId, this.currentQuarter);
   }
 
   endQuarter(): void {
@@ -296,8 +310,6 @@ export class PlayMatchComponent implements OnInit {
           this.currentQuarter++;
         } else {
           this.isMatchFinished = true;
-
-          // Mettre à jour le match comme terminé
           this.matchService.updateMatchStatus(this.matchId, true).subscribe({
             next: () => {
               alert('Fin du match !');
@@ -318,6 +330,9 @@ export class PlayMatchComponent implements OnInit {
             console.error('Erreur lors de la mise à jour du current quarter:', error);
           }
         });
+
+        // Emit the updated quarter in real-time
+        this.signalrService.updateCurrentQuarter(this.matchId, this.currentQuarter);
       },
       error: (error) => {
         console.error('Erreur lors de la sauvegarde du quart-temps:', error);

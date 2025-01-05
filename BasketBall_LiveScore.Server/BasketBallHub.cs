@@ -17,6 +17,11 @@ namespace BasketBall_LiveScore.Server
             await base.OnConnectedAsync();
         }
 
+        public async Task UpdateQuarter(int matchId, int currentQuarter)
+        {
+            await Clients.All.SendAsync("QuarterUpdated", currentQuarter);
+        }
+
         public async Task SendMessage(string message)
         {
             Log.Information("SendMessage called with message: {Message}", message);

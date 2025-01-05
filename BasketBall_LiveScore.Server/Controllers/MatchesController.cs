@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BasketBall_LiveScore.Server.Controllers
 {
@@ -13,11 +14,13 @@ namespace BasketBall_LiveScore.Server.Controllers
     public class MatchesController : ControllerBase
     {
         private readonly BasketballContext _context;
+        private readonly IHubContext<BasketBallHub> _hubContext;
         private readonly ILogger<MatchesController> _logger;
 
-        public MatchesController(BasketballContext context, ILogger<MatchesController> logger)
+        public MatchesController(BasketballContext context, IHubContext<BasketBallHub> hubContext, ILogger<MatchesController> logger)
         {
             _context = context;
+            _hubContext = hubContext;
             _logger = logger;
         }
 
@@ -132,6 +135,17 @@ namespace BasketBall_LiveScore.Server.Controllers
 
             return CreatedAtAction("GetMatch", new { id = match.Id }, match);
         }
+
+        /*public async Task UpdateTimer(int matchId, int currentTime)
+        {
+            var timerData = new
+            {
+                matchId = matchId,
+                currentTime = currentTime // Temps en secondes
+            };
+
+            await _hubContext.Clients.All.SendAsync("TimerUpdated", timerData);
+        }*/
 
         [HttpPut("{id}/finish")]
         public async Task<IActionResult> FinishMatch(int id)
