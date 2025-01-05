@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatchService } from '../../services/match.service';
 import { FoulService } from '../../services/foul.service';
-import { TimeoutService } from '../../services/timeout.service'; 
+import { TimeoutService } from '../../services/timeout.service';
 import { Match } from '../../services/match.model';
 import { Foul } from '../../services/foul.model';
 import { PlayerScore } from '../player-score.model';
@@ -25,6 +25,10 @@ export class MatchDetailComponent implements OnInit {
   players: Player[] = []; // Liste des joueurs
   homeTeamScore: number = 0;
   awayTeamScore: number = 0;
+  homeTeamId: number = 0;
+  awayTeamId: number = 0;
+  homePlayers: Player[] = [];
+  awayPlayers: Player[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -32,15 +36,11 @@ export class MatchDetailComponent implements OnInit {
     private foulService: FoulService,
     private playerScoreService: ScoreService,
     private timeoutService: TimeoutService,
-    private playerService: PlayerService 
+    private playerService: PlayerService
   ) { }
 
   ngOnInit(): void {
     this.loadMatch();
-    this.loadFouls();
-    this.loadPlayerScores();
-    this.loadTimeouts(); // Chargez les timeouts
-    this.loadPlayers(); // Charger les joueurs
   }
 
   loadMatch(): void {
@@ -56,23 +56,26 @@ export class MatchDetailComponent implements OnInit {
             this.matchService.getTeamName(this.match.homeTeamId).subscribe((name: string) => {
               if (this.match) {
                 this.match.homeTeam = { id: this.match.homeTeamId, name } as any;
+                this.homeTeamId = this.match.homeTeamId; // Mise à jour de l'ID de l'équipe à domicile
+                this.loadPlayers(); // Chargez les joueurs après avoir récupéré l'ID de l'équipe à domicile
               }
             });
 
             this.matchService.getTeamName(this.match.awayTeamId).subscribe((name: string) => {
               if (this.match) {
                 this.match.awayTeam = { id: this.match.awayTeamId, name } as any;
+                this.awayTeamId = this.match.awayTeamId; // Mise à jour de l'ID de l'équipe à l'extérieur
+                this.loadPlayers(); // Chargez les joueurs après avoir récupéré l'ID de l'équipe à l'extérieur
               }
             });
           }
 
-          if (this.matchIdd !== null) {
-            this.loadFouls();
-            this.loadPlayerScores();
-            this.loadTimeouts(); // Chargez les timeouts
-            this.loadPlayers(); // Charger les joueurs
-            this.loadMatchScores();
-          }
+          // Charger d'autres informations après le chargement de l'équipe
+          this.loadMatchDetails();
+          this.loadFouls();
+          this.loadPlayerScores();
+          this.loadTimeouts();
+          this.loadMatchScores();
         },
         error: (error) => {
           console.error('Error loading match', error);
@@ -84,6 +87,13 @@ export class MatchDetailComponent implements OnInit {
     } else {
       console.error('No match ID provided');
     }
+  }
+
+  loadMatchDetails(): void {
+    this.matchService.getMatch(this.matchIdd).subscribe((match: Match) => {
+      this.homeTeamId = match.homeTeamId;
+      this.awayTeamId = match.awayTeamId;
+    });
   }
 
   loadMatchScores(): void {
@@ -137,14 +147,25 @@ export class MatchDetailComponent implements OnInit {
   }
 
   loadPlayers(): void {
-    this.playerService.getPlayers().subscribe(
-      (data: Player[]) => {
-        this.players = data;
-      },
-      error => {
-        console.error('Error loading players', error);
-      }
-    );
+    if (this.homeTeamId > 0) {
+      this.playerService.getPlayersByTeam(this.homeTeamId).subscribe((homePlayers: Player[]) => {
+        this.homePlayers = homePlayers.slice(0, 5);
+      }, error => {
+        console.error('Error loading home team players', error);
+      });
+    } else {
+      console.warn('Invalid home team ID');
+    }
+
+    if (this.awayTeamId > 0) {
+      this.playerService.getPlayersByTeam(this.awayTeamId).subscribe((awayPlayers: Player[]) => {
+        this.awayPlayers = awayPlayers.slice(0, 5);
+      }, error => {
+        console.error('Error loading away team players', error);
+      });
+    } else {
+      console.warn('Invalid away team ID');
+    }
   }
 
   getPlayerName(playerId: number): string {
