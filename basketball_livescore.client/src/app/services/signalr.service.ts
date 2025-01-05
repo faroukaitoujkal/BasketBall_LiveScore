@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import signalR, { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import * as signalR from '@microsoft/signalr';  
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -28,16 +29,20 @@ export class SignalrService {
   }
 
   public startConnection(matchId: number): void {
-    this.matchId = matchId;  // Utiliser le matchId passé par le composant
+    this.matchId = matchId;
 
-    this.hubConnection
-      .start()
-      .then(() => {
-        console.log('SignalR connection established');
-      })
-      .catch((err) => {
-        console.error('SignalR connection failed: ', err);
-      });
+    if (this.hubConnection.state === signalR.HubConnectionState.Disconnected) {
+      this.hubConnection
+        .start()
+        .then(() => {
+          console.log('SignalR connection established');
+        })
+        .catch((err) => {
+          console.error('SignalR connection failed: ', err);
+        });
+    } else {
+      console.log('SignalR connection already started or in progress');
+    }
 
     this.listenToScoreUpdates();
     this.listenToTimeoutCreated();

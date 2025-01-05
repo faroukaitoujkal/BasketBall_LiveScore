@@ -1,0 +1,85 @@
+/* Style global */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Design du container du formulaire */
+.container {
+  padding: 0 15px;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  padding: 12px;
+}
+
+.form-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.btn {
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+.text-primary {
+  color: #007bff;
+}
+
+.text-danger {
+  color: #e74c3c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .w-100 {
+    width: 100% !important;
+  }
+
+  .p-3 {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .w-sm-75 {
+    width: 90% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-lg-45 {
+    width: 45% !important; /* Réduit la largeur à 25% sur les grands écrans */
+  }
+}

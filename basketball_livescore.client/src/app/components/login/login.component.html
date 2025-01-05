@@ -1,24 +1,24 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="w-50">
-    <h2 class="text-center mb-4">Login</h2>
+  <div class="w-100 w-sm-75 w-md-50 w-lg-25 bg-white p-3 rounded shadow">
+    <h2 class="text-center mb-4 text-primary">Login</h2>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group mb-3">
-        <label for="email">Email:</label>
-        <input type="email" id="email" formControlName="email" class="form-control">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter your email">
         <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
           Email is required and must be valid.
         </div>
       </div>
       <div class="form-group mb-3">
-        <label for="password">Password:</label>
-        <input type="password" id="password" formControlName="password" class="form-control">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" formControlName="password" class="form-control" placeholder="Enter your password">
         <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
           Password is required and must be at least 6 characters.
         </div>
       </div>
-      <button type="submit" class="btn btn-primary w-100">Login</button>
+      <button type="submit" class="btn btn-primary w-100 py-2 mt-3">Login</button>
     </form>
     <div *ngIf="errorMessage" class="text-danger text-center mt-3">{{ errorMessage }}</div>
-    <p class="text-center mt-3">Don't have an account? <a [routerLink]="['/register']">Register here</a></p>
+    <p class="text-center mt-3">Don't have an account? <a [routerLink]="['/register']" class="text-primary">Register here</a></p>
   </div>
 </div>
