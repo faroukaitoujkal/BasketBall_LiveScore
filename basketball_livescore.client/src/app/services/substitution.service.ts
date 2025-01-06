@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Substitution } from '../components/substitution.model';
+import { Substitution } from './substitution.model';
 
 @Injectable({
   providedIn: 'root'

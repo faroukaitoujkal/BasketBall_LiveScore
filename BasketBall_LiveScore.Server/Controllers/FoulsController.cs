@@ -64,15 +64,12 @@ namespace BasketBall_LiveScore.Server.Controllers
             var player = await _context.Players.FindAsync(foul.PlayerId);
             if (player == null)
             {
-                // Si le joueur n'existe pas, retourner une erreur
                 return NotFound(new { message = "Joueur non trouvé." });
             }
 
-            // Vérifier si l'entité Player est déjà suivie
             var entry = _context.Entry(player);
             if (entry.State == EntityState.Detached)
             {
-                // Si l'entité est détachée, l'attacher
                 _context.Players.Attach(player);
             }
 
@@ -83,7 +80,6 @@ namespace BasketBall_LiveScore.Server.Controllers
             _context.Fouls.Add(foul);
             await _context.SaveChangesAsync();
 
-            // Retourner la faute avec un code de statut "Created"
             return CreatedAtAction("GetFoul", new { id = foul.Id }, foul);
         }
 

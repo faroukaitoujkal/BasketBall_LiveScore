@@ -46,7 +46,6 @@ export class SignalrService {
 
     this.listenToScoreUpdates();
     this.listenToTimeoutCreated();
-    // this.listenToTimerUpdates(this.matchId);  
     this.listenForQuarterUpdates();
   }
 
@@ -71,18 +70,9 @@ export class SignalrService {
     });
   }
 
-  /*private listenToTimerUpdates(matchId: number): void {
-    this.hubConnection.on('TimerUpdated', (data) => {
-      console.log('Mise à jour du timer reçue:', data);
-      if (data.matchId === matchId) {
-        this.timerUpdatedSource.next(data.currentTime);  // Mettre à jour le timer dans toutes les pages
-      }
-    });
-  }*/
-
   listenForQuarterUpdates(): void {
     this.hubConnection.on('QuarterUpdated', (quarter: number) => {
-      this._currentQuarterUpdated.next(quarter);  // Notify subscribers
+      this._currentQuarterUpdated.next(quarter); 
     });
   }
 

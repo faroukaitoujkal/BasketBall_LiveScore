@@ -65,7 +65,6 @@ namespace BasketBall_LiveScore.Server.Controllers
             // Sauvegarder les changements dans la base de données
             await _context.SaveChangesAsync();
 
-            // Retourner la réponse avec le statut 201 (Créé)
             return CreatedAtAction("GetQuarter", new { id = quarter.Id }, quarter);
         }
 

@@ -60,7 +60,6 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return BadRequest("Invalid TeamId.");
             }
 
-            // Attacher le joueur à l'équipe
             player.Team = team;
 
             // Ajouter et sauvegarder le joueur dans la base de données

@@ -8,7 +8,7 @@ namespace BasketBall_LiveScore.Server.Models
         public string Name { get; set; }
         public int Number { get; set; }
         public int TeamId { get; set; }
-        [JsonIgnore] // Évite la sérialisation circulaire
+        [JsonIgnore] 
         public Team? Team { get; set; }
     }
 }

@@ -7,15 +7,15 @@ export interface TimeoutMatch {
   id: number;
   matchId: number;
   quarter: number;
-  gameTime: string; // Représentation en string pour TimeSpan
-  duration: string; // Représentation en string pour TimeSpan
+  gameTime: string; 
+  duration: string; 
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class TimeoutService {
-  private apiUrl = 'https://localhost:7088/api/Timeouts'; // URL de l'API
+  private apiUrl = 'https://localhost:7088/api/Timeouts'; 
 
   constructor(private http: HttpClient) { }
 

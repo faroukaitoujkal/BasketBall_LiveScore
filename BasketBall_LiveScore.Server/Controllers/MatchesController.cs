@@ -121,17 +121,6 @@ namespace BasketBall_LiveScore.Server.Controllers
             return CreatedAtAction("GetMatch", new { id = match.Id }, match);
         }
 
-        /*public async Task UpdateTimer(int matchId, int currentTime)
-        {
-            var timerData = new
-            {
-                matchId = matchId,
-                currentTime = currentTime // Temps en secondes
-            };
-
-            await _hubContext.Clients.All.SendAsync("TimerUpdated", timerData);
-        }*/
-
         [HttpPut("{id}/finish")]
         public async Task<IActionResult> FinishMatch(int id)
         {

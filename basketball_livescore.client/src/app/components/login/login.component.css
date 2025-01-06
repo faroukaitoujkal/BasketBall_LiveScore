@@ -80,6 +80,6 @@ h2 {
 
 @media (min-width: 1200px) {
   .w-lg-45 {
-    width: 45% !important; /* Réduit la largeur à 25% sur les grands écrans */
+    width: 45% !important; 
   }
 }

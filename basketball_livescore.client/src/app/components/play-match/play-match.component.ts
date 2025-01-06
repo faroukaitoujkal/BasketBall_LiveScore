@@ -8,8 +8,8 @@ import { ScoreService } from '../../services/score.service';
 import { SubstitutionService } from '../../services/substitution.service';
 import { Match } from '../../services/match.model';
 import { Player } from '../../services/player.model';
-import { PlayerScore } from '../player-score.model';
-import { Substitution } from '../substitution.model';
+import { PlayerScore } from '../../services/player-score.model';
+import { Substitution } from '../../services/substitution.model';
 import { QuarterService } from '../../services/quarter.service';
 import { Quarter } from '../../services/quarter.model';
 import { SignalrService } from '../../services/signalr.service';
@@ -90,7 +90,7 @@ export class PlayMatchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.signalrService.startConnection(this.matchId); // Passer le matchId ici
+    this.signalrService.startConnection(this.matchId); 
 
     // Écouter les mises à jour des scores
     this.signalrService.scoreUpdated$.subscribe((data) => {
@@ -109,12 +109,6 @@ export class PlayMatchComponent implements OnInit {
         console.log('Temps mort reçu pour ce match:', data);
       }
     });
-
-    /*this.signalrService.timerUpdated$.subscribe((data) => {
-      if (data && data.matchId === this.matchId) {
-        this.timer = data.currentTime; // Synchroniser le timer avec les autres pages
-      }
-    });*/
 
     this.signalrService.currentQuarterUpdated$.subscribe((quarter) => {
       this.currentQuarter = quarter;
@@ -140,7 +134,6 @@ export class PlayMatchComponent implements OnInit {
       this.intervalId = setInterval(() => {
         if (!this.isTimeoutInProgress) {
           this.timer++;
-          // this.signalrService.hubConnection.send("UpdateTimer", this.matchId, this.timer); 
         }
       }, 1000);
     }
@@ -161,7 +154,7 @@ export class PlayMatchComponent implements OnInit {
 
   loadMatchDetails(): void {
     this.matchService.getMatch(this.matchId).subscribe((match: Match) => {
-      this.numberOfQuarters = match.numberOfQuarters; // Assurez-vous que `quarters` est dans le modèle
+      this.numberOfQuarters = match.numberOfQuarters; 
       this.quarterDuration = match.quarterDuration * 60; // Convertir en secondes
       this.timeoutDuration = match.timeoutDuration * 60;
       this.homeTeamId = match.homeTeamId;
@@ -333,7 +326,6 @@ export class PlayMatchComponent implements OnInit {
           }
         });
 
-        // Emit the updated quarter in real-time
         this.signalrService.updateCurrentQuarter(this.matchId, this.currentQuarter);
       },
       error: (error) => {
@@ -373,10 +365,10 @@ export class PlayMatchComponent implements OnInit {
 
     // Création de l'objet PlayerScore
     const newScore: PlayerScore = {
-      playerId: selectedPlayer.id!,  // ID du joueur
-      points: this.selectedPoints,     // Points marqués
-      scoreTime: new Date().toISOString(),  // Heure du score
-      matchId: this.matchId,           // ID du match
+      playerId: selectedPlayer.id!,  
+      points: this.selectedPoints,     
+      scoreTime: new Date().toISOString(),  
+      matchId: this.matchId,          
     };
 
     console.log('Création du score:', newScore);

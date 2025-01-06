@@ -13,7 +13,6 @@ namespace BasketBall_LiveScore.Server.Controllers
 
         private readonly BasketballContext _context;
 
-        // Injection de dépendance du Hub SignalR
         public SignalRController(IHubContext<BasketBallHub> hubContext)
         {
             _hubContext = hubContext;

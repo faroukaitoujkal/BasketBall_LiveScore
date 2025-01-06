@@ -142,8 +142,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Centrage vertical */
-  margin-top: 90px; /* Ajoute cette ligne pour descendre un peu le panel */
+  height: 100%; 
+  margin-top: 90px; 
 }
 
 .control-panel {

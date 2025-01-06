@@ -5,11 +5,11 @@ import { FoulService } from '../../services/foul.service';
 import { TimeoutService } from '../../services/timeout.service';
 import { Match } from '../../services/match.model';
 import { Foul } from '../../services/foul.model';
-import { PlayerScore } from '../player-score.model';
 import { ScoreService } from '../../services/score.service';
 import { Timeout } from '../../services/timeout.model';
 import { Player } from '../../services/player.model';
 import { PlayerService } from '../../services/player.service';
+import { PlayerScore } from '../../services/player-score.model';
 
 @Component({
   selector: 'app-match-detail',
@@ -74,7 +74,6 @@ export class MatchDetailComponent implements OnInit {
             });
           }
 
-          // Charger d'autres informations après le chargement de l'équipe
           this.loadMatchDetails();
           this.loadFouls();
           this.loadPlayerScores();
@@ -171,7 +170,6 @@ export class MatchDetailComponent implements OnInit {
       console.warn('Invalid away team ID');
     }
 
-    // Charge tous les joueurs du match (si tu veux utiliser tous les joueurs pour getPlayerName)
     this.playerService.getPlayers().subscribe(
       (data: Player[]) => {
         this.players = data;

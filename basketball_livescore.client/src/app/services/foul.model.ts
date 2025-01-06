@@ -1,6 +1,6 @@
 export interface Foul {
   id: number;
-  playerId: number;  // L'ID du joueur, à utiliser pour la création ou l'association
+  playerId: number;  // L'ID du joueur
   player: {
     id: number;       // ID du joueur
     name: string;     // Nom du joueur

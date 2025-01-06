@@ -14,8 +14,8 @@ body {
 
 .container {
   margin: 20px auto;
-  max-width: 95%; /* Utiliser 95% de la largeur pour occuper presque toute la largeur */
-  width: 100%; /* Assurer que le conteneur utilise toute la largeur possible */
+  max-width: 95%;
+  width: 100%; 
   font-family: 'Roboto', sans-serif;
 }
 
@@ -24,7 +24,7 @@ h2 {
   color: #333;
   text-align: center;
   font-weight: bold;
-  font-size: 2rem; /* Augmenter la taille du titre */
+  font-size: 2rem; 
 }
 
 .table-responsive {
@@ -33,19 +33,19 @@ h2 {
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-top: 30px;
-  max-height: calc(100vh - 150px); /* Occupation de tout l'espace restant */
+  max-height: calc(100vh - 150px); 
   overflow-y: auto; /* Si le contenu dépasse la hauteur, une barre de défilement s'affiche */
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 16px; /* Augmenter la taille de la police */
+  font-size: 16px; 
   text-align: center;
 }
 
 th, td {
-  padding: 20px; /* Espacement augmenté pour plus de lisibilité */
+  padding: 20px; 
   vertical-align: middle;
 }
 
