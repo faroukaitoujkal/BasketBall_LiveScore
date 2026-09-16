@@ -1,8 +1,10 @@
-﻿using BasketBall_LiveScore.Server.Data;
+using BasketBall_LiveScore.Server.Data;
 using BasketBall_LiveScore.Server.Models;
+using BasketBall_LiveScore.Server.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BasketBall_LiveScore.Server.Controllers
@@ -19,28 +21,31 @@ namespace BasketBall_LiveScore.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
+        public async Task<ActionResult<IEnumerable<TeamDto>>> GetTeams()
         {
-            return await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.ToListAsync();
+            return Ok(teams.Select(t => t.ToDto()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(int id)
+        public async Task<ActionResult<TeamDetailDto>> GetTeam(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
+            var team = await _context.Teams
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             if (team == null)
             {
                 return NotFound();
             }
 
-            return team;
+            return Ok(team.ToDetailDto());
         }
 
         [HttpGet("{teamId}/name")]
-        public IActionResult GetTeamName(int teamId)
+        public async Task<IActionResult> GetTeamName(int teamId)
         {
-            var team = _context.Teams.FirstOrDefault(t => t.Id == teamId);
+            var team = await _context.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
             if (team == null)
             {
                 return NotFound();
@@ -49,27 +54,12 @@ namespace BasketBall_LiveScore.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Team>> PostTeam(Team team)
+        public async Task<ActionResult<TeamDto>> PostTeam(Team team)
         {
-            if (team.Players != null)
-            {
-                foreach (var player in team.Players)
-                {
-                    player.TeamId = team.Id; // Associer chaque joueur à l'équipe
-
-                    // Vérifier si le joueur est déjà suivi, sinon l'attacher
-                    var entry = _context.Entry(player);
-                    if (entry.State == EntityState.Detached)
-                    {
-                        _context.Players.Attach(player);
-                    }
-                }
-            }
-
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetTeam", new { id = team.Id }, team.ToDto());
         }
 
         [HttpPut("{id}")]

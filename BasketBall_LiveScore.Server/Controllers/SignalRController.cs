@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using BasketBall_LiveScore.Server;
 using BasketBall_LiveScore.Server.Data;
@@ -10,8 +10,6 @@ namespace BasketBall_LiveScore.Server.Controllers
     public class SignalRController : ControllerBase
     {
         private readonly IHubContext<BasketBallHub> _hubContext;
-
-        private readonly BasketballContext _context;
 
         public SignalRController(IHubContext<BasketBallHub> hubContext)
         {

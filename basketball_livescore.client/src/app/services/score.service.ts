@@ -7,7 +7,7 @@ import { PlayerScore } from './player-score.model';
   providedIn: 'root'
 })
 export class ScoreService {
-  private apiUrl = 'https://localhost:7088/api/playerscores';
+  private apiUrl = '/api/playerscores';
 
   constructor(private http: HttpClient) { }
 

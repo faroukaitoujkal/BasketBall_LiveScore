@@ -88,9 +88,6 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.PrimitiveCollection<string>("HomeTeamStartingPlayers")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsFinished")
-                        .HasColumnType("bit");
-
                     b.PrimitiveCollection<string>("LiveEncoders")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -106,6 +103,12 @@ namespace BasketBall_LiveScore.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("QuarterDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Season")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<double>("TimeoutDuration")
@@ -128,6 +131,12 @@ namespace BasketBall_LiveScore.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double?>("Height")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -135,8 +144,14 @@ namespace BasketBall_LiveScore.Server.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<string>("Position")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
+
+                    b.Property<double?>("Weight")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -240,8 +255,20 @@ namespace BasketBall_LiveScore.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CoachName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrimaryColor")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

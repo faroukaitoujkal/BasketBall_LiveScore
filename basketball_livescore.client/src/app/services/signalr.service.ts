@@ -23,7 +23,7 @@ export class SignalrService {
 
   constructor() {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl('https://localhost:7088/basketBallHub') 
+      .withUrl('/basketBallHub') 
       .configureLogging(LogLevel.Information)
       .build();
   }
@@ -37,7 +37,7 @@ export class SignalrService {
         .then(() => {
           console.log('SignalR connection established');
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error('SignalR connection failed: ', err);
         });
     } else {
@@ -57,14 +57,14 @@ export class SignalrService {
   }
 
   private listenToScoreUpdates(): void {
-    this.hubConnection.on('ScoreUpdated', (data) => {
+    this.hubConnection.on('ScoreUpdated', (data: any) => {
       console.log('Score mis à jour reçu:', data);
       this.scoreUpdatedSource.next(data);
     });
   }
 
   private listenToTimeoutCreated(): void {
-    this.hubConnection.on('TimeoutCreated', (data) => {
+    this.hubConnection.on('TimeoutCreated', (data: any) => {
       console.log('Temps mort créé reçu:', data);
       this.timeoutCreatedSource.next(data);
     });
@@ -79,7 +79,7 @@ export class SignalrService {
   updateCurrentQuarter(matchId: number, currentQuarter: number): void {
     this.hubConnection
       .invoke('UpdateQuarter', matchId, currentQuarter)
-      .catch((err) => console.error('Error sending quarter update:', err));
+      .catch((err: any) => console.error('Error sending quarter update:', err));
   }
 
   public sendMessage(message: string): void {
@@ -87,7 +87,7 @@ export class SignalrService {
       .then(() => {
         console.log('Message envoyé');
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error('Erreur d\'envoi du message :', err);
       });
   }
@@ -97,7 +97,7 @@ export class SignalrService {
       .then((connectionId: string) => {
         console.log('Connection ID:', connectionId);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error('Error retrieving Connection ID:', err);
       });
   }

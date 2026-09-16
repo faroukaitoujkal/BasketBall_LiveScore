@@ -28,7 +28,7 @@ export class TeamFormComponent implements OnInit {
       console.log('Submitting team:', JSON.stringify(team, null, 2)); 
 
       this.teamService.createTeam(team).pipe(
-        catchError(error => {
+        catchError((error: any) => {
           console.error('HTTP Error:', error.message);
           console.error('HTTP Response:', error);
           return of(null);

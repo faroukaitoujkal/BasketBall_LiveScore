@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
@@ -53,7 +53,9 @@ namespace BasketBall_LiveScore.Server.Models
         public int HomeTeamScore { get; set; } = 0;
         public int AwayTeamScore { get; set; } = 0;
 
-        public bool IsFinished { get; set; } = false; 
+        public MatchStatus Status { get; set; } = MatchStatus.Scheduled;
+
+        public string? Season { get; set; }
 
     }
 }

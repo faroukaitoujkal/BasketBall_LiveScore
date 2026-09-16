@@ -37,7 +37,7 @@ export class PlayerFormComponent implements OnInit {
       (data: Team[]) => {
         this.teams = data;
       },
-      error => {
+      (error: any) => {
         console.error('Error loading teams', error);
       }
     );
@@ -51,7 +51,7 @@ export class PlayerFormComponent implements OnInit {
       };
 
       this.playerService.createPlayer(player).pipe(
-        catchError(error => {
+        catchError((error: any) => {
           console.error('HTTP Error:', error.message);
           return of(null);
         })

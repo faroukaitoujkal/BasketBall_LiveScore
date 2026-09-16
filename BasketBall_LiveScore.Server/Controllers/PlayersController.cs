@@ -1,7 +1,10 @@
-﻿using BasketBall_LiveScore.Server.Data;
+using BasketBall_LiveScore.Server.Data;
 using BasketBall_LiveScore.Server.Models;
+using BasketBall_LiveScore.Server.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BasketBall_LiveScore.Server.Controllers
@@ -18,26 +21,27 @@ namespace BasketBall_LiveScore.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
+        public async Task<ActionResult<IEnumerable<PlayerDto>>> GetPlayers()
         {
-            return await _context.Players.Include(p => p.Team).ToListAsync();
+            var players = await _context.Players.Include(p => p.Team).ToListAsync();
+            return Ok(players.Select(p => p.ToDto()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(int id)
+        public async Task<ActionResult<PlayerDto>> GetPlayer(int id)
         {
-            var player = await _context.Players.FindAsync(id);
+            var player = await _context.Players.Include(p => p.Team).FirstOrDefaultAsync(p => p.Id == id);
 
             if (player == null)
             {
                 return NotFound();
             }
 
-            return player;
+            return Ok(player.ToDto());
         }
 
         [HttpGet("team/{teamId}")]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayersByTeam(int teamId)
+        public async Task<ActionResult<IEnumerable<PlayerDto>>> GetPlayersByTeam(int teamId)
         {
             var players = await _context.Players
                 .Where(p => p.TeamId == teamId)
@@ -48,11 +52,11 @@ namespace BasketBall_LiveScore.Server.Controllers
                 return NotFound();
             }
 
-            return Ok(players);
+            return Ok(players.Select(p => p.ToDto()));
         }
 
         [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
+        public async Task<ActionResult<PlayerDto>> PostPlayer(Player player)
         {
             var team = await _context.Teams.FindAsync(player.TeamId);
             if (team == null)
@@ -62,13 +66,11 @@ namespace BasketBall_LiveScore.Server.Controllers
 
             player.Team = team;
 
-            // Ajouter et sauvegarder le joueur dans la base de données
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
+            return CreatedAtAction("GetPlayer", new { id = player.Id }, player.ToDto());
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayer(int id, Player player)

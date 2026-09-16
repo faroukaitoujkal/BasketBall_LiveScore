@@ -1,33 +1,33 @@
-import { Player } from "./player.model";
+import { Team } from './team.model';
+
+export enum MatchStatus {
+  Scheduled = 0,
+  InProgress = 1,
+  Finished = 2,
+  Canceled = 3
+}
 
 export interface Match {
-  id?: number;
-  matchDate: Date;
+  id: number;
+  matchDate: string;
   location: string;
+  
   homeTeamId: number;
+  homeTeam?: Team;
   awayTeamId: number;
+  awayTeam?: Team;
+  
   numberOfQuarters: number;
   quarterDuration: number;
   timeoutDuration: number;
-  encodedBy?: string;
-  currentQuarter?: number; 
-  liveEncoders?: string[];
-  homeTeam?: Team;
-  awayTeam?: Team;
-  homeTeamStartingPlayers?: Player[];
-  awayTeamStartingPlayers?: Player[];
+  
+  currentQuarter: number;
   homeTeamScore: number;
   awayTeamScore: number;
-  isFinished: boolean;
-}
-export interface Team {
-  name: string;
-  id: number;
-}
+  status: MatchStatus;
+  season?: string;
 
-export interface Foul {
-  team: string; 
-  player: string;  
-  description: string;  
-  time: string;  
+  homeTeamStartingPlayers?: number[];
+  awayTeamStartingPlayers?: number[];
+  liveEncoders?: string[];
 }

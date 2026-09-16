@@ -15,7 +15,7 @@ export interface TimeoutMatch {
   providedIn: 'root',
 })
 export class TimeoutService {
-  private apiUrl = 'https://localhost:7088/api/Timeouts'; 
+  private apiUrl = '/api/Timeouts'; 
 
   constructor(private http: HttpClient) { }
 

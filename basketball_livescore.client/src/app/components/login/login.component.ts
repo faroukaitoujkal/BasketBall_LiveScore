@@ -30,7 +30,7 @@ export class LoginComponent {
           console.log('Login successful', response);
           this.router.navigate(['/matches']);
         },
-        error => {
+        (error: any) => {
           console.error('Login failed', error);
           this.errorMessage = 'Invalid email or password';
         }

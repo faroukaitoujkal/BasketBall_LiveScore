@@ -122,7 +122,7 @@ export class MatchDetailComponent implements OnInit {
       (data: Foul[]) => {
         this.fouls = data;
       },
-      error => {
+      (error: any) => {
         console.error('Error loading fouls', error);
       }
     );
@@ -143,7 +143,7 @@ export class MatchDetailComponent implements OnInit {
       (data: Timeout[]) => {
         this.timeouts = data;
       },
-      error => {
+      (error: any) => {
         console.error('Error loading timeouts', error);
       }
     );
@@ -153,7 +153,7 @@ export class MatchDetailComponent implements OnInit {
     if (this.homeTeamId > 0) {
       this.playerService.getPlayersByTeam(this.homeTeamId).subscribe((homePlayers: Player[]) => {
         this.homePlayers = homePlayers.slice(0, 5);
-      }, error => {
+      }, (error: any) => {
         console.error('Error loading home team players', error);
       });
     } else {
@@ -163,7 +163,7 @@ export class MatchDetailComponent implements OnInit {
     if (this.awayTeamId > 0) {
       this.playerService.getPlayersByTeam(this.awayTeamId).subscribe((awayPlayers: Player[]) => {
         this.awayPlayers = awayPlayers.slice(0, 5);
-      }, error => {
+      }, (error: any) => {
         console.error('Error loading away team players', error);
       });
     } else {
@@ -174,7 +174,7 @@ export class MatchDetailComponent implements OnInit {
       (data: Player[]) => {
         this.players = data;
       },
-      error => {
+      (error: any) => {
         console.error('Error loading players', error);
       }
     );

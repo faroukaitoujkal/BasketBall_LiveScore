@@ -7,7 +7,7 @@ import { Substitution } from './substitution.model';
   providedIn: 'root'
 })
 export class SubstitutionService {
-  private apiUrl = 'https://localhost:7088/api/substitutions'; 
+  private apiUrl = '/api/substitutions'; 
 
   constructor(private http: HttpClient) { }
 

@@ -77,7 +77,7 @@ export class MatchFormComponent implements OnInit {
       (data: Team[]) => {
         this.teams = data;
       },
-      error => {
+      (error: any) => {
         console.error('Error loading teams', error);
       }
     );
@@ -88,7 +88,7 @@ export class MatchFormComponent implements OnInit {
       (data: User[]) => {
         this.users = data;
       },
-      error => {
+      (error: any) => {
         console.error('Error loading users', error);
       }
     );
@@ -103,7 +103,7 @@ export class MatchFormComponent implements OnInit {
           this.awayTeamPlayers = data;
         }
       },
-      error => {
+      (error: any) => {
         console.error('Error loading players', error);
       }
     );
@@ -187,7 +187,7 @@ export class MatchFormComponent implements OnInit {
       console.log('Match payload:', match);
 
       this.matchService.createMatch(match).pipe(
-        catchError(error => {
+        catchError((error: any) => {
           console.error('HTTP Error:', error.message);
           return of(null);
         })

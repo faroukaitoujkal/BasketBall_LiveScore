@@ -7,7 +7,7 @@ import { Foul } from './foul.model';
   providedIn: 'root'
 })
 export class FoulService {
-  private apiUrl = 'https://localhost:7088/api/fouls'; 
+  private apiUrl = '/api/fouls'; 
 
   constructor(private http: HttpClient) { }
 

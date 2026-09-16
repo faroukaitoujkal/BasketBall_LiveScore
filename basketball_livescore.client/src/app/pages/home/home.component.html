@@ -1,0 +1,98 @@
+<div class="space-y-8 animate-fade-in">
+  
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-extrabold text-white tracking-tight">Match Dashboard</h1>
+  </div>
+
+  <!-- Live Matches Section -->
+  <section>
+    <div class="flex items-center space-x-2 mb-4">
+      <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+      <h2 class="text-xl font-semibold text-gray-100">Live Matches</h2>
+    </div>
+    
+    <div *ngIf="liveMatches.length === 0" class="bg-brand-card rounded-xl p-8 text-center text-gray-400 border border-gray-800">
+      No live matches at the moment.
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let match of liveMatches" class="bg-brand-card rounded-2xl overflow-hidden border border-gray-700 hover:border-brand-accent transition-colors shadow-lg">
+        <div class="p-4 bg-gray-800 border-b border-gray-700 flex justify-between items-center text-xs text-gray-400">
+          <span>Q{{ match.currentQuarter }}</span>
+          <span class="text-red-400 font-medium">LIVE</span>
+        </div>
+        <div class="p-6">
+          <!-- Teams & Scores -->
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center space-x-3">
+                <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="w-8 h-8 object-contain">
+                <span class="font-bold text-lg" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore">{{ match.homeTeam?.name }}</span>
+              </div>
+              <span class="text-2xl font-black" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore">{{ match.homeTeamScore }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center space-x-3">
+                <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="w-8 h-8 object-contain">
+                <span class="font-bold text-lg" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore">{{ match.awayTeam?.name }}</span>
+              </div>
+              <span class="text-2xl font-black" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore">{{ match.awayTeamScore }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-800 border-t border-gray-700">
+          <a [routerLink]="['/matches', match.id]" class="w-full block text-center bg-brand-accent text-white py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium">
+            Match Center
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other Matches Section -->
+  <section class="pt-8">
+    <h2 class="text-xl font-semibold text-gray-100 mb-4">Scheduled & Finished</h2>
+    
+    <div class="bg-brand-card rounded-xl border border-gray-800 overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-800">
+        <thead class="bg-gray-800/50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Match</th>
+            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800">
+          <tr *ngFor="let match of otherMatches" class="hover:bg-gray-800/30 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+              {{ match.matchDate | date:'mediumDate' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <div class="flex items-center justify-center space-x-4">
+                <span class="font-medium" [class.text-white]="match.homeTeamScore > match.awayTeamScore">{{ match.homeTeam?.name }}</span>
+                <div class="px-3 py-1 bg-gray-800 rounded-lg text-lg font-bold">
+                  {{ match.homeTeamScore }} - {{ match.awayTeamScore }}
+                </div>
+                <span class="font-medium" [class.text-white]="match.awayTeamScore > match.homeTeamScore">{{ match.awayTeam?.name }}</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
+                    [ngClass]="match.status === MatchStatus.Finished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'">
+                {{ match.status === MatchStatus.Finished ? 'Finished' : 'Scheduled' }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <a [routerLink]="['/matches', match.id]" class="text-brand-accent hover:text-orange-400">View details</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="otherMatches.length === 0" class="p-6 text-center text-gray-500 text-sm">
+        No matches found.
+      </div>
+    </div>
+  </section>
+
+</div>

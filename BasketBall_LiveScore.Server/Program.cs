@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.WithOrigins("https://localhost:61961") 
+            builder.WithOrigins("https://localhost:61961", "https://127.0.0.1:61961") 
                    .AllowAnyMethod()
                    .AllowAnyHeader()
                    .AllowCredentials(); 
@@ -72,6 +72,22 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<BasketBallHub>("/basketBallHub");
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<BasketballContext>();
+        context.Database.Migrate(); // Ensure DB is created and migrated
+        await DataSeeder.InitializeAsync(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred creating/seeding the DB.");
+    }
+}
 
 app.MapFallbackToFile("/index.html");
 

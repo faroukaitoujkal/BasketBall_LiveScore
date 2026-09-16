@@ -8,7 +8,7 @@ import { Quarter } from './quarter.model';
 })
 export class QuarterService {
 
-  private apiUrl = 'https://localhost:7088/api/quarters'; 
+  private apiUrl = '/api/quarters'; 
 
   constructor(private http: HttpClient) { }
 

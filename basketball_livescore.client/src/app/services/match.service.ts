@@ -8,7 +8,7 @@ import { map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class MatchService {
-  private apiUrl = 'https://localhost:7088/api/matches';
+  private apiUrl = '/api/matches';
 
   constructor(private http: HttpClient) { }
 
@@ -37,7 +37,7 @@ export class MatchService {
   }
 
   getTeamName(teamId: number): Observable<string> {
-    return this.http.get<{ name: string }>(`https://localhost:7088/api/teams/${teamId}/name`)
+    return this.http.get<{ name: string }>(`/api/teams/${teamId}/name`)
       .pipe(map(response => response.name));
   }
 
@@ -53,7 +53,7 @@ export class MatchService {
   }
 
   updateCurrentQuarter(matchId: number, currentQuarter: number): Observable<void> {
-    const url = `https://localhost:7088/api/matches/${matchId}/currentQuarter`;
+    const url = `/api/matches/${matchId}/currentQuarter`;
     return this.http.put<void>(url, currentQuarter); 
   }
 
