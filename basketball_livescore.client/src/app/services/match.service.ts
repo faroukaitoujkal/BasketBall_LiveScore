@@ -13,14 +13,15 @@ export class MatchService {
   constructor(private http: HttpClient) { }
 
   createMatch(match: Match): Observable<Match> {
-    console.log('Creating match at URL:', this.apiUrl);
     return this.http.post<Match>(this.apiUrl, match);
   }
 
   getMatches(): Observable<Match[]> {
-    return this.http.get<Match[]>(this.apiUrl).pipe(
-      tap(matches => console.log('Matches retrieved:', matches))
-    );
+    return this.http.get<Match[]>(this.apiUrl);
+  }
+
+  getUpcomingMatches(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/upcoming`);
   }
 
   getMatchById(id: string): Observable<Match> {
@@ -47,9 +48,7 @@ export class MatchService {
 
   updateMatchStatus(matchId: number, isFinished: boolean): Observable<void> {
     const url = `${this.apiUrl}/${matchId}/finish`;
-    return this.http.put<void>(url, { isFinished }).pipe(
-      tap(() => console.log(`Match status updated: MatchId=${matchId}, isFinished=${isFinished}`))
-    );
+    return this.http.put<void>(url, { isFinished });
   }
 
   updateCurrentQuarter(matchId: number, currentQuarter: number): Observable<void> {

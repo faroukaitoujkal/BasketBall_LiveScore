@@ -1,54 +1,79 @@
-<div class="min-h-screen flex flex-col bg-brand-dark text-brand-light">
+<div class="min-h-screen flex flex-col bg-brand-dark text-brand-light font-sans selection:bg-brand-accent selection:text-white">
   
   <!-- Navbar -->
-  <nav class="bg-brand-card shadow-lg border-b border-gray-800">
+  <header class="bg-brand-dark/95 backdrop-blur-sm border-b border-brand-border sticky top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex">
-          <div class="flex-shrink-0 flex items-center">
-            <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-accent to-yellow-500">🏀 LiveScore</span>
+      <div class="flex justify-between h-16 items-center">
+        <!-- Logo & Navigation -->
+        <div class="flex items-center space-x-8">
+          <div class="flex-shrink-0 flex items-center space-x-3">
+            <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            <a routerLink="/" class="font-sports text-2xl font-black text-brand-text tracking-tighter uppercase flex items-center">
+              <span class="text-brand-accent mr-1 drop-shadow-sm">LIVE</span>SCORE
+            </a>
           </div>
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <a routerLink="/" routerLinkActive="border-brand-accent text-white" [routerLinkActiveOptions]="{exact: true}"
-               class="border-transparent text-gray-300 hover:border-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
-              Live Matches
+          
+          <!-- Navigation Links -->
+          <div class="hidden md:flex space-x-1">
+            <a routerLink="/" routerLinkActive="text-brand-text bg-brand-dark" [routerLinkActiveOptions]="{exact: true}"
+               class="text-brand-text-muted hover:text-brand-text hover:bg-brand-dark/50 px-4 py-2 rounded-md font-sports text-lg tracking-wider uppercase transition-colors">
+              {{ 'NAV.MATCHES' | translate }}
             </a>
-            <a routerLink="/standings" routerLinkActive="border-brand-accent text-white"
-               class="border-transparent text-gray-300 hover:border-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
-              Standings
-            </a>
-            <a routerLink="/teams" routerLinkActive="border-brand-accent text-white"
-               class="border-transparent text-gray-300 hover:border-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
-              Teams
+            <a routerLink="/standings" routerLinkActive="text-brand-text bg-brand-dark"
+               class="text-brand-text-muted hover:text-brand-text hover:bg-brand-dark/50 px-4 py-2 rounded-md font-sports text-lg tracking-wider uppercase transition-colors">
+              {{ 'NAV.STANDINGS' | translate }}
             </a>
           </div>
         </div>
-        <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <ng-container *ngIf="authService.currentUser | async as user; else loginTpl">
-            <span class="text-sm text-gray-300 mr-4">{{ user.email }}</span>
-            <button (click)="logout()" class="text-sm font-medium text-brand-accent hover:text-orange-400 transition-colors">
-              Logout
-            </button>
+
+        <!-- Auth & Settings -->
+        <div class="flex items-center space-x-4">
+          <!-- Theme Toggle -->
+          <button (click)="themeService.toggleTheme()" class="p-2 rounded-sm bg-brand-card hover:bg-brand-card-hover border border-brand-border text-brand-text transition-colors" title="Toggle Theme">
+            <svg *ngIf="themeService.isDarkMode()" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg *ngIf="!themeService.isDarkMode()" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+
+          <!-- Language Switcher -->
+          <select #langSelect (change)="switchLanguage(langSelect.value)" class="bg-brand-card text-brand-text text-sm font-sports uppercase tracking-widest font-bold border border-brand-border rounded-sm py-1.5 px-3 focus:outline-none focus:border-brand-accent">
+            <option value="fr" [selected]="translate.currentLang === 'fr'">FR</option>
+            <option value="en" [selected]="translate.currentLang === 'en'">EN</option>
+          </select>
+
+          <ng-container *ngIf="authService.currentUser | async as user">
+            <div class="flex items-center space-x-2">
+              <div class="hidden sm:flex flex-col text-right">
+                <span class="text-xs text-brand-text-muted uppercase font-bold tracking-widest">Encoder</span>
+                <span class="text-sm text-brand-text font-bold leading-none">{{ user.email }}</span>
+              </div>
+              <button (click)="logout()" class="p-2 text-brand-danger hover:text-brand-danger/80 transition-colors ml-2" [title]="'NAV.LOGOUT' | translate">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+            </div>
           </ng-container>
-          <ng-template #loginTpl>
-            <a routerLink="/login" class="text-sm font-medium text-brand-accent hover:text-orange-400 transition-colors">
-              Encoder Login
-            </a>
-          </ng-template>
         </div>
       </div>
     </div>
-  </nav>
+  </header>
 
   <!-- Main Content -->
-  <main class="flex-1 max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
+  <main class="flex-1 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <router-outlet></router-outlet>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-brand-card border-t border-gray-800 py-6 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-      &copy; 2024 Basketball LiveScore. All rights reserved.
+  <footer class="bg-brand-card mt-auto border-t border-brand-border">
+    <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center">
+      <span class="font-sports text-2xl tracking-widest uppercase text-brand-text font-bold mb-4">LiveScore</span>
+      <p class="text-sm text-brand-text-muted font-medium">
+        &copy; 2024 Basketball LiveScore. All rights reserved.
+      </p>
     </div>
   </footer>
 </div>

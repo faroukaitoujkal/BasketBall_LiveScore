@@ -184,8 +184,6 @@ export class MatchFormComponent implements OnInit {
         isFinished: false
       };
 
-      console.log('Match payload:', match);
-
       this.matchService.createMatch(match).pipe(
         catchError((error: any) => {
           console.error('HTTP Error:', error.message);
@@ -193,13 +191,11 @@ export class MatchFormComponent implements OnInit {
         })
       ).subscribe(response => {
         if (response) {
-          console.log('Match created successfully', response);
           this.matchForm.reset();
           this.router.navigate(['/matches']);
         }
       });
     } else {
-      console.log('Form is invalid');
     }
   }
 }

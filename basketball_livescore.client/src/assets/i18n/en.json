@@ -1,0 +1,43 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "MATCHES": "Matches",
+    "STANDINGS": "Standings",
+    "THEME_LIGHT": "Light Mode",
+    "THEME_DARK": "Dark Mode",
+    "LANG_FR": "French",
+    "LANG_EN": "English"
+  },
+  "HOME": {
+    "LIVE_MATCHES": "LIVE MATCHES",
+    "OTHER_MATCHES": "OTHER MATCHES",
+    "UPCOMING_NBA": "UPCOMING NBA MATCHES (OFFICIAL)",
+    "NO_LIVE_MATCHES": "No live matches right now.",
+    "NO_OTHER_MATCHES": "No matches found.",
+    "NO_UPCOMING_MATCHES": "No scheduled matches found.",
+    "QUARTER": "Q{{quarter}}",
+    "FINISHED": "Final",
+    "SCHEDULED": "Scheduled",
+    "IN_PROGRESS": "In Progress",
+    "UPCOMING": "UPCOMING",
+    "DETAILS": "Details",
+    "TBD": "TBD"
+  },
+  "STANDINGS": {
+    "TITLE": "NBA STANDINGS",
+    "TEAM": "TEAM",
+    "WINS": "W",
+    "LOSSES": "L",
+    "WIN_PCT": "PCT",
+    "GB": "GB",
+    "L10": "L10",
+    "STRK": "STRK"
+  },
+  "MATCH": {
+    "SIMULATION_PANEL": "Simulation Panel (Manual)",
+    "ADD_PTS": "+{{pts}} Pts",
+    "HOME": "Home",
+    "AWAY": "Away",
+    "END_MATCH": "End Match"
+  }
+}

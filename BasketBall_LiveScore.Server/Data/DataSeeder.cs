@@ -9,10 +9,10 @@ namespace BasketBall_LiveScore.Server.Data
     {
         public static async Task InitializeAsync(BasketballContext context)
         {
-            if (context.Teams.Count() >= 30)
-            {
-                return; // DB has been seeded with NBA data
-            }
+            // if (context.Teams.Count() >= 30)
+            // {
+            //     return; // DB has been seeded with NBA data
+            // }
 
             // Clear old data
             context.Matches.RemoveRange(context.Matches);
@@ -38,13 +38,19 @@ namespace BasketBall_LiveScore.Server.Data
                 var displayName = t.GetProperty("displayName").GetString();
                 var location = t.GetProperty("location").GetString();
                 var color = t.TryGetProperty("color", out var c) ? c.GetString() : "000000";
+                var logoUrl = "";
+                if (t.TryGetProperty("logos", out var logos) && logos.GetArrayLength() > 0)
+                {
+                    logoUrl = logos[0].TryGetProperty("href", out var href) ? href.GetString() : "";
+                }
                 
                 var team = new Team
                 {
                     Name = displayName ?? "Unknown",
                     City = location ?? "Unknown",
                     CoachName = "TBD",
-                    PrimaryColor = "#" + color
+                    PrimaryColor = "#" + color,
+                    LogoUrl = logoUrl
                 };
                 
                 context.Teams.Add(team);
@@ -77,6 +83,16 @@ namespace BasketBall_LiveScore.Server.Data
                         var jersey = ath.TryGetProperty("jersey", out var j) ? j.GetString() : "0";
                         int.TryParse(jersey, out int jerseyNum);
 
+                        var headshotUrl = "";
+                        if (ath.TryGetProperty("headshot", out var headshot))
+                        {
+                            headshotUrl = headshot.TryGetProperty("href", out var href) ? href.GetString() : "";
+                        }
+                        if (string.IsNullOrEmpty(headshotUrl))
+                        {
+                            headshotUrl = $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(fullName ?? "NBA")}&background=random";
+                        }
+
                         var heightInches = ath.TryGetProperty("height", out var h) ? h.GetDouble() : 78;
                         var heightMeters = Math.Round(heightInches * 0.0254, 2);
 
@@ -87,6 +103,7 @@ namespace BasketBall_LiveScore.Server.Data
                             Position = pos ?? "N/A",
                             Height = heightMeters,
                             Weight = (int)(weightLbs * 0.453592),
+                            ImageUrl = headshotUrl,
                             TeamId = dbTeam.Id
                         });
                     }

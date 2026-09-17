@@ -84,7 +84,6 @@ export class MatchDetailComponent implements OnInit {
           console.error('Error loading match', error);
         },
         complete: () => {
-          console.log('Match loaded successfully');
         }
       });
     } else {
@@ -110,7 +109,6 @@ export class MatchDetailComponent implements OnInit {
           console.error('Erreur lors du chargement des scores:', error);
         },
         complete: () => {
-          console.log('Scores chargés avec succès');
         }
       });
     }

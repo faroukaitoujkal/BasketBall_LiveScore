@@ -57,7 +57,6 @@ export class PlayerFormComponent implements OnInit {
         })
       ).subscribe(response => {
         if (response) {
-          console.log('Player created successfully', response);
           this.playerForm.reset();
           this.router.navigate(['/players']);
         }

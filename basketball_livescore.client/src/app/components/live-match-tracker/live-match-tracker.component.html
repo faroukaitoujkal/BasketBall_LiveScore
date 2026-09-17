@@ -1,79 +1,108 @@
 <div *ngIf="loading" class="flex justify-center items-center h-64">
-  <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-accent"></div>
+  <div class="animate-spin rounded-sm h-12 w-12 border-t-4 border-b-4 border-brand-accent"></div>
 </div>
 
-<div *ngIf="!loading && match" class="max-w-5xl mx-auto space-y-6 animate-fade-in">
+<div *ngIf="!loading && match" class="max-w-5xl mx-auto space-y-8 animate-fade-in py-4">
   
   <!-- Match Status Banner -->
-  <div class="flex items-center justify-between bg-gray-800 rounded-xl p-4 border border-gray-700 shadow-sm">
-    <div class="flex items-center space-x-3">
-      <span class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider"
+  <div class="flex items-center justify-between bg-brand-dark/50 border-l-4 border-l-brand-accent border-r border-t border-b border-brand-border p-4 shadow-md">
+    <div class="flex items-center space-x-4">
+      <div class="px-4 py-1.5 font-sports font-bold text-sm uppercase tracking-widest border"
             [ngClass]="{
-              'bg-red-500 text-white animate-pulse': match.status === MatchStatus.InProgress,
-              'bg-gray-600 text-gray-200': match.status === MatchStatus.Scheduled,
-              'bg-green-600 text-white': match.status === MatchStatus.Finished
+              'bg-brand-danger/20 text-brand-danger border-brand-danger/50 animate-pulse': match.status === MatchStatus.InProgress,
+              'bg-brand-card-hover text-brand-text-muted border-brand-border': match.status === MatchStatus.Scheduled,
+              'bg-brand-success/20 text-brand-success border-brand-success/50': match.status === MatchStatus.Finished
             }">
         {{ 
           match.status === MatchStatus.InProgress ? 'LIVE' : 
-          match.status === MatchStatus.Finished ? 'FINAL' : 'SCHEDULED' 
+          match.status === MatchStatus.Finished ? ('HOME.FINISHED' | translate | uppercase) : ('HOME.SCHEDULED' | translate | uppercase)
         }}
-      </span>
-      <span class="text-gray-400 text-sm font-medium">{{ match.matchDate | date:'medium' }}</span>
+      </div>
+      <span class="text-brand-text-muted font-sports text-lg tracking-wider uppercase font-bold">{{ match.matchDate | date:'MMM d, y, h:mm a' }}</span>
     </div>
-    <div class="text-sm font-medium text-gray-300 flex items-center space-x-2">
-      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+    <div class="text-sm font-sports uppercase tracking-widest text-brand-text-muted font-bold flex items-center space-x-2">
+      <svg class="w-5 h-5 text-brand-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
       <span>{{ match.location }}</span>
     </div>
   </div>
 
-  <!-- Scoreboard -->
-  <div class="bg-brand-card rounded-2xl p-8 md:p-12 border border-gray-700 shadow-2xl relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-gray-800/50 to-transparent"></div>
+  <!-- Arena Scoreboard -->
+  <div class="bg-brand-dark border-4 border-brand-border shadow-2xl relative overflow-hidden ring-1 ring-brand-border p-2">
+    <!-- LED Matrix effect background -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#FF5722 1px, transparent 1px); background-size: 4px 4px;"></div>
     
-    <div class="relative flex flex-col md:flex-row items-center justify-between">
-      
-      <!-- Home Team -->
-      <div class="flex flex-col items-center flex-1 w-full mb-8 md:mb-0">
-        <div class="w-32 h-32 bg-gray-800 rounded-full flex items-center justify-center p-4 border-4 border-gray-700 shadow-inner mb-4">
-          <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="w-full h-full object-contain">
-          <span *ngIf="!match.homeTeam?.logoUrl" class="text-5xl">🏀</span>
+    <div class="bg-brand-card border border-brand-border p-8 md:p-12 relative">
+      <div class="relative flex flex-col md:flex-row items-center justify-between">
+        
+        <!-- Home Team -->
+        <div class="flex flex-col items-center flex-1 w-full mb-8 md:mb-0 z-10">
+          <div class="w-32 h-32 bg-brand-card rounded-full flex items-center justify-center p-2 border-2 border-brand-border shadow-inner mb-6 relative">
+            <div class="absolute inset-0 rounded-full border border-brand-border m-2"></div>
+            <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="w-20 h-20 object-contain z-10">
+            <span *ngIf="!match.homeTeam?.logoUrl" class="text-5xl z-10">🏀</span>
+          </div>
+          <h2 class="text-4xl font-sports tracking-wider uppercase font-bold text-brand-text text-center">{{ match.homeTeam?.name }}</h2>
+          <p class="text-brand-accent uppercase text-sm font-sports tracking-widest mt-2 font-bold">{{ 'MATCH.HOME' | translate }}</p>
         </div>
-        <h2 class="text-2xl font-bold text-white text-center">{{ match.homeTeam?.name }}</h2>
-        <p class="text-gray-500 uppercase text-xs font-semibold tracking-widest mt-1">Home</p>
-      </div>
 
-      <!-- Score -->
-      <div class="flex flex-col items-center flex-1 px-4 z-10">
-        <div class="flex items-center space-x-6">
-          <div class="text-6xl md:text-8xl font-black tabular-nums tracking-tighter" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore" [class.text-white]="match.homeTeamScore <= match.awayTeamScore">
-            {{ match.homeTeamScore }}
+        <!-- Score & Time -->
+        <div class="flex flex-col items-center flex-1 px-4 z-20">
+          <div class="bg-brand-dark/80 px-8 py-4 border-2 border-brand-border shadow-inner flex flex-col items-center">
+            
+            <div class="mb-4 bg-brand-card px-6 py-2 border border-brand-border font-sports text-2xl font-bold text-brand-accent tracking-widest uppercase shadow-glow">
+              <span *ngIf="match.status === MatchStatus.InProgress">{{ 'HOME.QUARTER' | translate:{quarter: match.currentQuarter} }}</span>
+              <span *ngIf="match.status !== MatchStatus.InProgress">{{ match.status === MatchStatus.Finished ? ('HOME.FINISHED' | translate | uppercase) : ('HOME.TBD' | translate | uppercase) }}</span>
+            </div>
+
+            <div class="flex items-center space-x-8">
+              <div class="text-7xl md:text-9xl font-sports font-bold tracking-tighter tabular-nums drop-shadow-md" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore" [class.text-brand-text]="match.homeTeamScore <= match.awayTeamScore">
+                {{ match.homeTeamScore | number:'2.0-0' }}
+              </div>
+              <div class="text-4xl text-brand-text-muted font-black mb-4">:</div>
+              <div class="text-7xl md:text-9xl font-sports font-bold tracking-tighter tabular-nums drop-shadow-md" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore" [class.text-brand-text]="match.awayTeamScore <= match.homeTeamScore">
+                {{ match.awayTeamScore | number:'2.0-0' }}
+              </div>
+            </div>
+
           </div>
-          <div class="text-3xl text-gray-600 font-black">-</div>
-          <div class="text-6xl md:text-8xl font-black tabular-nums tracking-tighter" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore" [class.text-white]="match.awayTeamScore <= match.homeTeamScore">
-            {{ match.awayTeamScore }}
+        </div>
+
+        <!-- Away Team -->
+        <div class="flex flex-col items-center flex-1 w-full mt-8 md:mt-0 z-10">
+          <div class="w-32 h-32 bg-brand-card rounded-full flex items-center justify-center p-2 border-2 border-brand-border shadow-inner mb-6 relative">
+             <div class="absolute inset-0 rounded-full border border-brand-border m-2"></div>
+            <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="w-20 h-20 object-contain z-10">
+            <span *ngIf="!match.awayTeam?.logoUrl" class="text-5xl z-10">🏀</span>
           </div>
+          <h2 class="text-4xl font-sports tracking-wider uppercase font-bold text-brand-text text-center">{{ match.awayTeam?.name }}</h2>
+          <p class="text-brand-accent uppercase text-sm font-sports tracking-widest mt-2 font-bold">{{ 'MATCH.AWAY' | translate }}</p>
         </div>
         
-        <div class="mt-6 bg-gray-900 px-6 py-2 rounded-lg border border-gray-700 font-mono text-xl font-medium text-brand-accent shadow-inner">
-          <span *ngIf="match.status === MatchStatus.InProgress">Q{{ match.currentQuarter }}</span>
-          <span *ngIf="match.status !== MatchStatus.InProgress">{{ match.status === MatchStatus.Finished ? 'END' : 'TBD' }}</span>
-        </div>
       </div>
-
-      <!-- Away Team -->
-      <div class="flex flex-col items-center flex-1 w-full mt-8 md:mt-0">
-        <div class="w-32 h-32 bg-gray-800 rounded-full flex items-center justify-center p-4 border-4 border-gray-700 shadow-inner mb-4">
-          <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="w-full h-full object-contain">
-          <span *ngIf="!match.awayTeam?.logoUrl" class="text-5xl">🏀</span>
-        </div>
-        <h2 class="text-2xl font-bold text-white text-center">{{ match.awayTeam?.name }}</h2>
-        <p class="text-gray-500 uppercase text-xs font-semibold tracking-widest mt-1">Away</p>
-      </div>
-      
     </div>
   </div>
+
+  <!-- Simulation Control Panel -->
+  <div class="fixed bottom-6 right-6 bg-brand-card border-2 border-brand-accent p-4 rounded-lg shadow-2xl z-50 w-72">
+    <div class="text-center mb-3">
+      <span class="text-xs font-sports text-brand-accent uppercase tracking-widest font-bold">{{ 'MATCH.SIMULATION_PANEL' | translate }}</span>
+    </div>
+    
+    <div class="flex justify-between items-center mb-4">
+      <div class="flex space-x-2">
+        <button (click)="simulateScore('home', 2)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+2</button>
+        <button (click)="simulateScore('home', 3)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+3</button>
+      </div>
+      <div class="text-xs text-brand-text-muted uppercase tracking-widest font-bold">Pts</div>
+      <div class="flex space-x-2">
+        <button (click)="simulateScore('away', 2)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+2</button>
+        <button (click)="simulateScore('away', 3)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+3</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<div *ngIf="!loading && !match" class="text-center p-12 bg-brand-card rounded-xl border border-gray-800">
-  <p class="text-gray-400 text-lg">Match not found.</p>
+<div *ngIf="!loading && !match" class="text-center p-16 bg-brand-card/50 rounded-sm border border-brand-border border-dashed">
+  <p class="text-brand-text-muted font-sports text-2xl uppercase tracking-widest font-bold">Match not found.</p>
 </div>

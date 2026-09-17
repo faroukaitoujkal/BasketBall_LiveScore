@@ -22,6 +22,8 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@microsoft/signalr": "^10.0.11",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "jest-editor-support": "*",
     "run-script-os": "*",
     "rxjs": "~7.8.0",

@@ -42,7 +42,6 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe(
         (response) => {
-          console.log('Registration successful', response);
           this.successMessage = 'Account created successfully!';
           this.errorMessage = '';
           this.registerForm.reset();

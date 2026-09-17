@@ -98,7 +98,6 @@ export class PlayMatchComponent implements OnInit {
         this.homeTeamScore = data.homeTeamScore;
         this.awayTeamScore = data.awayTeamScore;
         this.loadScores(); // Recharger les détails des scores
-        console.log('Mise à jour reçue pour ce match:', data);
       }
     });
 
@@ -106,13 +105,11 @@ export class PlayMatchComponent implements OnInit {
     this.signalrService.timeoutCreated$.subscribe((data) => {
       if (data && data.matchId === this.matchId) {
         this.loadTimeouts(); // Recharger les temps morts
-        console.log('Temps mort reçu pour ce match:', data);
       }
     });
 
     this.signalrService.currentQuarterUpdated$.subscribe((quarter) => {
       this.currentQuarter = quarter;
-      console.log('Current quarter updated:', this.currentQuarter);
     });
 
     // Récupérer le matchId depuis l'URL
@@ -208,7 +205,6 @@ export class PlayMatchComponent implements OnInit {
         console.error('Erreur lors du chargement des scores:', error);
       },
       complete: () => {
-        console.log('Scores chargés avec succès');
       }
     });
   }
@@ -248,7 +244,6 @@ export class PlayMatchComponent implements OnInit {
         console.error('Erreur lors de la création du timeout:', error);
       },
       complete: () => {
-        console.log('Timeout créé avec succès');
       }
     });
   }
@@ -267,8 +262,6 @@ export class PlayMatchComponent implements OnInit {
     this.timer = 0;
     this.isQuarterActive = true;
     this.isRunning = true;
-
-    console.log(`Début du quart-temps ${this.currentQuarter}.`);
 
     // Lancer le timer pour le quart-temps
     this.intervalId = setInterval(() => {
@@ -298,8 +291,6 @@ export class PlayMatchComponent implements OnInit {
 
     this.quarterService.createQuarter(quarter).subscribe({
       next: (response) => {
-        console.log('Quart-temps sauvegardé avec succès:', response);
-
         // Incrémenter le currentQuarter après avoir fini le quart-temps
         if (this.currentQuarter < this.numberOfQuarters) {
           this.currentQuarter++;
@@ -308,7 +299,6 @@ export class PlayMatchComponent implements OnInit {
           this.matchService.updateMatchStatus(this.matchId, true).subscribe({
             next: () => {
               alert('Fin du match !');
-              console.log('Le match est terminé et mis à jour dans la base de données.');
             },
             error: (error) => {
               console.error('Erreur lors de la mise à jour du statut du match:', error);
@@ -319,7 +309,6 @@ export class PlayMatchComponent implements OnInit {
 
         this.matchService.updateCurrentQuarter(this.matchId, this.currentQuarter).subscribe({
           next: () => {
-            console.log(`Current quarter updated to ${this.currentQuarter} in the match table.`);
           },
           error: (error) => {
             console.error('Erreur lors de la mise à jour du current quarter:', error);
@@ -336,14 +325,10 @@ export class PlayMatchComponent implements OnInit {
   }
 
   recordScore(): void {
-    console.log('Début de la méthode recordScore');
-
     // Recherche du joueur sélectionné
     const selectedPlayer = this.allPlayers.find(
       (player) => Number(player.id) === Number(this.selectedPlayerId)
     );
-
-    console.log('Joueur sélectionné:', selectedPlayer);
 
     // Vérification si le joueur est trouvé
     if (!selectedPlayer || selectedPlayer.id === undefined) {
@@ -355,9 +340,6 @@ export class PlayMatchComponent implements OnInit {
     this.selectedPoints = Number(this.selectedPoints);
 
     // Vérification si les points sont valides
-    console.log('selectedPoints:', this.selectedPoints);
-    console.log('selectedPoints type:', typeof this.selectedPoints);
-
     if (![1, 2, 3].includes(this.selectedPoints)) {
       console.error('Points invalides, uniquement 1, 2 ou 3 sont valides');
       return;
@@ -371,24 +353,18 @@ export class PlayMatchComponent implements OnInit {
       matchId: this.matchId,          
     };
 
-    console.log('Création du score:', newScore);
-
     // Appel au service pour ajouter le score
     this.scoreService.addScore(newScore).subscribe({
       next: (response) => {
-        console.log('Score enregistré avec succès:', response);
         this.loadScores(); // Recharger les scores après l'ajout
       },
       error: (error) => {
         console.error("Erreur lors de l'enregistrement du score:", error);
-        console.log('Détails de l\'erreur:', error);
       },
       complete: () => {
-        console.log('Ajout du score terminé');
       }
     });
 
-    console.log('Fin de la méthode recordScore');
   }
 
   recordFoul(): void {
@@ -414,13 +390,11 @@ export class PlayMatchComponent implements OnInit {
 
       this.foulService.createFoul(newFoul).subscribe({
         next: (response) => {
-          console.log('Faute enregistrée avec succès:', response);
         },
         error: (error) => {
           console.error('Erreur lors de l\'enregistrement de la faute:', error);
         },
         complete: () => {
-          console.log('Enregistrement de la faute terminé');
         }
       });
     } else {
@@ -439,13 +413,11 @@ export class PlayMatchComponent implements OnInit {
 
     this.substitutionService.recordSubstitution(substitutionData).subscribe({
       next: (response) => {
-        console.log('Substitution enregistrée avec succès:', response);
       },
       error: (error) => {
         console.error('Erreur lors de l\'enregistrement de la substitution:', error);
       },
       complete: () => {
-        console.log('Enregistrement de la substitution terminé');
       }
     });
   }

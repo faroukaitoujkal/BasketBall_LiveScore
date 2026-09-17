@@ -3,7 +3,25 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --brand-dark: #f8fafc;
+    --brand-card: #ffffff;
+    --brand-card-hover: #f1f5f9;
+    --brand-text: #0f172a;
+    --brand-text-muted: #64748b;
+    --brand-border: #e2e8f0;
+  }
+
+  .dark {
+    --brand-dark: #0B1120;
+    --brand-card: #162032;
+    --brand-card-hover: #1E293B;
+    --brand-text: #f8fafc;
+    --brand-text-muted: #94a3b8;
+    --brand-border: #334155;
+  }
+
   body {
-    @apply bg-brand-dark text-brand-light font-sans antialiased m-0;
+    @apply bg-brand-dark text-brand-text font-sans antialiased m-0;
   }
 }

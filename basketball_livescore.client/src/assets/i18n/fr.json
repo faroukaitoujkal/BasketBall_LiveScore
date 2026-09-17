@@ -1,0 +1,43 @@
+{
+  "NAV": {
+    "HOME": "Accueil",
+    "MATCHES": "Matchs",
+    "STANDINGS": "Classement",
+    "THEME_LIGHT": "Thème Clair",
+    "THEME_DARK": "Thème Sombre",
+    "LANG_FR": "Français",
+    "LANG_EN": "Anglais"
+  },
+  "HOME": {
+    "LIVE_MATCHES": "MATCHS EN DIRECT",
+    "OTHER_MATCHES": "AUTRES MATCHS",
+    "UPCOMING_NBA": "MATCHS NBA À VENIR (OFFICIEL)",
+    "NO_LIVE_MATCHES": "Aucun match en direct actuellement.",
+    "NO_OTHER_MATCHES": "Aucun match trouvé.",
+    "NO_UPCOMING_MATCHES": "Aucun match programmé trouvé.",
+    "QUARTER": "Q{{quarter}}",
+    "FINISHED": "Terminé",
+    "SCHEDULED": "Programmé",
+    "IN_PROGRESS": "En Cours",
+    "UPCOMING": "À VENIR",
+    "DETAILS": "Détails",
+    "TBD": "À déterminer"
+  },
+  "STANDINGS": {
+    "TITLE": "CLASSEMENT NBA",
+    "TEAM": "ÉQUIPE",
+    "WINS": "V",
+    "LOSSES": "D",
+    "WIN_PCT": "%",
+    "GB": "GB",
+    "L10": "10 D",
+    "STRK": "SÉRIE"
+  },
+  "MATCH": {
+    "SIMULATION_PANEL": "Panneau de Simulation (Manuel)",
+    "ADD_PTS": "+{{pts}} Pts",
+    "HOME": "Domicile",
+    "AWAY": "Extérieur",
+    "END_MATCH": "Terminer le Match"
+  }
+}

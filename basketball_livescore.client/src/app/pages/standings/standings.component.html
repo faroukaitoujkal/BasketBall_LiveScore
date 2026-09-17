@@ -1,61 +1,65 @@
-<div class="space-y-6 animate-fade-in">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-extrabold text-white tracking-tight">League Standings</h1>
+<div class="space-y-6 animate-fade-in py-4">
+  <div class="flex justify-between items-end border-b border-brand-border pb-4">
+    <h1 class="text-4xl font-sports tracking-wider uppercase text-brand-text font-bold">{{ 'STANDINGS.TITLE' | translate }}</h1>
   </div>
 
-  <div class="bg-brand-card rounded-xl border border-gray-800 overflow-hidden shadow-xl">
+  <div class="bg-brand-card rounded-sm border border-brand-border overflow-hidden shadow-xl">
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-800">
-        <thead class="bg-gray-800/80">
+      <table class="min-w-full divide-y divide-brand-border">
+        <thead class="bg-brand-dark/40">
           <tr>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider w-16">Pos</th>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Team</th>
-            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider" title="Games Played">GP</th>
-            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider" title="Wins">W</th>
-            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider" title="Losses">L</th>
-            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider" title="Win Percentage">PCT</th>
-            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell" title="Points For">PF</th>
-            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell" title="Points Against">PA</th>
-            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider" title="Point Differential">DIFF</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest w-16">Pos</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest">{{ 'STANDINGS.TEAM' | translate }}</th>
+            <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest" title="Games Played">GP</th>
+            <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest" title="Wins">{{ 'STANDINGS.WINS' | translate }}</th>
+            <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest" title="Losses">{{ 'STANDINGS.LOSSES' | translate }}</th>
+            <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-accent uppercase tracking-widest" title="Win Percentage">{{ 'STANDINGS.WIN_PCT' | translate }}</th>
+            <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest hidden md:table-cell" title="Points For">PF</th>
+            <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest hidden md:table-cell" title="Points Against">PA</th>
+            <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest" title="Point Differential">DIFF</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-800">
-          <tr *ngFor="let team of standings; let i = index" class="hover:bg-gray-800/30 transition-colors">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-300">
-              {{ i + 1 }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
-                <img *ngIf="team.teamLogoUrl" [src]="team.teamLogoUrl" class="w-8 h-8 object-contain">
-                <span class="text-sm font-bold text-white">{{ team.teamName }}</span>
+        <tbody class="divide-y divide-brand-border bg-brand-card">
+          <tr *ngFor="let team of standings; let i = index; trackBy: trackByTeamId" class="hover:bg-brand-card-hover transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-sports text-xl font-bold text-brand-text-muted">
+              <div class="flex items-center justify-center w-8 h-8 rounded-sm bg-brand-dark/40 border border-brand-border">
+                {{ i + 1 }}
               </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-300">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center space-x-4">
+                <div class="w-8 h-8 bg-brand-dark/20 rounded-full p-1 flex items-center justify-center border border-brand-border">
+                  <img *ngIf="team.teamLogoUrl" [src]="team.teamLogoUrl" class="w-full h-full object-contain">
+                </div>
+                <span class="text-lg font-sports tracking-wider uppercase font-bold text-brand-text">{{ team.teamName }}</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold text-brand-text-muted">
               {{ team.gamesPlayed }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-semibold text-green-400">
+            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold text-brand-success">
               {{ team.wins }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-semibold text-red-400">
+            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold text-brand-danger">
               {{ team.losses }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold text-brand-accent">
+            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold text-brand-accent bg-brand-dark/20">
               {{ team.winPercentage | number:'1.3-3' }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-400 hidden md:table-cell">
+            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports text-brand-text-muted hidden md:table-cell">
               {{ team.pointsFor }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-400 hidden md:table-cell">
+            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports text-brand-text-muted hidden md:table-cell">
               {{ team.pointsAgainst }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium" [ngClass]="team.pointDifferential > 0 ? 'text-green-400' : (team.pointDifferential < 0 ? 'text-red-400' : 'text-gray-400')">
+            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold" [ngClass]="team.pointDifferential > 0 ? 'text-brand-success' : (team.pointDifferential < 0 ? 'text-brand-danger' : 'text-brand-text-muted')">
               <span *ngIf="team.pointDifferential > 0">+</span>{{ team.pointDifferential }}
             </td>
           </tr>
         </tbody>
       </table>
       
-      <div *ngIf="standings.length === 0" class="p-10 text-center text-gray-500">
+      <div *ngIf="standings.length === 0" class="p-12 text-center text-brand-text-muted font-sports text-lg uppercase tracking-widest">
         <p>No standings available.</p>
       </div>
     </div>

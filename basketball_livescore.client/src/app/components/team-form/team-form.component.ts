@@ -25,7 +25,7 @@ export class TeamFormComponent implements OnInit {
   onSubmit(): void {
     if (this.teamForm.valid) {
       const team: Team = this.teamForm.value;
-      console.log('Submitting team:', JSON.stringify(team, null, 2)); 
+); 
 
       this.teamService.createTeam(team).pipe(
         catchError((error: any) => {
@@ -35,7 +35,6 @@ export class TeamFormComponent implements OnInit {
         })
       ).subscribe(response => {
         if (response) {
-          console.log('Team created successfully', response);
           this.teamForm.reset();
           this.router.navigate(['/teams']);
         } else {

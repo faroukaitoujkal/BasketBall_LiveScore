@@ -35,13 +35,11 @@ export class SignalrService {
       this.hubConnection
         .start()
         .then(() => {
-          console.log('SignalR connection established');
         })
         .catch((err: any) => {
           console.error('SignalR connection failed: ', err);
         });
     } else {
-      console.log('SignalR connection already started or in progress');
     }
 
     this.listenToScoreUpdates();
@@ -51,21 +49,18 @@ export class SignalrService {
 
   public listenForMessages(): void {
     this.hubConnection.on('ReceiveMessage', (message: string) => {
-      console.log('Message reçu :', message);
       this.messageReceivedSubject.next(message);
     });
   }
 
   private listenToScoreUpdates(): void {
     this.hubConnection.on('ScoreUpdated', (data: any) => {
-      console.log('Score mis à jour reçu:', data);
       this.scoreUpdatedSource.next(data);
     });
   }
 
   private listenToTimeoutCreated(): void {
     this.hubConnection.on('TimeoutCreated', (data: any) => {
-      console.log('Temps mort créé reçu:', data);
       this.timeoutCreatedSource.next(data);
     });
   }
@@ -85,7 +80,6 @@ export class SignalrService {
   public sendMessage(message: string): void {
     this.hubConnection.invoke('SendMessage', message)
       .then(() => {
-        console.log('Message envoyé');
       })
       .catch((err: any) => {
         console.error('Erreur d\'envoi du message :', err);
@@ -95,7 +89,6 @@ export class SignalrService {
   public getConnectionId(): void {
     this.hubConnection.invoke('GetConnectionId')
       .then((connectionId: string) => {
-        console.log('Connection ID:', connectionId);
       })
       .catch((err: any) => {
         console.error('Error retrieving Connection ID:', err);

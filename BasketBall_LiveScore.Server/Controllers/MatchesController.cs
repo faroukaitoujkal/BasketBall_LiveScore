@@ -186,6 +186,73 @@ namespace BasketBall_LiveScore.Server.Controllers
             return NoContent();
         }
 
+        [HttpGet("upcoming")]
+        public async Task<ActionResult<object>> GetUpcomingMatches()
+        {
+            try
+            {
+                using var httpClient = new System.Net.Http.HttpClient();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "curl/7.68.0");
+                httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
+                
+                // 1. Fetch base scoreboard to get the calendar
+                var baseResponse = await httpClient.GetStringAsync("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard");
+                var rootNode = System.Text.Json.Nodes.JsonNode.Parse(baseResponse);
+                
+                var calendarArray = rootNode["leagues"]?[0]?["calendar"]?.AsArray();
+                if (calendarArray == null) return Content(baseResponse, "application/json");
+
+                var todayStr = System.DateTime.UtcNow.ToString("yyyy-MM-dd");
+                var upcomingDates = new List<string>();
+
+                foreach (var dateNode in calendarArray)
+                {
+                    var dateStr = dateNode.ToString();
+                    if (string.Compare(dateStr, todayStr) >= 0)
+                    {
+                        // ESPN dates look like "2026-10-03T07:00Z". Convert to "20261003"
+                        var yyyyMMdd = dateStr.Substring(0, 10).Replace("-", "");
+                        upcomingDates.Add(yyyyMMdd);
+                        if (upcomingDates.Count >= 7) break; // Fetch next 7 match days
+                    }
+                }
+
+                if (upcomingDates.Count == 0) return Content(baseResponse, "application/json");
+
+                var fetchTasks = upcomingDates.Select(date => 
+                    httpClient.GetStringAsync($"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={date}")
+                ).ToList();
+
+                var responses = await Task.WhenAll(fetchTasks);
+                var allEvents = new System.Text.Json.Nodes.JsonArray();
+
+                foreach (var responseStr in responses)
+                {
+                    var dayNode = System.Text.Json.Nodes.JsonNode.Parse(responseStr);
+                    var dayEvents = dayNode?["events"]?.AsArray();
+                    if (dayEvents != null)
+                    {
+                        foreach (var ev in dayEvents)
+                        {
+                            // Clone node by parsing its string representation to add to a new array
+                            var evClone = System.Text.Json.Nodes.JsonNode.Parse(ev.ToJsonString());
+                            allEvents.Add(evClone);
+                        }
+                    }
+                }
+
+                // Replace the events array in the base response with our merged array
+                rootNode["events"] = allEvents;
+
+                return Content(rootNode.ToJsonString(), "application/json");
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch upcoming matches from ESPN.");
+                return StatusCode(500, "Failed to fetch upcoming matches.");
+            }
+        }
+
         private bool MatchExists(int id) => _context.Matches.Any(e => e.Id == id);
     }
 }

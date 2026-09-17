@@ -12,7 +12,7 @@ export class PlayerService {
   constructor(private http: HttpClient) { }
 
   createPlayer(player: Player): Observable<Player> {
-    console.log('Creating player at URL:', this.apiUrl); 
+ 
     return this.http.post<Player>(this.apiUrl, player);
   }
 

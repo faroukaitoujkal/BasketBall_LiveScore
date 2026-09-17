@@ -40,7 +40,6 @@ export class MatchesListComponent implements OnInit {
         console.error('Error loading matches', error);
       },
       complete: () => {
-        console.log('Matches loaded successfully');
       }
     });
   }
@@ -55,7 +54,6 @@ export class MatchesListComponent implements OnInit {
   }
 
   playMatch(matchId: number): void {
-    console.log(`Playing match with ID: ${matchId}`);
     this.router.navigate(['/play-match', matchId]);
   }
 }

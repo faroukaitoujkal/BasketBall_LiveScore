@@ -5,11 +5,12 @@ import { MatchService } from '../../services/match.service';
 import { Match, MatchStatus } from '../../services/match.model';
 import { SignalrService } from '../../services/signalr.service';
 import { Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-live-match-tracker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './live-match-tracker.component.html'
 })
 export class LiveMatchTrackerComponent implements OnInit, OnDestroy {
@@ -53,6 +54,17 @@ export class LiveMatchTrackerComponent implements OnInit, OnDestroy {
         this.loading = false;
       }
     );
+  }
+
+  simulateScore(team: 'home' | 'away', points: number) {
+    if (!this.match) return;
+    
+    // Simulate updating locally for instant feedback
+    if (team === 'home') this.match.homeTeamScore += points;
+    else this.match.awayTeamScore += points;
+    
+    // If we had a ScoreService, we would call it here.
+    // For now, it's just simulating the front-end logic as requested.
   }
 
   ngOnDestroy(): void {
