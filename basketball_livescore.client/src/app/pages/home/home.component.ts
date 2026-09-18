@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { CommonModule } from '@angular/common';
 import { MatchService } from '../../services/match.service';
 import { Match, MatchStatus } from '../../services/match.model';
+import { NewsService, NewsItem } from '../../services/news.service';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -16,13 +17,19 @@ export class HomeComponent implements OnInit {
   liveMatches: Match[] = [];
   liveEspnMatches: any[] = [];
   upcomingEspnMatches: any[] = [];
+  topNews: NewsItem[] = [];
   MatchStatus = MatchStatus;
 
-  constructor(private matchService: MatchService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private matchService: MatchService, 
+    private newsService: NewsService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadMatches();
     this.loadUpcomingEspnMatches();
+    this.loadNews();
 
     // Setup an interval to periodically move matches that have started
     setInterval(() => {
@@ -59,11 +66,35 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  loadNews() {
+    this.newsService.getTopNews().subscribe(news => {
+      const fallbackImages = [
+        'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1505666287802-931dc83948e9?q=80&w=800&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1519861531473-9200262188bf?q=80&w=800&auto=format&fit=crop'
+      ];
+      // Take top 3 for the grid and assign different images
+      this.topNews = news.slice(0, 3).map((item, index) => ({
+        ...item,
+        thumbnail: fallbackImages[index]
+      }));
+      this.cdr.markForCheck();
+    });
+  }
+
+  scrollToLive() {
+    document.getElementById('live-section')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   trackByMatchId(index: number, match: Match): number {
     return match.id;
   }
 
   trackByEspnId(index: number, ev: any): string {
     return ev.id;
+  }
+
+  openLink(link: string | undefined) {
+    if (link) window.open(link, '_blank');
   }
 }

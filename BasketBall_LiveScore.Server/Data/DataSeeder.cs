@@ -149,8 +149,8 @@ namespace BasketBall_LiveScore.Server.Data
                             var status = MatchStatus.Scheduled;
                             if (statusStr != null)
                             {
-                                if (statusStr.Contains("IN_PROGRESS")) status = MatchStatus.InProgress;
-                                if (statusStr.Contains("FINAL")) status = MatchStatus.Finished;
+                                if (statusStr.Contains("IN_PROGRESS") || matchesToSeed.Count == 0) status = MatchStatus.InProgress;
+                                else if (statusStr.Contains("FINAL")) status = MatchStatus.Finished;
                             }
                             
                             matchesToSeed.Add(new Match

@@ -54,7 +54,9 @@ namespace BasketBall_LiveScore.Server.Controllers
         {
             var match = await _context.Matches
                 .Include(m => m.HomeTeam)
+                    .ThenInclude(t => t.Players)
                 .Include(m => m.AwayTeam)
+                    .ThenInclude(t => t.Players)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (match == null)

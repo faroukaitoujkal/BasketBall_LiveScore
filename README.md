@@ -6,15 +6,15 @@ This project combines an **Angular 17** frontend with a robust **ASP.NET Core 8*
 
 ---
 
-## 🌟 Key Features
-
-- **Real-time Live Scores**: Live matches are updated instantly using WebSockets (SignalR).
+- **Real-time Live Scores**: Live matches are updated instantly using WebSockets (SignalR). No manual refresh required!
+- **Encoder Dashboard**: Secured features for "Encoder" accounts to manage matches, add scores, timeouts, and fouls live.
 - **ESPN API Integration**: Automatically fetches the next 7 days of NBA upcoming matches via a backend proxy to bypass CORS and consolidate queries.
 - **Dynamic UI/UX**:
   - Fully responsive, mobile-first design using Tailwind CSS.
   - Custom "Sports" typography for that authentic scoreboard feel.
   - Micro-animations, glow effects, and a persistent Dark/Light Mode.
 - **Internationalization (i18n)**: Instantly switch between English and French without reloading.
+- **Legal & GDPR Compliance**: Integrated pages for Legal Notices, Privacy Policy, and Terms of Service (TOS), fully translated.
 - **Performance Optimized**: Uses Angular's `ChangeDetectionStrategy.OnPush` and `trackBy` functions for buttery smooth array updates.
 
 ---

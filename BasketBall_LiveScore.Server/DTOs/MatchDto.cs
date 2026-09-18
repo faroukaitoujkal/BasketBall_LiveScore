@@ -9,9 +9,9 @@ namespace BasketBall_LiveScore.Server.DTOs
         public string Location { get; set; }
         
         public int HomeTeamId { get; set; }
-        public TeamDto? HomeTeam { get; set; }
+        public TeamDetailDto? HomeTeam { get; set; }
         public int AwayTeamId { get; set; }
-        public TeamDto? AwayTeam { get; set; }
+        public TeamDetailDto? AwayTeam { get; set; }
         
         public int NumberOfQuarters { get; set; }
         public int QuarterDuration { get; set; }

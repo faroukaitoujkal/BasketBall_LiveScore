@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { StandingService } from '../../services/standing.service';
 import { Standing } from '../../services/standing.model';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,7 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-standings',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, RouterLink],
   templateUrl: './standings.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

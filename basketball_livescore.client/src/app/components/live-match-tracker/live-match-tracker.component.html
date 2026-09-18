@@ -47,19 +47,22 @@
 
         <!-- Score & Time -->
         <div class="flex flex-col items-center flex-1 px-4 z-20">
-          <div class="bg-brand-dark/80 px-8 py-4 border-2 border-brand-border shadow-inner flex flex-col items-center">
+          <div class="bg-brand-dark/90 px-8 py-6 border-2 border-brand-border shadow-[0_0_30px_rgba(255,87,34,0.3)] flex flex-col items-center rounded-xl backdrop-blur-sm relative overflow-hidden">
             
-            <div class="mb-4 bg-brand-card px-6 py-2 border border-brand-border font-sports text-2xl font-bold text-brand-accent tracking-widest uppercase shadow-glow">
+            <!-- Inner subtle glow -->
+            <div class="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent pointer-events-none"></div>
+
+            <div class="mb-4 bg-brand-card px-6 py-2 border border-brand-accent/50 font-sports text-2xl font-bold text-brand-accent tracking-widest uppercase shadow-glow rounded-sm relative z-10">
               <span *ngIf="match.status === MatchStatus.InProgress">{{ 'HOME.QUARTER' | translate:{quarter: match.currentQuarter} }}</span>
               <span *ngIf="match.status !== MatchStatus.InProgress">{{ match.status === MatchStatus.Finished ? ('HOME.FINISHED' | translate | uppercase) : ('HOME.TBD' | translate | uppercase) }}</span>
             </div>
 
-            <div class="flex items-center space-x-8">
-              <div class="text-7xl md:text-9xl font-sports font-bold tracking-tighter tabular-nums drop-shadow-md" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore" [class.text-brand-text]="match.homeTeamScore <= match.awayTeamScore">
+            <div class="flex items-center space-x-6 md:space-x-12 relative z-10">
+              <div class="text-7xl md:text-9xl font-sports font-black tracking-tighter tabular-nums drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore" [class.text-brand-text]="match.homeTeamScore <= match.awayTeamScore">
                 {{ match.homeTeamScore | number:'2.0-0' }}
               </div>
-              <div class="text-4xl text-brand-text-muted font-black mb-4">:</div>
-              <div class="text-7xl md:text-9xl font-sports font-bold tracking-tighter tabular-nums drop-shadow-md" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore" [class.text-brand-text]="match.awayTeamScore <= match.homeTeamScore">
+              <div class="text-4xl text-brand-border font-black mb-4 animate-pulse-slow">:</div>
+              <div class="text-7xl md:text-9xl font-sports font-black tracking-tighter tabular-nums drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore" [class.text-brand-text]="match.awayTeamScore <= match.homeTeamScore">
                 {{ match.awayTeamScore | number:'2.0-0' }}
               </div>
             </div>
@@ -82,22 +85,114 @@
     </div>
   </div>
 
+  <!-- Play-by-Play & Stats Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-slide-up">
+    <!-- Play by play -->
+    <div class="lg:col-span-2 bg-brand-card border border-brand-border rounded-xl shadow-lg p-6">
+      <h3 class="font-sports text-2xl uppercase tracking-widest font-bold text-brand-text mb-6 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-brand-accent mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+        Play-By-Play
+      </h3>
+      
+      <div class="space-y-4">
+        <!-- Real Events -->
+        <div *ngIf="recentEvents.length === 0" class="text-brand-text-muted text-sm font-sports uppercase tracking-widest text-center py-8">
+           No events yet.
+        </div>
+        <div *ngFor="let ev of recentEvents" class="flex items-start space-x-4 p-4 bg-brand-dark/30 rounded-lg border-l-4" [ngClass]="ev.isHome ? 'border-l-brand-accent' : 'border-l-brand-border'">
+          <div class="font-sports font-bold text-brand-text-muted w-16 shrink-0 text-sm">{{ ev.timeString }}</div>
+          <div>
+            <p class="text-brand-text font-medium"><span class="font-bold" [ngClass]="ev.isHome ? 'text-brand-accent' : ''">{{ ev.teamName }}</span> - Score by {{ ev.playerName }}</p>
+            <p class="text-sm text-brand-text-muted mt-1">+{{ ev.points }} Points</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Match Stats -->
+    <div class="bg-brand-card border border-brand-border rounded-xl shadow-lg p-6">
+       <h3 class="font-sports text-2xl uppercase tracking-widest font-bold text-brand-text mb-6 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-brand-accent mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+        Team Stats
+      </h3>
+      
+      <div class="space-y-6">
+        <!-- Field Goals -->
+        <div>
+          <div class="flex justify-between text-sm font-sports uppercase tracking-wider mb-2">
+            <span class="font-bold" [class.text-brand-accent]="true">45%</span>
+            <span class="text-brand-text-muted">Field Goals</span>
+            <span class="font-bold">42%</span>
+          </div>
+          <div class="w-full bg-brand-dark h-2 rounded-full overflow-hidden flex">
+            <div class="bg-brand-accent h-full w-[45%]"></div>
+            <div class="bg-brand-border h-full w-[55%]"></div>
+          </div>
+        </div>
+
+        <!-- 3 Pointers -->
+        <div>
+          <div class="flex justify-between text-sm font-sports uppercase tracking-wider mb-2">
+            <span class="font-bold" [class.text-brand-accent]="true">38%</span>
+            <span class="text-brand-text-muted">3PT</span>
+            <span class="font-bold">33%</span>
+          </div>
+          <div class="w-full bg-brand-dark h-2 rounded-full overflow-hidden flex">
+            <div class="bg-brand-accent h-full w-[38%]"></div>
+            <div class="bg-brand-border h-full w-[62%]"></div>
+          </div>
+        </div>
+        
+        <!-- Rebounds -->
+         <div>
+          <div class="flex justify-between text-sm font-sports uppercase tracking-wider mb-2">
+            <span class="font-bold">34</span>
+            <span class="text-brand-text-muted">Rebounds</span>
+            <span class="font-bold" [class.text-brand-accent]="true">41</span>
+          </div>
+          <div class="w-full bg-brand-dark h-2 rounded-full overflow-hidden flex">
+            <div class="bg-brand-border h-full w-[45%]"></div>
+            <div class="bg-brand-accent h-full w-[55%]"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Simulation Control Panel -->
-  <div class="fixed bottom-6 right-6 bg-brand-card border-2 border-brand-accent p-4 rounded-lg shadow-2xl z-50 w-72">
+  <div class="fixed bottom-6 right-6 bg-brand-card border-2 border-brand-accent p-4 rounded-lg shadow-2xl z-50 w-80">
     <div class="text-center mb-3">
-      <span class="text-xs font-sports text-brand-accent uppercase tracking-widest font-bold">{{ 'MATCH.SIMULATION_PANEL' | translate }}</span>
+      <span class="text-xs font-sports text-brand-accent uppercase tracking-widest font-bold">LIVE ENCODER</span>
     </div>
     
-    <div class="flex justify-between items-center mb-4">
-      <div class="flex space-x-2">
-        <button (click)="simulateScore('home', 2)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+2</button>
-        <button (click)="simulateScore('home', 3)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+3</button>
-      </div>
-      <div class="text-xs text-brand-text-muted uppercase tracking-widest font-bold">Pts</div>
-      <div class="flex space-x-2">
-        <button (click)="simulateScore('away', 2)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+2</button>
-        <button (click)="simulateScore('away', 3)" class="px-3 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-lg rounded border border-brand-border hover:border-brand-accent transition-colors">+3</button>
-      </div>
+    <div class="space-y-4">
+       <!-- Home Team Encoder -->
+       <div class="flex flex-col space-y-2">
+         <select class="bg-brand-dark text-brand-text border border-brand-border rounded p-1 text-xs" (change)="selectedHomePlayerId = +$any($event.target).value">
+            <option *ngFor="let p of match.homeTeam?.players" [value]="p.id">{{ p.name }}</option>
+         </select>
+         <div class="flex justify-between items-center">
+            <span class="text-xs font-sports uppercase tracking-widest text-brand-text-muted">{{ match.homeTeam?.name }}</span>
+            <div class="flex space-x-2">
+              <button (click)="addRealScore('home', 2)" [disabled]="isSubmitting" class="px-2 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-sm rounded border border-brand-border hover:border-brand-accent transition-colors disabled:opacity-50">+2</button>
+              <button (click)="addRealScore('home', 3)" [disabled]="isSubmitting" class="px-2 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-sm rounded border border-brand-border hover:border-brand-accent transition-colors disabled:opacity-50">+3</button>
+            </div>
+         </div>
+       </div>
+
+       <!-- Away Team Encoder -->
+       <div class="flex flex-col space-y-2 pt-2 border-t border-brand-border">
+         <select class="bg-brand-dark text-brand-text border border-brand-border rounded p-1 text-xs" (change)="selectedAwayPlayerId = +$any($event.target).value">
+            <option *ngFor="let p of match.awayTeam?.players" [value]="p.id">{{ p.name }}</option>
+         </select>
+         <div class="flex justify-between items-center">
+            <span class="text-xs font-sports uppercase tracking-widest text-brand-text-muted">{{ match.awayTeam?.name }}</span>
+            <div class="flex space-x-2">
+              <button (click)="addRealScore('away', 2)" [disabled]="isSubmitting" class="px-2 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-sm rounded border border-brand-border hover:border-brand-accent transition-colors disabled:opacity-50">+2</button>
+              <button (click)="addRealScore('away', 3)" [disabled]="isSubmitting" class="px-2 py-1 bg-brand-card-hover text-brand-text font-sports font-bold text-sm rounded border border-brand-border hover:border-brand-accent transition-colors disabled:opacity-50">+3</button>
+            </div>
+         </div>
+       </div>
     </div>
   </div>
 

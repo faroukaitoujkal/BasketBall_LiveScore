@@ -9,6 +9,13 @@
     "LANG_EN": "English"
   },
   "HOME": {
+    "HERO_TAG": "Game of the Day",
+    "HERO_TITLE": "THE ULTIMATE",
+    "HERO_TITLE_ACCENT": "SHOWDOWN",
+    "HERO_DESC": "Experience basketball like never before. Real-time scores, deep statistics, and immersive tracking.",
+    "HERO_BUTTON": "Watch Live Now",
+    "TOP_HEADLINES": "Top Headlines",
+    "VIEW_ALL": "View All",
     "LIVE_MATCHES": "LIVE MATCHES",
     "OTHER_MATCHES": "OTHER MATCHES",
     "UPCOMING_NBA": "UPCOMING NBA MATCHES (OFFICIAL)",
@@ -39,5 +46,80 @@
     "HOME": "Home",
     "AWAY": "Away",
     "END_MATCH": "End Match"
+  },
+  "LAYOUT": {
+    "FOOTER_DESC": "The ultimate destination for real-time basketball scores, standings, and news. Dive into the action.",
+    "LEGAL": "Legal (GDPR)",
+    "LEGAL_MENTIONS": "Legal Notice",
+    "FOLLOW_US": "Follow Us",
+    "COPYRIGHT": "All rights reserved.",
+    "PRIVACY": "Privacy Policy",
+    "TERMS": "Terms of Service"
+  },
+  "TEAMS": {
+    "TITLE": "NBA TEAMS",
+    "CITY": "City:",
+    "COACH": "Head Coach",
+    "ALL_TEAMS": "All Teams",
+    "ROSTER": "Team Roster",
+    "PLAYERS": "Players",
+    "HEIGHT": "Height",
+    "WEIGHT": "Weight",
+    "NO_PLAYERS": "No players found for this team.",
+    "TEAM_NOT_FOUND": "Team not found.",
+    "RETURN": "Return to Teams"
+  },
+  "LEGAL_PAGES": {
+    "TBD": "[To be completed]",
+    "MENTIONS": {
+      "TITLE": "Legal Notice",
+      "SECTION_1_TITLE": "1. Site Publisher",
+      "SECTION_1_TEXT": "The BasketBall LiveScore site is published by:",
+      "COMPANY": "Company Name",
+      "ADDRESS": "Address",
+      "PHONE": "Phone",
+      "DIRECTOR": "Publication Director",
+      "SECTION_2_TITLE": "2. Hosting",
+      "SECTION_2_TEXT": "This site is hosted by:",
+      "HOST_NAME": "Host Name",
+      "SECTION_3_TITLE": "3. Intellectual Property",
+      "SECTION_3_TEXT": "All content on this site (texts, images, videos, logos) is protected by copyright. Any reproduction, distribution, modification, or use of this content without express authorization is strictly prohibited."
+    },
+    "PRIVACY": {
+      "TITLE": "Privacy Policy",
+      "LAST_UPDATED": "Last updated: September 18, 2026",
+      "SECTION_1_TITLE": "1. Collection of Personal Data",
+      "SECTION_1_TEXT": "We collect the following personal data from our users:",
+      "SECTION_1_BULLET_1": "Email address (upon registration).",
+      "SECTION_1_BULLET_2": "Browsing data and cookies (see section 3).",
+      "SECTION_2_TITLE": "2. Use of Data",
+      "SECTION_2_TEXT": "Your data is used exclusively to:",
+      "SECTION_2_BULLET_1": "Allow you to access site features (encoding, favorites).",
+      "SECTION_2_BULLET_2": "Improve user experience and analyze traffic.",
+      "SECTION_2_CONCLUSION": "We never sell, rent, or share your personal data with third parties without your explicit consent.",
+      "SECTION_3_TITLE": "3. Cookies",
+      "SECTION_3_TEXT": "We use essential cookies for the operation of the site (saving your display preferences, user session). You can revoke your consent at any time by clearing your browser cache or via your account settings.",
+      "SECTION_4_TITLE": "4. Your Rights (GDPR)",
+      "SECTION_4_TEXT": "In accordance with the General Data Protection Regulation (GDPR), you have the following rights:",
+      "SECTION_4_BULLET_1": "Right of access, rectification, and deletion of your data.",
+      "SECTION_4_BULLET_2": "Right to limit processing.",
+      "SECTION_4_BULLET_3": "Right to data portability.",
+      "SECTION_4_CONTACT": "To exercise these rights, contact us at:"
+    },
+    "TERMS": {
+      "TITLE": "Terms of Service",
+      "LAST_UPDATED": "Last updated: September 18, 2026",
+      "SECTION_1_TITLE": "1. Purpose",
+      "SECTION_1_TEXT": "These Terms of Service (TOS) govern the access to and use of the BasketBall LiveScore site. By accessing the site, you fully and unreservedly accept these conditions.",
+      "SECTION_2_TITLE": "2. Access to the site",
+      "SECTION_2_TEXT": "The site is accessible free of charge. However, Internet access and equipment costs remain the responsibility of the user. We reserve the right to suspend or modify access to the site for maintenance purposes without notice.",
+      "SECTION_3_TITLE": "3. User Responsibilities",
+      "SECTION_3_TEXT": "The user agrees to:",
+      "SECTION_3_BULLET_1": "Not use the site for illegal or fraudulent purposes.",
+      "SECTION_3_BULLET_2": "Not attempt to hack or overload the application servers (DDoS).",
+      "SECTION_3_BULLET_3": "Keep their login credentials confidential (for 'Encoder' accounts).",
+      "SECTION_4_TITLE": "4. Data Reliability",
+      "SECTION_4_TEXT": "While we strive to provide real-time scores and statistics as accurately as possible, BasketBall LiveScore does not guarantee the absence of errors or delays. Using the data for sports betting purposes is at your own risk."
+    }
   }
 }

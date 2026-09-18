@@ -59,4 +59,13 @@ export class MatchService {
   deleteMatch(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  // Functional features: Player Scores
+  addScore(scoreData: { matchId: number; playerId: number; points: number }): Observable<any> {
+    return this.http.post<any>('/api/playerscores/add-score', scoreData);
+  }
+
+  getHistoricalScores(matchId: number): Observable<any[]> {
+    return this.http.get<any[]>(`/api/playerscores/match/${matchId}`);
+  }
 }

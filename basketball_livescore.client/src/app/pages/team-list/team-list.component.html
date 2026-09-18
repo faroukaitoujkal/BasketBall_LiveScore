@@ -1,35 +1,41 @@
 <div class="space-y-8 animate-fade-in py-4">
   <div class="flex justify-between items-end border-b border-brand-border pb-4">
-    <h1 class="text-4xl font-sports tracking-wider uppercase text-brand-text font-bold">Teams</h1>
+    <h1 class="text-4xl font-sports tracking-wider uppercase text-brand-text font-bold">{{ 'TEAMS.TITLE' | translate }}</h1>
   </div>
 
   <div *ngIf="teams.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <a *ngFor="let team of teams; trackBy: trackByTeamId" 
        [routerLink]="['/teams', team.id]" 
-       class="group bg-brand-card rounded-sm border-t-4 border-t-brand-accent border-l border-r border-b border-brand-border hover:border-brand-accent/50 transition-all shadow-md hover:shadow-glow overflow-hidden flex flex-col relative">
+       class="group bg-brand-card rounded-2xl border border-brand-border hover:border-brand-accent/70 transition-all duration-500 shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.3)] overflow-hidden flex flex-col relative transform hover:-translate-y-2">
       
-      <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+      <!-- Premium Background Gradient -->
+      <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/10 via-transparent to-brand-dark/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-      <div class="p-6 flex-1 flex flex-col items-center text-center relative z-10">
-        <div class="w-24 h-24 bg-brand-dark/20 rounded-full flex items-center justify-center p-2 mb-4 border border-brand-border group-hover:scale-110 transition-transform duration-300">
-           <img *ngIf="team.logoUrl" [src]="team.logoUrl" class="w-16 h-16 object-contain">
-           <span *ngIf="!team.logoUrl" class="text-4xl">🏀</span>
+      <div class="p-8 flex-1 flex flex-col items-center text-center relative z-10">
+        <div class="w-28 h-28 bg-brand-dark/40 rounded-full flex items-center justify-center p-3 mb-6 border border-brand-border group-hover:scale-110 group-hover:rotate-[360deg] transition-all duration-1000 shadow-inner backdrop-blur-sm relative">
+           <div class="absolute inset-0 rounded-full border border-brand-accent/30 scale-110 opacity-0 group-hover:opacity-100 transition-all duration-700 animate-pulse"></div>
+           <img *ngIf="team.logoUrl" [src]="team.logoUrl" class="w-full h-full object-contain relative z-10 drop-shadow-lg">
+           <span *ngIf="!team.logoUrl" class="text-5xl relative z-10">🏀</span>
         </div>
         <div class="flex-1">
-          <h3 class="text-2xl font-sports uppercase tracking-wider font-bold text-brand-text group-hover:text-brand-accent transition-colors">{{ team.name }}</h3>
-          <p class="text-sm font-sports uppercase tracking-widest text-brand-text-muted font-bold mt-1">{{ team.city || 'Unknown City' }}</p>
+          <h3 class="text-3xl font-sports uppercase tracking-wider font-black text-brand-text group-hover:text-brand-accent transition-colors drop-shadow-md">{{ team.name }}</h3>
+          <p class="text-sm font-sports uppercase tracking-widest text-brand-text-muted font-bold mt-2">{{ team.city || ('TEAMS.TEAM_NOT_FOUND' | translate) }}</p>
         </div>
       </div>
-      <div class="bg-brand-dark/40 py-3 px-6 border-t border-brand-border flex justify-between items-center z-10">
+      <div class="bg-brand-dark/60 py-4 px-8 border-t border-brand-border flex justify-between items-center z-10 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-brand-accent/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
         <div class="flex flex-col text-left">
-          <span class="text-xs font-sports uppercase tracking-widest text-brand-text-muted font-bold">Head Coach</span>
-          <span class="text-sm font-sports uppercase tracking-wider text-brand-text font-bold mt-1">{{ team.coachName || 'N/A' }}</span>
+          <span class="text-xs font-sports uppercase tracking-widest text-brand-text-muted font-bold">{{ 'TEAMS.COACH' | translate }}</span>
+          <span class="text-base font-sports uppercase tracking-wider text-brand-text font-bold mt-1">{{ team.coachName || 'N/A' }}</span>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-brand-accent/20 flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
         </div>
       </div>
     </a>
   </div>
 
   <div *ngIf="teams.length === 0" class="text-center p-12 bg-brand-card/50 rounded-sm border border-brand-border border-dashed">
-    <p class="text-brand-text-muted font-sports text-xl uppercase tracking-widest">No teams found.</p>
+    <p class="text-brand-text-muted font-sports text-xl uppercase tracking-widest">{{ 'HOME.NO_OTHER_MATCHES' | translate }}</p>
   </div>
 </div>

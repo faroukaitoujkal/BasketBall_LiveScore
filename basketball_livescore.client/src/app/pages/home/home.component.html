@@ -1,11 +1,32 @@
 <div class="space-y-12 animate-fade-in py-4">
   
-  <div class="flex justify-between items-end border-b border-brand-border pb-4">
-    <h1 class="text-4xl font-sports tracking-wider uppercase text-brand-text font-bold">Game Center</h1>
+  <!-- Hero Section -->
+  <div class="relative w-full h-[400px] bg-brand-dark overflow-hidden rounded-xl border border-brand-border shadow-2xl mb-12">
+    <!-- Background Abstract shapes -->
+    <div class="absolute inset-0 opacity-20">
+      <div class="absolute top-0 -left-1/4 w-1/2 h-full bg-gradient-to-r from-brand-accent to-transparent blur-3xl transform -skew-x-12"></div>
+      <div class="absolute bottom-0 -right-1/4 w-1/2 h-full bg-gradient-to-l from-brand-accent to-transparent blur-3xl transform skew-x-12"></div>
+    </div>
+    
+    <div class="absolute inset-0 flex flex-col justify-center items-center z-10 px-4 text-center">
+      <span class="px-4 py-1 mb-6 border border-brand-accent text-brand-accent font-sports uppercase tracking-widest text-sm font-bold bg-brand-dark/50 backdrop-blur-sm rounded-full animate-pulse-slow">
+        {{ 'HOME.HERO_TAG' | translate }}
+      </span>
+      <h1 class="text-5xl md:text-7xl font-sports tracking-tighter uppercase text-brand-text font-black mb-4 drop-shadow-lg">
+        {{ 'HOME.HERO_TITLE' | translate }} <span class="text-brand-accent">{{ 'HOME.HERO_TITLE_ACCENT' | translate }}</span>
+      </h1>
+      <p class="text-brand-text-muted text-lg max-w-2xl font-medium">
+        {{ 'HOME.HERO_DESC' | translate }}
+      </p>
+      
+      <button (click)="scrollToLive()" class="mt-8 px-8 py-3 bg-brand-accent text-white font-sports text-xl uppercase tracking-widest font-bold hover:bg-brand-accent-hover hover:scale-105 transition-all shadow-glow">
+        {{ 'HOME.HERO_BUTTON' | translate }}
+      </button>
+    </div>
   </div>
 
   <!-- Live Matches Section -->
-  <section>
+  <section id="live-section">
     <div class="flex items-center space-x-3 mb-6">
       <div class="flex items-center justify-center px-3 py-1 bg-brand-danger/20 border border-brand-danger/50 rounded-sm">
         <div class="w-2 h-2 bg-brand-danger rounded-full animate-pulse mr-2"></div>
@@ -36,22 +57,22 @@
             <!-- Home Team -->
             <div class="flex justify-between items-center">
               <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 bg-white/5 rounded-full p-1 flex items-center justify-center border border-white/10">
+                <div class="w-10 h-10 bg-brand-dark/20 rounded-full p-1 flex items-center justify-center border border-brand-border">
                    <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="w-full h-full object-contain">
                 </div>
-                <span class="font-sports text-xl tracking-wider uppercase font-bold" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore">{{ match.homeTeam?.name }}</span>
+                <span class="font-sports text-xl tracking-wider uppercase font-bold" [ngClass]="match.homeTeamScore > match.awayTeamScore ? 'text-brand-accent' : 'text-brand-text'">{{ match.homeTeam?.name }}</span>
               </div>
-              <span class="font-sports text-4xl font-bold" [class.text-brand-accent]="match.homeTeamScore > match.awayTeamScore">{{ match.homeTeamScore }}</span>
+              <span class="font-sports text-4xl font-bold" [ngClass]="match.homeTeamScore > match.awayTeamScore ? 'text-brand-accent' : 'text-brand-text'">{{ match.homeTeamScore }}</span>
             </div>
             <!-- Away Team -->
             <div class="flex justify-between items-center">
               <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 bg-white/5 rounded-full p-1 flex items-center justify-center border border-white/10">
+                <div class="w-10 h-10 bg-brand-dark/20 rounded-full p-1 flex items-center justify-center border border-brand-border">
                   <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="w-full h-full object-contain">
                 </div>
-                <span class="font-sports text-xl tracking-wider uppercase font-bold" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore">{{ match.awayTeam?.name }}</span>
+                <span class="font-sports text-xl tracking-wider uppercase font-bold" [ngClass]="match.awayTeamScore > match.homeTeamScore ? 'text-brand-accent' : 'text-brand-text'">{{ match.awayTeam?.name }}</span>
               </div>
-              <span class="font-sports text-4xl font-bold" [class.text-brand-accent]="match.awayTeamScore > match.homeTeamScore">{{ match.awayTeamScore }}</span>
+              <span class="font-sports text-4xl font-bold" [ngClass]="match.awayTeamScore > match.homeTeamScore ? 'text-brand-accent' : 'text-brand-text'">{{ match.awayTeamScore }}</span>
             </div>
           </div>
         </div>
@@ -80,9 +101,9 @@
                 <div class="w-10 h-10 bg-brand-dark/20 rounded-full p-1 flex items-center justify-center border border-brand-border">
                    <img *ngIf="ev.competitions[0].competitors[0].team.logo" [src]="ev.competitions[0].competitors[0].team.logo" class="w-full h-full object-contain">
                 </div>
-                <span class="font-sports text-xl tracking-wider uppercase font-bold" [class.text-brand-accent]="ev.competitions[0].competitors[0].score > ev.competitions[0].competitors[1].score">{{ ev.competitions[0].competitors[0].team.shortDisplayName }}</span>
+                <span class="font-sports text-xl tracking-wider uppercase font-bold" [ngClass]="ev.competitions[0].competitors[0].score > ev.competitions[0].competitors[1].score ? 'text-brand-accent' : 'text-brand-text'">{{ ev.competitions[0].competitors[0].team.shortDisplayName }}</span>
               </div>
-              <span class="font-sports text-4xl font-bold" [class.text-brand-accent]="ev.competitions[0].competitors[0].score > ev.competitions[0].competitors[1].score">{{ ev.competitions[0].competitors[0].score || '0' }}</span>
+              <span class="font-sports text-4xl font-bold" [ngClass]="ev.competitions[0].competitors[0].score > ev.competitions[0].competitors[1].score ? 'text-brand-accent' : 'text-brand-text'">{{ ev.competitions[0].competitors[0].score || '0' }}</span>
             </div>
             <!-- Away Team -->
             <div class="flex justify-between items-center">
@@ -90,9 +111,9 @@
                 <div class="w-10 h-10 bg-brand-dark/20 rounded-full p-1 flex items-center justify-center border border-brand-border">
                   <img *ngIf="ev.competitions[0].competitors[1].team.logo" [src]="ev.competitions[0].competitors[1].team.logo" class="w-full h-full object-contain">
                 </div>
-                <span class="font-sports text-xl tracking-wider uppercase font-bold" [class.text-brand-accent]="ev.competitions[0].competitors[1].score > ev.competitions[0].competitors[0].score">{{ ev.competitions[0].competitors[1].team.shortDisplayName }}</span>
+                <span class="font-sports text-xl tracking-wider uppercase font-bold" [ngClass]="ev.competitions[0].competitors[1].score > ev.competitions[0].competitors[0].score ? 'text-brand-accent' : 'text-brand-text'">{{ ev.competitions[0].competitors[1].team.shortDisplayName }}</span>
               </div>
-              <span class="font-sports text-4xl font-bold" [class.text-brand-accent]="ev.competitions[0].competitors[1].score > ev.competitions[0].competitors[0].score">{{ ev.competitions[0].competitors[1].score || '0' }}</span>
+              <span class="font-sports text-4xl font-bold" [ngClass]="ev.competitions[0].competitors[1].score > ev.competitions[0].competitors[0].score ? 'text-brand-accent' : 'text-brand-text'">{{ ev.competitions[0].competitors[1].score || '0' }}</span>
             </div>
           </div>
         </div>
@@ -158,6 +179,40 @@
       <div *ngIf="upcomingEspnMatches.length === 0" class="p-12 text-center text-brand-text-muted font-sports text-lg uppercase tracking-widest">
         {{ 'HOME.NO_UPCOMING_MATCHES' | translate }}
       </div>
+    </div>
+  </section>
+  
+  <!-- Latest News / Highlights Section -->
+  <section class="mt-16 border-t border-brand-border pt-12 animate-slide-up">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="font-sports text-3xl uppercase tracking-widest font-bold text-brand-text flex items-center">
+        <span class="w-2 h-8 bg-brand-accent mr-4"></span>
+        {{ 'HOME.TOP_HEADLINES' | translate }}
+      </h2>
+      <a href="#" class="text-brand-accent hover:text-brand-accent-hover font-sports uppercase tracking-widest text-sm font-bold flex items-center transition-colors">
+        {{ 'HOME.VIEW_ALL' | translate }} <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+    </div>
+
+    <div *ngIf="topNews.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div *ngFor="let news of topNews" class="group cursor-pointer bg-brand-card rounded-lg overflow-hidden border border-brand-border hover:border-brand-accent/50 transition-all shadow-md hover:shadow-glow-lg flex flex-col" [title]="news.title" (click)="openLink(news.link)">
+        <div class="relative h-48 bg-brand-dark/50 overflow-hidden shrink-0">
+          <img [src]="news.thumbnail" [alt]="news.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800&auto=format&fit=crop'">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-dark to-transparent opacity-80"></div>
+          <span class="absolute bottom-4 left-4 px-2 py-1 bg-brand-accent text-white text-xs font-sports uppercase tracking-widest font-bold">{{ news.categories[0] || 'News' }}</span>
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="font-sports text-xl uppercase tracking-wider font-bold text-brand-text mb-2 group-hover:text-brand-accent transition-colors line-clamp-2" [innerHTML]="news.title"></h3>
+          <p class="text-brand-text-muted text-sm line-clamp-2 mb-4" [innerHTML]="news.description"></p>
+          <div class="mt-auto flex items-center text-xs text-brand-text-muted font-bold uppercase tracking-wider">
+            <span>{{ news.pubDate | date:'medium' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="topNews.length === 0" class="flex justify-center p-12">
+       <div class="animate-spin rounded-sm h-8 w-8 border-t-2 border-b-2 border-brand-accent"></div>
     </div>
   </section>
 

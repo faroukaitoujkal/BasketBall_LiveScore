@@ -9,6 +9,13 @@
     "LANG_EN": "Anglais"
   },
   "HOME": {
+    "HERO_TAG": "Le Match du Jour",
+    "HERO_TITLE": "LE CHOC",
+    "HERO_TITLE_ACCENT": "ULTIME",
+    "HERO_DESC": "Vivez le basketball comme jamais auparavant. Scores en temps réel, statistiques détaillées et suivi immersif.",
+    "HERO_BUTTON": "Regarder en Direct",
+    "TOP_HEADLINES": "À la Une",
+    "VIEW_ALL": "Voir Tout",
     "LIVE_MATCHES": "MATCHS EN DIRECT",
     "OTHER_MATCHES": "AUTRES MATCHS",
     "UPCOMING_NBA": "MATCHS NBA À VENIR (OFFICIEL)",
@@ -39,5 +46,80 @@
     "HOME": "Domicile",
     "AWAY": "Extérieur",
     "END_MATCH": "Terminer le Match"
+  },
+  "LAYOUT": {
+    "FOOTER_DESC": "La destination ultime pour suivre les scores, les classements et les actus du basketball en temps réel. Plongez au cœur de l'action.",
+    "LEGAL": "Légal (RGPD)",
+    "LEGAL_MENTIONS": "Mentions Légales",
+    "FOLLOW_US": "Suivez-nous",
+    "COPYRIGHT": "Tous droits réservés.",
+    "PRIVACY": "Politique de Confidentialité",
+    "TERMS": "Conditions Générales (CGU)"
+  },
+  "TEAMS": {
+    "TITLE": "ÉQUIPES NBA",
+    "CITY": "Ville :",
+    "COACH": "Entraîneur",
+    "ALL_TEAMS": "Toutes les équipes",
+    "ROSTER": "Effectif",
+    "PLAYERS": "Joueurs",
+    "HEIGHT": "Taille",
+    "WEIGHT": "Poids",
+    "NO_PLAYERS": "Aucun joueur trouvé pour cette équipe.",
+    "TEAM_NOT_FOUND": "Équipe introuvable.",
+    "RETURN": "Retour aux équipes"
+  },
+  "LEGAL_PAGES": {
+    "TBD": "[À compléter]",
+    "MENTIONS": {
+      "TITLE": "Mentions Légales",
+      "SECTION_1_TITLE": "1. Éditeur du site",
+      "SECTION_1_TEXT": "Le site BasketBall LiveScore est édité par :",
+      "COMPANY": "Nom de l'entreprise",
+      "ADDRESS": "Adresse",
+      "PHONE": "Téléphone",
+      "DIRECTOR": "Directeur de la publication",
+      "SECTION_2_TITLE": "2. Hébergement",
+      "SECTION_2_TEXT": "Ce site est hébergé par :",
+      "HOST_NAME": "Nom de l'hébergeur",
+      "SECTION_3_TITLE": "3. Propriété Intellectuelle",
+      "SECTION_3_TEXT": "L'ensemble du contenu de ce site (textes, images, vidéos, logos) est protégé par le droit d'auteur. Toute reproduction, distribution, modification ou utilisation de ce contenu sans autorisation expresse est strictement interdite."
+    },
+    "PRIVACY": {
+      "TITLE": "Politique de Confidentialité",
+      "LAST_UPDATED": "Dernière mise à jour : 18 Septembre 2026",
+      "SECTION_1_TITLE": "1. Collecte des Données Personnelles",
+      "SECTION_1_TEXT": "Nous collectons les données personnelles suivantes de nos utilisateurs :",
+      "SECTION_1_BULLET_1": "Adresse e-mail (lors de l'inscription).",
+      "SECTION_1_BULLET_2": "Données de navigation et cookies (voir section 3).",
+      "SECTION_2_TITLE": "2. Utilisation des Données",
+      "SECTION_2_TEXT": "Vos données sont utilisées exclusivement pour :",
+      "SECTION_2_BULLET_1": "Vous permettre d'accéder aux fonctionnalités du site (encodage, favoris).",
+      "SECTION_2_BULLET_2": "Améliorer l'expérience utilisateur et analyser le trafic.",
+      "SECTION_2_CONCLUSION": "Nous ne vendons, ne louons et ne partageons jamais vos données personnelles avec des tiers sans votre consentement explicite.",
+      "SECTION_3_TITLE": "3. Cookies",
+      "SECTION_3_TEXT": "Nous utilisons des cookies essentiels pour le fonctionnement du site (sauvegarde de vos préférences d'affichage, session utilisateur). Vous pouvez révoquer votre consentement à tout moment en vidant le cache de votre navigateur ou via les paramètres de votre compte.",
+      "SECTION_4_TITLE": "4. Vos Droits (RGPD)",
+      "SECTION_4_TEXT": "Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants :",
+      "SECTION_4_BULLET_1": "Droit d'accès, de rectification et de suppression de vos données.",
+      "SECTION_4_BULLET_2": "Droit à la limitation du traitement.",
+      "SECTION_4_BULLET_3": "Droit à la portabilité de vos données.",
+      "SECTION_4_CONTACT": "Pour exercer ces droits, contactez-nous à l'adresse :"
+    },
+    "TERMS": {
+      "TITLE": "Conditions Générales d'Utilisation",
+      "LAST_UPDATED": "Dernière mise à jour : 18 Septembre 2026",
+      "SECTION_1_TITLE": "1. Objet",
+      "SECTION_1_TEXT": "Les présentes Conditions Générales d'Utilisation (CGU) encadrent l'accès et l'utilisation du site BasketBall LiveScore. En accédant au site, vous acceptez pleinement et sans réserve ces conditions.",
+      "SECTION_2_TITLE": "2. Accès au site",
+      "SECTION_2_TEXT": "Le site est accessible gratuitement. Toutefois, les frais d'accès à Internet et de matériel restent à la charge de l'utilisateur. Nous nous réservons le droit de suspendre ou de modifier l'accès au site pour des raisons de maintenance sans préavis.",
+      "SECTION_3_TITLE": "3. Responsabilités de l'utilisateur",
+      "SECTION_3_TEXT": "L'utilisateur s'engage à :",
+      "SECTION_3_BULLET_1": "Ne pas utiliser le site à des fins illégales ou frauduleuses.",
+      "SECTION_3_BULLET_2": "Ne pas tenter de pirater ou de surcharger les serveurs de l'application (DDoS).",
+      "SECTION_3_BULLET_3": "Garder confidentiels ses identifiants de connexion (pour les comptes 'Encoder').",
+      "SECTION_4_TITLE": "4. Fiabilité des Données",
+      "SECTION_4_TEXT": "Bien que nous nous efforcions de fournir des scores et des statistiques en temps réel aussi exacts que possible, BasketBall LiveScore ne garantit pas l'absence d'erreurs ou de délais. L'utilisation des données à des fins de paris sportifs est à vos risques et périls."
+    }
   }
 }

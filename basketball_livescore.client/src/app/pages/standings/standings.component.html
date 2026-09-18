@@ -3,8 +3,11 @@
     <h1 class="text-4xl font-sports tracking-wider uppercase text-brand-text font-bold">{{ 'STANDINGS.TITLE' | translate }}</h1>
   </div>
 
-  <div class="bg-brand-card rounded-sm border border-brand-border overflow-hidden shadow-xl">
-    <div class="overflow-x-auto">
+  <div class="bg-brand-card rounded-xl border border-brand-border overflow-hidden shadow-2xl relative">
+    <!-- Inner subtle glow -->
+    <div class="absolute inset-0 bg-gradient-to-b from-brand-accent/5 to-transparent pointer-events-none"></div>
+
+    <div class="overflow-x-auto relative z-10">
       <table class="min-w-full divide-y divide-brand-border">
         <thead class="bg-brand-dark/40">
           <tr>
@@ -19,19 +22,26 @@
             <th scope="col" class="px-6 py-4 text-center text-xs font-sports font-bold text-brand-text-muted uppercase tracking-widest" title="Point Differential">DIFF</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-brand-border bg-brand-card">
-          <tr *ngFor="let team of standings; let i = index; trackBy: trackByTeamId" class="hover:bg-brand-card-hover transition-colors">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-sports text-xl font-bold text-brand-text-muted">
-              <div class="flex items-center justify-center w-8 h-8 rounded-sm bg-brand-dark/40 border border-brand-border">
-                {{ i + 1 }}
+        <tbody class="divide-y divide-brand-border bg-brand-dark/20">
+          <tr *ngFor="let team of standings; let i = index; trackBy: trackByTeamId" 
+              class="hover:bg-brand-card-hover transition-colors group relative"
+              [ngClass]="{'border-b-4 border-b-brand-accent/50': i === 7}">
+            <!-- Playoff Indicator -->
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-sports text-xl font-bold">
+              <div class="flex flex-col items-center justify-center">
+                 <div class="flex items-center justify-center w-8 h-8 rounded-sm bg-brand-dark/60 border border-brand-border shadow-sm group-hover:border-brand-accent/50 transition-colors"
+                      [ngClass]="i < 8 ? 'text-brand-text shadow-glow-sm' : 'text-brand-text-muted'">
+                   {{ i + 1 }}
+                 </div>
+                 <span *ngIf="i < 8" class="text-[10px] text-brand-accent mt-1 uppercase tracking-widest hidden md:block">Playoffs</span>
               </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td class="px-6 py-4 whitespace-nowrap cursor-pointer" [routerLink]="['/teams', team.teamId]">
               <div class="flex items-center space-x-4">
-                <div class="w-8 h-8 bg-brand-dark/20 rounded-full p-1 flex items-center justify-center border border-brand-border">
+                <div class="w-10 h-10 bg-brand-dark/40 rounded-full p-1.5 flex items-center justify-center border border-brand-border group-hover:scale-110 group-hover:border-brand-accent/50 transition-all drop-shadow-md">
                   <img *ngIf="team.teamLogoUrl" [src]="team.teamLogoUrl" class="w-full h-full object-contain">
                 </div>
-                <span class="text-lg font-sports tracking-wider uppercase font-bold text-brand-text">{{ team.teamName }}</span>
+                <span class="text-lg font-sports tracking-wider uppercase font-bold text-brand-text group-hover:text-brand-accent transition-colors">{{ team.teamName }}</span>
               </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold text-brand-text-muted">
@@ -43,7 +53,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold text-brand-danger">
               {{ team.losses }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports font-bold text-brand-accent bg-brand-dark/20">
+            <td class="px-6 py-4 whitespace-nowrap text-center text-xl font-sports font-black text-brand-accent bg-brand-dark/40 border-x border-brand-border">
               {{ team.winPercentage | number:'1.3-3' }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-center text-lg font-sports text-brand-text-muted hidden md:table-cell">
